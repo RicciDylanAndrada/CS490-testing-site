@@ -1,5 +1,5 @@
 
-<h1 align="center"> Project Title - Test Tajer </h1>
+<h1 align="center"> Test Taker </h1>
 
 <p align="center"> CS490 Project </p>
 
@@ -19,6 +19,8 @@ source .venv/bin/activate
 python3 -m venv .venv
 source .venv/bin/activate</li>
   <li> <h2>Windows</h2>
+
+  <li>
 py -3 -m venv .venv
 .venv\scripts\activate</li>
 
@@ -26,8 +28,6 @@ py -3 -m venv .venv
 </l1>
 <li> python -m pip install flask
 </l1>
-
-
 
 </ul>
 
