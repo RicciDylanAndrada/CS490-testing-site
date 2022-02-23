@@ -36,9 +36,7 @@ py -3 -m venv .venv
 
 
 
-```shell
-$ npm i boilerplate-readme-template
-```
+
 <h3>Contributing</h3>
 Charles Maher
 Bret Seelall
