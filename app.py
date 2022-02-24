@@ -1,3 +1,4 @@
+from crypt import methods
 from venv import create
 from flask import Flask,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -42,5 +43,6 @@ def my_profile():
     }
 
     return response_body
+@app.route("/token",methods=["POST"])
 if __name__=="__main__":
     app.run(debug=True)
