@@ -8,6 +8,7 @@
 <p> Describe you project -> Website to allow users to take tests created manually by teachers </p>
 
 <h3> Download & Installation </h3>
+<h4> Python Enviorment/Flask Installation </h4>
 
 <ul>
   <li> <h2>Linux</h2>
@@ -28,13 +29,25 @@ py -3 -m venv .venv
 </l1>
 <li> python -m pip install flask
 </l1>
-
+<li>pip install flask_sqlalchemy           </li>
+<li>pip install flask_migrate </li>
+<li>flask_marshmallow    </li>
+<li>flask_cors     </li>
+<li>python-dotenv</li>
 </ul>
 
 
 
 
 
+<h1>Developemnt<h1>
+<ul>
+<li>
+FLASK_ENV=development flask run
+
+When  set FLASK_ENV=development, Flask will monitor changes to app files and reload the server when there’s a change. This way, you don’t need to manually stop and restart the app server after each modification.
+</li>
+</ul>
 
 
 <h3>Contributing</h3>

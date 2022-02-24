@@ -1,28 +1,36 @@
+from venv import create
 from flask import Flask
-from datetime import datetime
-import re
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_marshmallow import Marshmallow
+from flask_cors import CORS
+db = SQLAlchemy()
+migrate = Migrate()
+ma = Marshmallow()
+cors = CORS()
+def create_app():
+    app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app = Flask(__name__)
+   
+    db.init_app(app)
+    migrate.init_app(app, db)
+    ma.init_app(app)
+    cors.init_app(app)
 
+    return app
+app = create_app()
 @app.route("/")
 def home():
     return "Hello, Flask!"
 
-@app.route("/hello/<name>")
-def hello_there(name):
-    now = datetime.now()
-    formatted_now = now.strftime("%A, %d %B, %Y at %X")
+#this for testing purposes for react
+@app.route("/api",methods=["GET"])
+def index():
+    return {
+        "testing":"Hello from flask backend"
+    }
 
-    # Filter the name argument to letters only using regular expressions. URL arguments
-    # can contain arbitrary text, so we restrict to safe characters only.
-    match_object = re.match("[a-zA-Z]+", name)
-
-    if match_object:
-        clean_name = match_object.group(0)
-    else:
-        clean_name = "Friend"
-
-    content = "Hello there, " + clean_name + "! It's " + formatted_now
-    return content
 if __name__=="__main__":
     app.run(debug=True)
