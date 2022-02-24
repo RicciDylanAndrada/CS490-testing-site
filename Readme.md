@@ -36,18 +36,20 @@ py -3 -m venv .venv
 <li>python-dotenv</li>
 </ul>
 <h3>Developemnt<h3>
-<ul>
-<li>
-FLASK_ENV=development flask run
-</li>
-  <p>When  set FLASK_ENV=development, Flask will monitor changes to app files and reload the server when there’s a change. This way, you don’t need to manually stop and restart the app server after each modification.</p>
-</ul>
+
 
 
 <h3>Contributing</h3>
-Ricci Andrada
-Charles Maher
-Bret Seelall
-Param Patel
+  <ul>
+    <li>Ricci Andrada
+ </li>
+    <li> Charles Maher
+</li>
+    <li>Bret Seelall
+ </li>
+    <li> Param Patel
+</li>
+
+  </ul>
 
 
