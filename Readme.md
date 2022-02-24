@@ -39,8 +39,8 @@ py -3 -m venv .venv
 <ul>
 <li>
 FLASK_ENV=development flask run
-<p>When  set FLASK_ENV=development, Flask will monitor changes to app files and reload the server when there’s a change. This way, you don’t need to manually stop and restart the app server after each modification.</p>
 </li>
+  <p>When  set FLASK_ENV=development, Flask will monitor changes to app files and reload the server when there’s a change. This way, you don’t need to manually stop and restart the app server after each modification.</p>
 </ul>
 
 
