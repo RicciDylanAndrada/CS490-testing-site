@@ -35,7 +35,24 @@ py -3 -m venv .venv
 <li>flask_cors     </li>
 <li>python-dotenv</li>
 </ul>
-<h3>Developemnt<h3>
+
+
+<h3> Running Backend/Front end </h3>
+<h4> Frontend Side </h4>
+
+<ul>
+  <li> 
+    npm run start-backend
+  </li>
+</ul>
+
+<h4> Backend Side </h4>
+
+<ul>
+  <li> 
+   flask run
+  </li>
+</ul>
 
 
 
