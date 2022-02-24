@@ -40,7 +40,7 @@ py -3 -m venv .venv
 
 
 
-<h1>Developemnt<h1>
+<h3>Developemnt<h3>
 <ul>
 <li>
 FLASK_ENV=development flask run
