@@ -14,7 +14,6 @@ export default function Navbar() {
         <div className="navbar  w-full mb-12 bg-neutral text-neutral-content">
         <div className="container mx-auto">
             <div className="flex-none px-2 mx-2">
-                <FaSpotify className=" inline flex-none pr-4 text-5xl" color="green" />
                 <Link to="/" className=" text-md font-bold align-middle">
                     Test Taker
                 </Link>

@@ -4,8 +4,8 @@ import { useState,useEffect,useContext } from 'react'
 import axios from "axios";
 import {BrowserRouter, BrowserRouter as Router,Route,Routes} from 'react-router-dom'
 import { LoginProvider } from "./content/LoginContext";
-import Teacher from '../pages/Teacher'
-import Student from '../pages/Student'
+import Teacher from './components/pages/Teacher'
+import Student from './components/pages/Student'
 import Navbar from './components/layout/Navbar'
 import LoginContext from './content/LoginContext';
 

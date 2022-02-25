@@ -8,26 +8,29 @@ import { LoginProvider } from '../content/LoginContext'
 
 function LoginForm({date}) {
 
-  const[loginForm,setLoginForm]=useState({
+  const[loginForm,setLoginForm]=useState(
+    {
     username:"",
     password:""
 
-  })
+  }
+  )
 
-  const{setToken,setUser}=useContext(LoginProvider)
+  const{setToken,setUser,token}=useContext(LoginProvider)
 
 
   const logIn = async (e) =>{
     try{
         const user = await fetch("/token",{
+          cache: "no-cache",
+
              method:'POST',
              headers:{
+              "content-type": "application/json",
+
                   Authorization:`Bearer ${token}`,
                        }, 
-            body:{
-              username:loginForm.username,
-              password:loginForm.password
-            }
+            body: loginForm
                               
                    })
 
@@ -45,7 +48,7 @@ function LoginForm({date}) {
 
        
                }
-               setloginForm(({
+               setLoginForm(({
                 email: "",
                 password: ""}))
         
@@ -54,7 +57,7 @@ function LoginForm({date}) {
 
 function handleChange(event) { 
   const {value, name} = event.target
-  setloginForm(prevNote => ({
+  setLoginForm(prevNote => ({
       ...prevNote, [name]: value})
   )}
   return (

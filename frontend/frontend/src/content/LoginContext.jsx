@@ -5,10 +5,8 @@ const LoginContext =createContext()
 
 export const LoginProvider=({children})=>{
 
-    const [token,setToken]=useState(null)
     const [ student,setStudent]=useState(null)
     const [ teacher,setTeacher]=useState(null)
-    const [ user,setUser]=useState("")
     const [ user,setUser]=useState("")
 
 
@@ -75,42 +73,12 @@ export const LoginProvider=({children})=>{
     const [token,setToken]=useState(getToken())
 
     const saveToken=()=>{
-        window.localStorage.setItem('token',userToken);
-        setToken(userToken)
+        window.localStorage.setItem('token',token);
+        setToken(token)
     }
 
 
-const logIn = async (info) =>{
-    try{
-        const user = await fetch("/token",{
-             method:'POST',
-             headers:{
-                  Authorization:`Bearer ${token}`,
-                       }, 
-            body:  JSON.stringify(info)
-                              
-                   })
 
-                       const response= await user.json()
-                       setToken(response.data.access_token)
-                       setUser(response.data.user)
-
-                       
-
-               }
-               catch(err){
-       console.log(err)
-       console.log(err.response)
-       console.log(err.response.status)
-
-       
-               }
-               setloginForm(({
-                email: "",
-                password: ""}))
-        
-              info.preventDefault()
-}
 
 
 
@@ -138,7 +106,6 @@ const handleLogout=()=>{
        setUser,
        handleLogout,
        saveToken,
-       logIn,
        token,
        setToken
        
