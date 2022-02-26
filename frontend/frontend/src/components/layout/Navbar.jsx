@@ -11,7 +11,7 @@ export default function Navbar() {
       }   
     return (
         
-        <div className="navbar  w-full mb-12 bg-neutral text-neutral-content">
+        <div className="navbar  w-full  bg-neutral text-neutral-content">
         <div className="container mx-auto">
             <div className="flex-none px-2 mx-2">
                 <Link to="/" className=" text-md font-bold align-middle">

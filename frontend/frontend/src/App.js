@@ -3,7 +3,6 @@ import LoginForm from './components/LoginForm'
 import { useState,useEffect,useContext } from 'react'
 import axios from "axios";
 import {BrowserRouter, BrowserRouter as Router,Route,Routes} from 'react-router-dom'
-import { LoginProvider } from "./content/LoginContext";
 import Teacher from './components/pages/Teacher'
 import Student from './components/pages/Student'
 import Navbar from './components/layout/Navbar'
@@ -14,42 +13,41 @@ function App() {
 
   const [profileData, setProfileData] = useState(null)
 
-  useEffect(() => {
-      axios({
-        method: "GET",
-        url:"/profile",
-      })
-      .then((response) => {
-        const res =response.data
-        setProfileData(({
-          profile_name: res.name,
-          about_me: res.about}))
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-          }
-      })
-  },[])
+  // useEffect(() => {
+  //     axios({
+  //       method: "GET",
+  //       url:"/profile",
+  //     })
+  //     .then((response) => {
+  //       const res =response.data
+  //       setProfileData(({
+  //         profile_name: res.name,
+  //         about_me: res.about}))
+  //     }).catch((error) => {
+  //       if (error.response) {
+  //         console.log(error.response)
+  //         console.log(error.response.status)
+  //         console.log(error.response.headers)
+  //         }
+  //     })
+  // },[])
 
   
 
   return (
-    <LoginProvider>
       <Router>
 
-      <div className=" ">
+      <div className=" h-screen">
 
       <Navbar/>
 
-<main>
+<main className="bg-black h-screen">
 <Routes>
 {/** Check for user exists   */}
 
 { !token &&  !user &&token!="" && token !==undefined?(
   
-<Route path="/login" element={<LoginForm setToken={setToken} />}> </Route>
+<Route path="/" element={<LoginForm setToken={setToken} />}> </Route>
 )
  :
 
@@ -75,7 +73,6 @@ function App() {
 
 
      
-    </LoginProvider>
    
   );
 }

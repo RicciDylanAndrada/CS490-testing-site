@@ -2,8 +2,7 @@ import React from 'react'
 //get set login from here
 import  img from  "./images/free3.jpeg"
 import {useState,useContext} from 'react'
-import { LoginProvider } from '../content/LoginContext'
-
+import LoginContext from "../content/LoginContext"
 
 
 function LoginForm({date}) {
@@ -16,10 +15,14 @@ function LoginForm({date}) {
   }
   )
 
-  const{setToken,setUser,token}=useContext(LoginProvider)
+  const{setToken,setUser,token}=useContext(LoginContext)
 
 
   const logIn = async (e) =>{
+    e.preventDfault()
+
+    console.log("fire")
+
     try{
         const user = await fetch("/token",{
           cache: "no-cache",
@@ -52,7 +55,6 @@ function LoginForm({date}) {
                 email: "",
                 password: ""}))
         
-              e.preventDefault()
 }
 
 function handleChange(event) { 
@@ -71,9 +73,8 @@ function handleChange(event) {
     
     <div className="bg-white text-black grid place-items-center "> 
     <div className="w-4/6 h-3/6 rounded shadow-md drop-shadow-lg p-3 ">
-    <p>Profile name: {date?.profile_name}</p>
-              <p>About me: {date.about_me}</p>
-        <form className=' h-full'>
+    
+        <form className='h-full'>
         
             <h1 className='text-black text-2xl ' >Login</h1>
             <div className="grid grid-cols-1 place-items-center  h-full">
