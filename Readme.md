@@ -9,8 +9,9 @@
 
 <h3> Download & Installation </h3>
 <h4> Python Enviorment/Flask Installation </h4>
-
 <ul>
+    <li> <h2>Assuming Python is already install on the system</h2>
+
   <li> <h2>Linux</h2>
 sudo apt-get install python3-venv    # If needed
 python3 -m venv .venv
@@ -26,6 +27,8 @@ py -3 -m venv .venv
 .venv\scripts\activate</li>
 <h3> Clone Repo </h3>
 <li>git clone {url} </li>
+  
+<h4> Make Sure to be inside Python Environment  </h4>
 
 <li> python -m pip install --upgrade pip
 </l1>
@@ -40,8 +43,14 @@ py -3 -m venv .venv
 <h4> Frontend Side </h4>
 
 <ul>
-  <li> 
+     <li> 
+        <h1> Inside Front End Directory ( /frontend/front/) </>
     npm run start-backend
+  </li>
+       
+        <li> 
+        <h1> Inside main directory</>
+    flask run
   </li>
 </ul>
 
