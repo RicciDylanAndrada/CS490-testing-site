@@ -40,16 +40,17 @@ py -3 -m venv .venv
 
 <h3> Setting up Frontend </h3>
 <ul>
-    <4>Errors that may occur</h4>
+    <h4>Errors that may occur</h4>
     <p>When cloning a repo, react-scripts may get errors such as (react scripts is not recognized) 
 </p>
         
   <li> 
     rm -rf node_modules
-    npm install
-    This will reinstall  node_modules
-   
+    npm install   
   </li>
+  <li>npm install </li>
+  <p>    This will reinstall  node_modules
+</p>
 </ul>
 
 
