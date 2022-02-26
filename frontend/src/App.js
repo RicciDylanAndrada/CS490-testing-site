@@ -37,15 +37,17 @@ function App() {
   
 
   return (
-<div>
+<div className=' h-screen'>
 
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
-<div class="h-screen w-full">
+<div class="h-full w-full">
 <LoginForm />
 
 </div>
         :( 
+          <div class="h-full  w-full">
+
           <Routes>
 <Route path="/" element={<Layout/>} >
     <Route element={<ProtectedRoutes />}>
@@ -72,6 +74,8 @@ function App() {
 </Route>
 
 </Routes>
+</div>
+
         )}
 </div>
 
