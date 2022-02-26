@@ -44,7 +44,7 @@ py -3 -m venv .venv
 
 <ul>
   <li> 
-   npm run 
+   npm start 
   </li>
 </ul>
 
