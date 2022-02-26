@@ -2,16 +2,19 @@
 import LoginForm from './components/LoginForm'
 import { useState,useEffect,useContext } from 'react'
 import axios from "axios";
-import {BrowserRouter, BrowserRouter as Router,Route,Routes} from 'react-router-dom'
+import {BrowserRouter, BrowserRouter as Router,Route,Routes,useLocation} from 'react-router-dom'
 import Teacher from './components/pages/Teacher'
 import Student from './components/pages/Student'
 import Navbar from './components/layout/Navbar'
 import LoginContext from './content/LoginContext';
-
+import ProtectedRoutes from './components/ProtectedRoutes';
+import Layout from './components/Layout';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
   const [profileData, setProfileData] = useState(null)
+
+
 
   // useEffect(() => {
   //     axios({
@@ -31,50 +34,90 @@ function App() {
   //         }
   //     })
   // },[])
-
   
 
   return (
-      <Router>
+<div>
 
-      <div className=" h-screen">
 
-      <Navbar/>
+{!token.token && token.setToken!=="" &&token.token!== undefined?  
+        <LoginForm />
+        :( 
+          <Routes>
+<Route path="/" element={<Layout/>} >
+    <Route element={<ProtectedRoutes />}>
+    {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
-<main className="bg-black h-screen">
-<Routes>
-{/** Check for user exists   */}
+       <Route path="/student" element={<Student/>}/>
+       {/* </Route> */}
+     
 
-{ !token &&  !user &&token!="" && token !==undefined?(
-  
-<Route path="/" element={<LoginForm setToken={setToken} />}> </Route>
-)
- :
+     {/* <Route element={<ProtectedRoutes allowedRoles={['teacher']}/>}>
 
-   user==='teacher'?  
+            <Route path="teacher" element={<Teacher/>}/>
 
-     <Route path="/teacher" element={<Teacher/>}/> 
-       : 
-      <Route path="/student" element={<Student/>}/> 
-}
+      */}
+
+     </Route>
+{/* <Route path="*" element={<Missing/>}/> */}
+
+
+
+
+
+
+</Route>
 
 </Routes>
-</main>
+        )}
+</div>
+
+  )};
+
+export default App;
+//       <div className=" h-screen">
+
+//       <Navbar/>
+
+// <main>
+// <Routes>
+// {/** Check for user exists   */}
+
+// { !token &&  !user &&token!="" && token !==undefined?(
+  
+// <Route path="/" element={<LoginForm setToken={setToken} />}> </Route>
+// )
+//  :
+//    user==='teacher'?  <>
+
+//         <Route element ={<ProtectedRoutes/>}/>
+//      <Route path="/teacher" element={<Teacher/>}/> )
+//      </>
+
+
+//        : 
+
+//        <>
+//        <Route element ={<ProtectedRoutes/>}/>
+
+//       <Route path="/student" element={<Student/>}/> 
+//       </>
+// }
+
+// </Routes>
+// </main>
 
         
-        {/* {profileData?.profile_name &&
-         <div className="App bg-slate-500 h-screen w-full" >
+//         {/* {profileData?.profile_name &&
+//          <div className="App bg-slate-500 h-screen w-full" >
 
-              <LoginForm date={profileData}  />
-            </div>
-        } */}
-    </div>
-      </Router>
+//               <LoginForm date={profileData}  />
+//             </div>
+//         } */}
+//     </div>
 
 
      
    
-  );
-}
-
-export default App;
+//   );
+// }

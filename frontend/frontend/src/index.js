@@ -3,15 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { LoginProvider } from "./content/LoginContext";
-
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
 
 ReactDOM.render(
 
   <React.StrictMode>
-      <LoginProvider>
+  <BrowserRouter>
 
-    <App />
+      <LoginProvider>
+<Routes>
+  <Route  path="/*" element={<App/>}/>
+</Routes>
     </LoginProvider>
+    </BrowserRouter>
 
   </React.StrictMode>,
   document.getElementById('root')

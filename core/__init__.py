@@ -1,5 +1,7 @@
 from flask import Flask
 import datetime
+from flask_cors import CORS
+
 
 from flask import request
 from flask import json
@@ -46,6 +48,7 @@ from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
 # app = create_app()
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
+cors = CORS()
 
 jwt = JWTManager(app)
 @app.route("/")
@@ -68,7 +71,6 @@ def my_profile():
 
     return response_body
 
-@app.route('/token', methods=["POST"])
 @app.after_request
 def refresh_expiring_jwts(response):
     try:
@@ -85,7 +87,10 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
+@app.route('/token', methods=["POST"])
+
 def create_token():
+    
     username = request.json.get("username", None)
     password = request.json.get("password", None)
     if username != "test" or password != "test":

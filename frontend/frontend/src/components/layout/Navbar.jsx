@@ -27,6 +27,7 @@ export default function Navbar() {
                     
                 </div>:
                 <div className="justify-self-end ">
+            <button  className="btn btn-sm btn-success h-30">Logout</button>
             <Link to="/"  onClick ={handleLogout} className="btn text-md btn-ghost btn-sm rounded-btn">
                         Log In
                     </Link>
