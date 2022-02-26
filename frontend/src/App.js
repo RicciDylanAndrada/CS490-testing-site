@@ -41,7 +41,10 @@ function App() {
 
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
-        <LoginForm />
+<div class="h-screen w-full">
+<LoginForm />
+
+</div>
         :( 
           <Routes>
 <Route path="/" element={<Layout/>} >

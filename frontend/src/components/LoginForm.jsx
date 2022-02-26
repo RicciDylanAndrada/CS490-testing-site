@@ -67,7 +67,7 @@ function handleChange(event) {
 
     <div className="bg-hero-pattern bg-no-repeat  bg-cover rounded-xl   text-black grid place-items-center "> 
     
-    <div className="w-2/6 h-2/6  bg-white   rounded-3xl  shadow-md drop-shadow-2xl  p-3  text-center">
+    <div className="w-2/6 h-3/6  bg-white   rounded-3xl  shadow-md drop-shadow-2xl  p-3  text-center">
     
         <form className=' h-full' onSubmit={logMeIn}>
 
@@ -76,14 +76,14 @@ function handleChange(event) {
                     <label  >
                     <p className='justify-self-start' ></p>
                     Username
-                    <input onChange={handleChange} type="username" value ={loginForm.username || ''} name="username" className='border-2 w-5/6 border-sky-200'></input>
+                    <input onChange={handleChange} type="username" value ={loginForm.username || ''} name="username" className='border-2 h-10 rounded-l  w-5/6 ' required></input>
                     </label>
                     <label>
                     Password
-                    <input  onChange={handleChange} type="password"  t value ={loginForm.password || ''} name="password" className='border-2  w-5/6 border-sky-200'></input>
+                    <input  onChange={handleChange} type="password"  t value ={loginForm.password || ''} name="password" className='border-2  h-10 rounded-l  w-5/6 ' required></input>
 
                     </label>
-                        <button className='btn  w-3/6 h-3 ' type='submit' >Enter</button>
+                        <button className='btn  w-3/6 h-3 mb-10 ' type='submit' >Enter</button>
             </div>
 
         </form>
