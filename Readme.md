@@ -5,12 +5,12 @@
 
 <hr/>
 
-<p> Describe you project -> Website to allow users to take tests created manually by teachers </p>
+<p>  Website to allow users to take tests created manually by teachers </p>
 
 <h3> Download & Installation </h3>
 <h4> Python Enviorment/Flask Installation </h4>
+<p>Assuming Python is already install on the system</p>
 <ul>
-    <li> <h2>Assuming Python is already install on the system</h2>
 
   <li> <h2>Linux</h2>
 sudo apt-get install python3-venv    # If needed
@@ -36,6 +36,20 @@ py -3 -m venv .venv
 </l1>
 <h4> Install all required dependencies </h4>
 <li>pip install -r requirements.txt</li>
+</ul>
+
+<h3> Setting up Frontend </h3>
+<ul>
+    <4>Errors that may occur</h4>
+    <p>When cloning a repo, react-scripts may get errors such as (react scripts is not recognized) 
+</p>
+        
+  <li> 
+    rm -rf node_modules
+    npm install
+    This will reinstall  node_modules
+   
+  </li>
 </ul>
 
 
