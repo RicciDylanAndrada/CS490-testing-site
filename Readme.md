@@ -24,6 +24,8 @@ source .venv/bin/activate</li>
   <li>
 py -3 -m venv .venv
 .venv\scripts\activate</li>
+<h3> Clone Repo </h3>
+<li>git clone {url} </li>
 
 <li> python -m pip install --upgrade pip
 </l1>
