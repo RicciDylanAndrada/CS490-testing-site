@@ -29,11 +29,8 @@ py -3 -m venv .venv
 </l1>
 <li> python -m pip install flask
 </l1>
-<li>pip install flask_sqlalchemy           </li>
-<li>pip install flask_migrate </li>
-<li>flask_marshmallow    </li>
-<li>flask_cors     </li>
-<li>python-dotenv</li>
+<h4> Install all required dependencies </h4>
+<li>pip install -r requirements.txt</li>
 </ul>
 
 
