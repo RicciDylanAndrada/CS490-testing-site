@@ -46,7 +46,6 @@ py -3 -m venv .venv
         
   <li> 
     rm -rf node_modules
-    npm install   
   </li>
   <li>npm install </li>
   <p>    This will reinstall  node_modules
