@@ -40,22 +40,15 @@ py -3 -m venv .venv
 
 
 <h3> Running Backend/Front end </h3>
-<h4> Frontend Side </h4>
+<h4> Frontend Side, (cd frontend/frontend ) </h4>
 
 <ul>
-   <h1> Inside Front End Directory ( /frontend/front/) </h1>
-
-     <li> 
-    npm run start-backend
-  </li>
-       
-        <li> 
-        <h1> Inside main directory</>
-    flask run
+  <li> 
+   npm run 
   </li>
 </ul>
 
-<h4> Backend Side </h4>
+<h4> Backend Side ( main dir)  </h4>
 
 <ul>
   <li> 
