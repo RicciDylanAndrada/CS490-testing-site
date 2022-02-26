@@ -44,7 +44,7 @@ py -3 -m venv .venv
 
 <ul>
      <li> 
-        <h1> Inside Front End Directory ( /frontend/front/) </>
+        <h1> Inside Front End Directory ( /frontend/front/) </h1>
     npm run start-backend
   </li>
        
