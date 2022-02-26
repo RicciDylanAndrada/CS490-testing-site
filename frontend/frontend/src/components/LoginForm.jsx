@@ -1,8 +1,8 @@
 import React from 'react'
 //get set login from here
-import  img from  "./images/free3.jpeg"
 import {useState,useContext} from 'react'
 import LoginContext from "../content/LoginContext"
+
 
 
 function LoginForm({date}) {
@@ -62,21 +62,21 @@ function handleChange(event) {
   setLoginForm(prevNote => ({
       ...prevNote, [name]: value})
   )}
+
   return (
 
     <div className=' w-full h-full col ' >
-   
-<div className="grid grid-cols-2 h-full">
-<div className="bg-sky-200 grid   p-4  place-items-center">
-        <img className='rounded-full  ' src={ img} ></img>
-    </div>
+
+<div className="grid grid-cols-1 h-full">
+
+
+    <div className="bg-hero-pattern bg-no-repeat  bg-cover rounded-xl grid  text-black grid place-items-center "> 
     
-    <div className="bg-white text-black grid place-items-center "> 
-    <div className="w-4/6 h-3/6 rounded shadow-md drop-shadow-lg p-3 ">
+    <div className="w-2/6 h-2/6  bg-white   rounded-3xl  shadow-md drop-shadow-2xl  p-3  text-center">
     
-        <form className='h-full'>
-        
-            <h1 className='text-black text-2xl ' >Login</h1>
+        <form className=' h-full'>
+
+            <h1 className='text-black text-2xl justify-self-center ' >Login</h1>
             <div className="grid grid-cols-1 place-items-center  h-full">
                     <label  >
                     <p className='justify-self-start' ></p>
@@ -90,7 +90,7 @@ function handleChange(event) {
                     </label>
                         <button className='btn  w-3/6 h-3 ' onSubmit={logIn} >Enter</button>
             </div>
-            
+
         </form>
     </div>
         

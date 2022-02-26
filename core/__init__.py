@@ -1,5 +1,10 @@
 from flask import Flask
+import datetime
+
 from flask import request
+from flask import json
+from sqlalchemy import DateTime
+
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -39,6 +44,10 @@ from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
 
 #     return app
 # app = create_app()
+app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
+
+jwt = JWTManager(app)
 @app.route("/")
 def home():
     return "Hello, Flask!"
@@ -50,29 +59,47 @@ def index():
         "testing":"Hello from flask backend"
     }
 @app.route('/profile')
+@jwt_required() #new line
 def my_profile():
     response_body = {
-        "name": "Ricci",
-        "about" :"Testing for this link"
+        "name": "Nagato",
+        "about" :"Hello! I'm a full stack developer that loves python and javascript"
     }
 
     return response_body
-@app.route("/token",methods=["POST"])
+
+@app.route('/token', methods=["POST"])
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(datetime.timezone.utc)
+        target_timestamp = datetime.timestamp(now + datetime.timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
 def create_token():
-    username = request.get_json("username",None)
-    password = request.get_json("password",None)
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if username != "test" or password != "test":
+        return {"msg": "Wrong username or password"}, 401
 
-    if (  (username != "admin" or username !="student")  or (password !="admin" or password!="student")):
-        return {"msg":"Wrong Credentials"}
+    access_token = create_access_token(identity=username)
+    response = {"access_token":access_token}
+    return response
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
 
-    else:
-        access_token = create_access_token(identity=username)
 
-        if(username == "admin" and password=="admin"):
-            response ={"access_token":access_token,"user":"admin"}
-            return response
-        elif(username == "student" and password=="student"):
-            response ={"access_token":access_token,"user":"student"}
-            return response
             
         

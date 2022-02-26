@@ -4,7 +4,7 @@ import {useContext} from 'react'
 import LoginContext from '../../content/LoginContext'
 
 export default function Navbar() {
-    const{setToken}=useContext(LoginContext)
+    const{setToken,user}=useContext(LoginContext)
     const handleLogout=()=>{
         setToken("")
         window.localStorage.removeItem("token")
@@ -19,18 +19,24 @@ export default function Navbar() {
                 </Link>
             </div>
             <div className="flex-1 px-2 mx-2">
-                <div className="flex justify-end">
+                {!user? 
+                    <div className="flex justify-end">
                     <Link to="/" className="btn text-md btn-ghost btn-sm rounded-btn">
                         Log In
                     </Link>
                     
-                </div>
+                </div>:
+                <div className="justify-self-end ">
+            <Link to="/"  onClick ={handleLogout} className="btn text-md btn-ghost btn-sm rounded-btn">
+                        Log In
+                    </Link>
+            </div>
+                }
+                
 
             </div>
         </div>
-        <div className="justify-self-end ">
-            <button onClick ={handleLogout} className="btn btn-sm btn-success h-30">Logout</button>
-            </div>
+        
         </div>
         
     )
