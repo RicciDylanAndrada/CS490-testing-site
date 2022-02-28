@@ -1,5 +1,6 @@
 import React from 'react'
 import data from "../data/test.json"
+import Card from '../shared/Card'
 function Student() {
 
   //fetch the test acconuts
@@ -22,8 +23,8 @@ function Student() {
         </div> 
         </div>
    
-
-       {data?.tests &&
+<div class="w-full row-span-3 h-full p-4">
+{data?.tests &&
        data.tests.map((value)=>{
          {/* let key = Object.keys(value.Questions)
         key.forEach((key,index) =>{
@@ -37,7 +38,7 @@ function Student() {
         
 
          <div key={value.test_id}>
-         <p>Section id: {value.section_id}</p>
+         <Card test_id={value.test_id}/>
 
 
 
@@ -45,6 +46,8 @@ function Student() {
          )
        })
      }
+</div>
+       
       
 
 
