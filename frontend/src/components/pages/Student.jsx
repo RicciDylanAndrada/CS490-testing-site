@@ -4,7 +4,12 @@ function Student() {
 
   //fetch the test acconuts
   // would also have to check for section ID to display the certain test
-console.log(data.tests)
+  const questions = data.tests.map((test)=>{
+    if (test.section_id==1){
+      return test?.Questions
+    }
+  })
+  
   return (
     <div className='h-screen text-black bg-gray-100  place-items-center  w-full  grid grid-rows-6 '>
     <div class=" row-span-1  grid place-items-center bg-gradient-to-tr from-red-700 to-red-100  w-full h-full">
@@ -17,7 +22,30 @@ console.log(data.tests)
         </div> 
         </div>
    
-    <div class="row-span-4">Test</div>
+
+       {data?.tests &&
+       data.tests.map((value)=>{
+         {/* let key = Object.keys(value.Questions)
+        key.forEach((key,index) =>{
+          return (        
+          console.log(value.Questions[index])
+          )
+          
+
+        }) */}
+         return(
+        
+
+         <div key={value.test_id}>
+         <p>Section id: {value.section_id}</p>
+
+
+
+         </div>
+         )
+       })
+     }
+      
 
 
 

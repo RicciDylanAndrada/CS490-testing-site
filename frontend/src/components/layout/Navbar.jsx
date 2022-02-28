@@ -21,8 +21,8 @@ export default function Navbar() {
             <div className="flex-1 px-2 mx-2">
                 {!user? 
                     <div className="flex justify-end">
-                    <Link to="/" className="btn text-md btn-ghost btn-sm rounded-btn">
-                        Log In
+                    <Link to="/"  onClick ={handleLogout} className="btn text-md btn-ghost btn-sm rounded-btn">
+                        Logout
                     </Link>
                     
                 </div>:

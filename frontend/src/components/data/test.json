@@ -3,22 +3,26 @@
      [
       {
         "test_id": 1,
+        
         "section_id": 1,
-        "Questions":
-        { 
-            "1":"Question 1 for seciton 1 ",
-            "2":"Question 2 for section 1"
-        }
+        "test_name":"Example Test 1 for section 1"
+        
+       
+      },
+      {
+        "test_id": 1,
+        
+        "section_id": 1,
+        "test_name":"Example Test 2 for section 1"
+        
        
       },
       {
         "test_id": 2,
         "section_id": 2,
-        "Questions":
-        {
-            "1":"Question 1 for section 2",
-            "2":"Question 2 for section 2"
-        }
+        "test_name":"Example Test 1 for section 2 "
+
+       
         
       }
       
