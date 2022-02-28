@@ -54,7 +54,8 @@ py -3 -m venv .venv
 
 
 <h3> Running Backend/Front end </h3>
-<h4> Frontend Side, (cd frontend/frontend ) </h4>
+<h4> Frontend Side,  </h4>
+<p> make sure you are inside frontend folder, ( cd frontend) </p>
 
 <ul>
   <li> 
