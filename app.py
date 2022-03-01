@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-from flask import Flask
-from flask import request
-=======
 import datetime
 from flask_cors import CORS
 
@@ -9,7 +5,6 @@ from flask_cors import CORS
 import json
 from sqlalchemy import DateTime
 
->>>>>>> 12c6ef1bf5722f4cda86ba6870d66db923ee913d
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -50,8 +45,6 @@ class roles(db.Model):
     role_name = db.Column(db.String(80)) 
      
 
-
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -65,7 +58,7 @@ def index():
     socks = User.query.filter_by(username='Param').order_by(User.username).all()
     sock_text = '<ul>'
     for sock in socks:
-        sock_text += '<li>' + "username =" + str(sock.user_id) + ', ' + "password =" +sock.username + '</li>'
+        sock_text += '<li>' + "username =" + str(sock.password) + ', ' + "password =" +sock.username + '</li>'
     sock_text += '</ul>'
     return sock_text
     #return 'Hello world!'
@@ -102,16 +95,16 @@ def refresh_expiring_jwts(response):
 
 def create_token():
     
-    username = request.json.get("username", None)
+    ausername = request.json.get("username", None)
     password = request.json.get("password", None)
+    socks = User.query.filter_by(username=ausername).first()
     
     
-
-    if (   (username !="student" or password!="student")):
+    if (ausername != socks.username or password!=socks.password):
         return {"msg":"Wrong Credentials"}
 
     else:
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity=ausername)
 
         
         response ={"access_token":access_token,"user":"student"}
@@ -122,4 +115,3 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
-            
