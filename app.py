@@ -1,18 +1,15 @@
-from flask import Flask
-from flask import request
+import datetime
+from flask_cors import CORS
+
+
+import json
+from sqlalchemy import DateTime
+
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
-app.config.from_object(Configuration)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
-db = SQLAlchemy(app)
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(15), unique=True)
-    password = db.Column(db.String(80)) 
+
 
 from core import models
 from crypt import methods
@@ -22,9 +19,28 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 
+cors = CORS()
+
+
+app = Flask(__name__)
+app.config.from_object(Configuration)
+jwt = JWTManager(app)
+app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
+
+app.config['DEBUG'] = True
+app.config.from_object(Configuration)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
+db = SQLAlchemy(app)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), unique=True)
+    password = db.Column(db.String(80)) 
+
+
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"     
 
 @app.route("/")
 def home():
@@ -51,21 +67,46 @@ def my_profile():
     }
 
     return response_body
-@app.route("/token",methods=["POST"])
-def create_token():
-    username = request.get_json("username",None)
-    password = request.get_json("password",None)
 
-    if (  (username != "admin" or username !="student")  or (password !="admin" or password!="student")):
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(datetime.timezone.utc)
+        target_timestamp = datetime.timestamp(now + datetime.timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
+@app.route("/token",methods=["POST"])
+
+def create_token():
+    
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    
+    
+
+    if (   (username !="student" or password!="student")):
         return {"msg":"Wrong Credentials"}
 
     else:
         access_token = create_access_token(identity=username)
 
-        if(username == "admin" and password=="admin"):
-            response ={"access_token":access_token,"user":"admin"}
-            return response
-        elif(username == "student" and password=="student"):
-            response ={"access_token":access_token,"user":"student"}
-            return response
+        
+        response ={"access_token":access_token,"user":"student"}
+        return response
+        
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
             

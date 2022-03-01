@@ -59,17 +59,8 @@ def home():
 @app.route("/api",methods=["GET"])
 def index():
     return {
-        "testing":"Hello from flask back"
+        "testing":"Hello from flask backend"
     }
-@app.route('/profile')
-@jwt_required() #new line
-def my_profile():
-    response_body = {
-        "name": "Nagato",
-        "about" :"Hello! I'm a full stack developer that loves python and javascript"
-    }
-
-    return response_body
 
 @app.after_request
 def refresh_expiring_jwts(response):
@@ -93,7 +84,6 @@ def create_token():
     
     username = request.json.get("username", None)
     password = request.json.get("password", None)
-    
     if username != "test" or password != "test":
         return {"msg": "Wrong username or password"}, 401
 
@@ -106,6 +96,5 @@ def logout():
     unset_jwt_cookies(response)
     return response
 
-
-            
-        
+if __name__=="__main__":
+    app.run(debug=True)

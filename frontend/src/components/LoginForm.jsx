@@ -34,6 +34,7 @@ function LoginForm({date}) {
        }
     })
     .then((response) => {
+      console.log(response)
       setToken({token:response.data.access_token})
     }).catch((error) => {
       if (error.response) {
