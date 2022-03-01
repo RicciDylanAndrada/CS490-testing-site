@@ -9,10 +9,15 @@ function Layout() {
   return (
 
 
-    <main>
-    <Navbar/>
-        
-    <Outlet/>
+    <main class=" ">
+    <div class="fixed w-32 ">
+<Navbar className="fixed w-full" />
+
+</div>    
+<div class="ml-32 ">
+      <Outlet/>
+
+</div>
 
     </main>
   )

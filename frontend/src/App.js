@@ -42,11 +42,14 @@ function App() {
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
 <div class="h-full w-full">
-<LoginForm />
+<Routes>
+<Route path="/" element={<LoginForm/>}/>
+
+</Routes>
 
 </div>
         :( 
-          <div class="h-full  w-full">
+          <div class="">
 
           <Routes>
 <Route path="/" element={<Layout/>} >
@@ -54,6 +57,10 @@ function App() {
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/student" element={<Student/>}/>
+       <Route path="/student/test" element={<LoginForm/>}/>
+        <Route path="/student/test/submit" element={<LoginForm/>}/>
+
+
        {/* </Route> */}
      
 

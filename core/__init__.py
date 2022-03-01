@@ -93,6 +93,7 @@ def create_token():
     
     username = request.json.get("username", None)
     password = request.json.get("password", None)
+    
     if username != "test" or password != "test":
         return {"msg": "Wrong username or password"}, 401
 
