@@ -29,10 +29,10 @@ const [test,setTest]=useState("")
         <button onClick={() => navigate("test")}>Go forward</button>
       <button onClick={() => navigate(-1)}>Go back</button> */}
       
-    <div class=" row-span-2  grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
+    <div class=" row-span-1   grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
         
     </div>
-    <div class="w-11/12  h-5/6 relative bottom-24 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center rounded-md ">
+    <div class="w-11/12  h-4/6 relative bottom-28 row-span-1 bg-white shadow-xl grid grid-rows-6 1 text-center rounded-md ">
 
         <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
           <h2 class="justify-self-start" >Completed Tests</h2>
@@ -57,7 +57,7 @@ const [test,setTest]=useState("")
 
 
 
-<div class="grid grid-cols-3 row-span-7 h-full w-full place-items-center">
+<div class="grid grid-cols-3 row-span-7 h-full w-full place-items-center content-start ">
 
 {data?.tests &&
        data?.tests.map((value)=>{

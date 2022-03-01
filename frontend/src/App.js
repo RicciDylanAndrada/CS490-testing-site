@@ -37,23 +37,29 @@ function App() {
   
 
   return (
-<div className=' h-screen'>
+<div className=' h-screen font-semibold   ' >
 
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
 <div class="h-full w-full">
-<Routes>
+<LoginForm/>
+{/* <Routes>
 <Route path="/" element={<LoginForm/>}/>
 
-</Routes>
+</Routes> */}
 
 </div>
         :( 
           <div class="">
+            {token.status == 0? (
 
-          <Routes>
+
+
+              <Routes>
 <Route path="/" element={<Layout/>} >
-    <Route element={<ProtectedRoutes />}>
+<Route path="/login" element={<LoginForm/>}/>
+
+    <Route element={<ProtectedRoutes  allowedRoles={0} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/student" element={<Student/>}/>
@@ -71,7 +77,6 @@ function App() {
       */}
 
      </Route>
-{/* <Route path="*" element={<Missing/>}/> */}
 
 
 
@@ -81,6 +86,40 @@ function App() {
 </Route>
 
 </Routes>
+            )
+:
+
+              (<Routes>
+  <Route path="/login" element={<LoginForm/>}/>
+
+<Route path="/" element={<Layout/>} >
+    <Route element={<ProtectedRoutes  allowedRoles={1} />}>
+    {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
+
+       <Route path="/teacher" element={<Teacher/>}/>
+       <Route path="/teacher/test/submissions" element={<LoginForm/>}/>
+       <Route path="/teacher/test/create" element={<LoginForm/>}/>
+
+        <Route path="/student/test/submit" element={<LoginForm/>}/>
+
+
+       {/* </Route> */}
+     
+
+   
+
+     </Route>
+
+
+
+
+
+
+</Route>
+
+</Routes>)
+            }
+          
 </div>
 
         )}

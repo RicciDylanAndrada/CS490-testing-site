@@ -94,14 +94,14 @@ def create_token():
     
     
 
-    if (   (username !="student" or password!="student")):
-        return {"msg":"Wrong Credentials"}
+    if (   (username !="teacher" or password!="teacher")):
+        return {"msg":"Wrong Credentials","status":-1}
 
     else:
         access_token = create_access_token(identity=username)
 
         
-        response ={"access_token":access_token,"user":"student"}
+        response ={"access_token":access_token,"status":1}
         return response
         
 @app.route("/logout", methods=["POST"])

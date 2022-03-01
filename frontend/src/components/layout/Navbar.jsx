@@ -2,10 +2,11 @@ import {Link} from 'react-router-dom'
 import {useContext} from 'react'
 import {HiOutlineDesktopComputer} from 'react-icons/hi'
 import {AiOutlineFileDone} from 'react-icons/ai'
-
 import LoginContext from '../../content/LoginContext'
 
 export default function Navbar() {
+
+    const{token}=useContext(LoginContext)
     const{setToken,user,removeToken}=useContext(LoginContext)
     const handleLogout=()=>{
         removeToken()
@@ -24,9 +25,51 @@ export default function Navbar() {
         
             
            
-       <div class="grid gap-2 h-12"> <div class="grid  grid-cols-1  place-items-center    w-full">
+       
+
+        
+        {token.status==1? (
+            <div class="grid gap-2 h-28  "> <div class="grid  grid-cols-1  place-items-center    w-full">
+            <div class="grid  grid-cols-1  place-items-center    w-full">
+       <div class=" w-full flex  justify-start">
+        <a  class="hover:border-bg-orange basis-2/12  ">
+        <HiOutlineDesktopComputer size="15px"  />
+        </a>
+        <h1 className='text-xs basis-6/12 ml-2' >Dashboard</h1>
+
+        </div>
+
+        </div>
+
+        </div>
+         <div class="grid  grid-cols-1  place-items-center    w-full">
+       <div class=" w-full flex  justify-start">
+        <a  class="hover:border-bg-orange basis-2/12  ">
+        <AiOutlineFileDone size="15px"  />
+        </a>
+        <h1 className='text-xs basis-6/12 ml-2' >Questions</h1>
+
+        </div>
+
+        </div>
+        <div class="grid  grid-cols-1  place-items-center    w-full">
+       <div class=" w-full flex  justify-start">
+        <a  class="hover:border-bg-orange basis-2/12  ">
+        <AiOutlineFileDone size="15px"  />
+        </a>
+        <h1 className='text-xs basis-6/12 ml-2' >Submissions</h1>
+
+        </div>
+
+        </div>
+        </div>
+        ) 
+        
+        :
+      (
+        <div class="grid gap-2 h-16"> <div class="grid  grid-cols-1  place-items-center    w-full">
        <div class=" w-full flex  justify-center">
-        <a href="https://github.com/RicciDylanAndrada" class="hover:border-bg-orange basis-2/12  ">
+        <a  class="hover:border-bg-orange basis-2/12  ">
         <HiOutlineDesktopComputer  size="15px"  />
         </a>
         <h1 className='text-xs basis-7/12 ml-2' >DashBoard</h1>
@@ -34,10 +77,10 @@ export default function Navbar() {
         </div>
 
         </div>
-            
-            <div class="grid  grid-cols-1  place-items-center    w-full">
+          
+         <div class="grid  grid-cols-1  place-items-center    w-full">
        <div class=" w-full flex  justify-start">
-        <a href="https://github.com/RicciDylanAndrada" class="hover:border-bg-orange basis-2/12  ">
+        <a  class="hover:border-bg-orange basis-2/12  ">
         <AiOutlineFileDone size="15px"  />
         </a>
         <h1 className='text-xs basis-6/12 ml-2' >Results</h1>
@@ -45,12 +88,16 @@ export default function Navbar() {
         </div>
 
         </div>
-            
-           <a href="https://www.linkedin.com/in/riccidylanandrada/" className="hover:bg-orange">
-           </a>
-
-           
+        
         </div>
+        
+      )
+        
+        }
+        
+            
+         
+           
         </div>
 
 
