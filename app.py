@@ -33,9 +33,14 @@ def home():
 #this for testing purposes for react
 @app.route("/api",methods=["GET"])
 def index():
-    return {
-        "testing":"Hello from flask backend"
-    }
+    socks = User.query.filter_by(username='Param').order_by(User.username).all()
+    sock_text = '<ul>'
+    for sock in socks:
+        sock_text += '<li>' + "username =" + str(sock.id) + ', ' + "password =" +sock.username + '</li>'
+    sock_text += '</ul>'
+    return sock_text
+    #return 'Hello world!'
+
 @app.route('/login',methods=["GET"])
 def my_profile():
     
