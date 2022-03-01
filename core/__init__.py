@@ -59,7 +59,7 @@ def home():
 @app.route("/api",methods=["GET"])
 def index():
     return {
-        "testing":"Hello from flask backend"
+        "testing":"Hello from flask back"
     }
 @app.route('/profile')
 @jwt_required() #new line
