@@ -1,7 +1,11 @@
 import datetime
 from flask_cors import CORS
 
+<<<<<<< HEAD
 import sys
+=======
+import sqlite3
+>>>>>>> cc4ee6da3232b2261c382aa6c9034e8287a82312
 
 import json
 from sqlalchemy import DateTime
@@ -9,19 +13,17 @@ from sqlalchemy import DateTime
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+
+
+from core import models
 from crypt import methods
 from venv import create
 from flask import Flask,request,jsonify
-
 from flask_cors import CORS
 import sqlite3 as sql
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
-
-cors = CORS()
-                              
-
-
 
 cors = CORS()
 
@@ -34,7 +36,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
 
 app.config['DEBUG'] = True
 app.config.from_object(Configuration)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
 db = SQLAlchemy(app)
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -104,29 +106,11 @@ def refresh_expiring_jwts(response):
         return response
 @app.route("/token",methods=["POST"])
 
-# def create_token():
-    
-#     username = request.json.get("username", None)
-#     password = request.json.get("password", None)
-    
-    
-
-#     if (   (username !="teacher" or password!="teacher")):
-#         return {"msg":"Wrong Credentials","status":-1}
-
-#     else:
-#         access_token = create_access_token(identity=username)
-
-        
-#         response ={"access_token":access_token,"status":1}
-
 def create_token():
     
     ausername = request.json.get("username", None)
     password = request.json.get("password", None)
     socks = User.query.filter_by(username=ausername).first()
-    # Get query for the users role id and return that in the status
-    # also get their section id
     
     
     if (ausername != socks.username or password!=socks.password):
@@ -161,9 +145,17 @@ def question():
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     cur = con.cursor()
-    cur.execute("SELECT * FROM questions")
-    
-    data1 = cur.fetchall()
-    print("this is data1", data1, file=sys.stderr)
-
-    return { "success":"success"} 
+    query = cur.execute("SELECT * FROM questions")
+    colname = [ d[0] for d in query.description ]
+    result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
+    cur.close()
+    cur.connection.close()
+    response ={"question":result_list }
+    return response
+   
+    data1 = cur.fetchall()   
+    response = []
+    for data in data1:
+        row_data = {"question_id" : data.question_id, "question" : data.question}
+    response.append(row_data)
+    return response
