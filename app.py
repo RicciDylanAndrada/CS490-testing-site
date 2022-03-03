@@ -1,6 +1,7 @@
 import datetime
 from flask_cors import CORS
 
+import sys
 
 import json
 from sqlalchemy import DateTime
@@ -64,6 +65,8 @@ def home():
 @app.route("/api",methods=["GET"])
 def index():
     socks = questions.query.all()
+    print("this is socks", socks, file=sys.stderr)
+
     sock_text = '<ul>'
     for sock in socks:
         sock_text += '<li>' + "username =" + str(sock.question_id) + ', ' + "password =" +sock.question + '</li>'
@@ -134,11 +137,7 @@ def create_token():
         access_token = create_access_token(identity=ausername)
 
         
-<<<<<<< HEAD
         response ={"access_token":access_token,"user":socks.username,"status":"1"}
-=======
-        response ={"access_token":access_token,"status":1}
->>>>>>> 5449060f054ecc6652375e20cf4293f4ce4a28d2
         return response
         
 @app.route("/logout", methods=["POST"])
@@ -146,27 +145,25 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
-<<<<<<< HEAD
 
-@app.route('/add_question',methods=['GET', 'POST'])
+@app.route('/add_question',methods=['POST'])
 def add_question():
-    question = request.json.get("username", None)
+    question = request.json.get("question", None)
     resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
     c.execute("INSERT INTO questions (question) VALUES ('" + resultJSON + "')")
     con.commit()
 
-@app.route('/question',methods=['GET', 'POST'])
+@app.route('/question',methods=['GET'])
 def question():
     #question = request.json.get("username", None)
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     cur = con.cursor()
     cur.execute("SELECT * FROM questions")
-    data1 = cur.fetchall()   
-    return { "data": [
-        {"start": data1.question, "end": data1.question, "label": data1.question}
-    ]} 
-=======
->>>>>>> 5449060f054ecc6652375e20cf4293f4ce4a28d2
+    
+    data1 = cur.fetchall()
+    print("this is data1", data1, file=sys.stderr)
+
+    return { "success":"success"} 
