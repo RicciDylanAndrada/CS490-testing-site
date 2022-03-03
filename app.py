@@ -8,17 +8,18 @@ from sqlalchemy import DateTime
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
-
-
-from core import models
 from crypt import methods
 from venv import create
 from flask import Flask,request,jsonify
+
 from flask_cors import CORS
-import sqlite3 as sql
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
+
+cors = CORS()
+                              
+
+
 
 cors = CORS()
 
@@ -34,10 +35,9 @@ app.config.from_object(Configuration)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
 db = SQLAlchemy(app)
 class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True)
     password = db.Column(db.String(80)) 
-    section = db.Column(db.String(80))
 class User_role(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     role_id = db.Column(db.Integer, primary_key=True)
@@ -45,10 +45,6 @@ class User_role(db.Model):
 class roles(db.Model):
     role_id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(80)) 
-class questions(db.Model):
-    question_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    question = db.Column(db.String(120))
-
      
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -61,10 +57,10 @@ def home():
 #this for testing purposes for react
 @app.route("/api",methods=["GET"])
 def index():
-    socks = questions.query.all()
+    socks = User.query.filter_by(username='Param').order_by(User.username).all()
     sock_text = '<ul>'
     for sock in socks:
-        sock_text += '<li>' + "username =" + str(sock.question_id) + ', ' + "password =" +sock.question + '</li>'
+        sock_text += '<li>' + "username =" + str(sock.password) + ', ' + "password =" +sock.username + '</li>'
     sock_text += '</ul>'
     return sock_text
     #return 'Hello world!'
@@ -99,22 +95,41 @@ def refresh_expiring_jwts(response):
         return response
 @app.route("/token",methods=["POST"])
 
+# def create_token():
+    
+#     username = request.json.get("username", None)
+#     password = request.json.get("password", None)
+    
+    
+
+#     if (   (username !="teacher" or password!="teacher")):
+#         return {"msg":"Wrong Credentials","status":-1}
+
+#     else:
+#         access_token = create_access_token(identity=username)
+
+        
+#         response ={"access_token":access_token,"status":1}
+
 def create_token():
     
     ausername = request.json.get("username", None)
     password = request.json.get("password", None)
     socks = User.query.filter_by(username=ausername).first()
+    socks1 = User_role.query.filter_by(user_id=socks.user_id).first()
+    # Get query for the users role id and return that in the status
+    # also get their section id
     
     
     if (ausername != socks.username or password!=socks.password):
         return {"msg":"Wrong Credentials"}
 
     else:
-        
+        if(socks1.userid)
         access_token = create_access_token(identity=ausername)
 
         
-        response ={"access_token":access_token,"user":socks.username,"status":"1"}
+        response ={"access_token":access_token,"status":1}
         return response
         
 @app.route("/logout", methods=["POST"])
@@ -123,21 +138,3 @@ def logout():
     unset_jwt_cookies(response)
     return response
 
-@app.route('/add_question',methods=['GET', 'POST'])
-def add_question():
-    question = request.json.get("username", None)
-    resultJSON = json.dumps(question)
-    con = sql.connect('database.db')
-    c =  con.cursor() 
-    c.execute("INSERT INTO questions (question) VALUES ('" + resultJSON + "')")
-    con.commit()
-
-@app.route('/question',methods=['GET', 'POST'])
-def question():
-    #question = request.json.get("username", None)
-    #resultJSON = json.dumps(question)
-    con = sql.connect('database.db')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM questions")
-    data1 = cur.fetchall()   
-    
