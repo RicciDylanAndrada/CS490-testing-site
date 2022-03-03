@@ -1,7 +1,8 @@
 import React from 'react'
 import data from "../data/test.json"
 import Card from '../shared/Card'
-import { useState } from 'react'
+import axios from 'axios'
+import { useState,useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import LoginContext from '../../content/LoginContext'
 import { PathRouteProps } from 'react-router-dom'
@@ -26,6 +27,33 @@ import Paper from '@mui/material/Paper';
 
 function Teacher() {
   const [tabValue,setTabValue]=useState(0);
+  const[fetchQuestion,setFetchQuestion]=useState("null")
+
+
+
+  useEffect(()=>{
+
+    axios({
+        method: "GET",
+        url:"/question"
+      })
+      .then((response) => {
+        console.log(response.data)
+        setFetchQuestion(response.data)
+        setRight(response.data.question)
+  
+  
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+          }
+      })
+  
+
+},[])
+
   const [value,setValue]=useState({
     // student_id:null,
     // section:null,
@@ -37,10 +65,115 @@ function Teacher() {
   // would also have to check for section ID to display the certain test
   const navigate = useNavigate();
 
+
+  const [checked, setChecked] = React.useState([]);
+  const [left, setLeft] = React.useState([]);
+  const [right, setRight] = useState(fetchQuestion?.question);
+
+    // have to set right use state the array of question_id
+
+  //const [right, setRight] = React.useState(fetchQuestion.question);
+
+console.log(fetchQuestion.question)
+console.log(right)
+
 //  let getButtonId = (e) => {
 //         console.log(e.currentTarget.id);
 //         setTest(e.currentTarget.id)
 //       }
+const not =(a, b)=> {
+  return a.filter((value) => b.indexOf(value) === -1);
+}
+
+const intersection = (a, b)=> {
+  return a.filter((value) => b.indexOf(value) !== -1);
+}
+const leftChecked = intersection(checked, left);
+const rightChecked = intersection(checked, right);
+
+
+const handleToggle = (value) => () => {
+  const currentIndex = checked.indexOf(value);
+  const newChecked = [...checked];
+
+  if (currentIndex === -1) {
+    newChecked.push(value);
+  } else {
+    newChecked.splice(currentIndex, 1);
+  }
+
+  setChecked(newChecked);
+};
+
+
+
+const handleAllRight = () => {
+  setRight(right.concat(left));
+  setLeft([]);
+};
+
+
+
+const handleCheckedLeft = () => {
+  setLeft(left.concat(rightChecked));
+  setRight(not(right, rightChecked));
+  setChecked(not(checked, rightChecked));
+};
+const handleCheckedRight = () => {
+  setRight(right.concat(leftChecked));
+  setLeft(not(left, leftChecked));
+  setChecked(not(checked, leftChecked));
+};
+
+
+const handleAllLeft = () => {
+  setLeft(left.concat(right));
+  setRight([]);
+};
+
+const customList = (items) => (
+
+  <div className="overflow-auto h-full w-80  flex flex-col space-y-4    ">
+  
+    
+      {items.map((value) => {
+        const labelId = `transfer-list-item-${value.question_id}-label`;
+
+        return (
+          <div className='border-2'>
+
+         
+          <ListItem
+            key={value.question_id}
+            role="listitem"
+            className="border-2"
+            button
+            onClick={handleToggle(value)}
+          >
+            <ListItemIcon>
+              <Checkbox
+                checked={checked.indexOf(value) !== -1}
+                
+                tabIndex={-1}
+                disableRipple
+                inputProps={{
+                  'aria-labelledby': labelId,
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={value.question} />
+          </ListItem>
+          </div>
+        );
+      })}
+      <ListItem />
+      
+  </div>
+);
+
+
+
+
 
 
 const handleChangeTab = (event, newValue) => {
@@ -57,15 +190,7 @@ const handleSubmit=(e)=>{
   e.preventDefault()
 
 
-  const submission={
-    // id:token.student_id
-    question_id:e.value.question,
-    answer:e.value.answer,
-
-
-  }
-  console.log(submission)
-  
+  console.log(left)
 }
 
   return (
@@ -91,11 +216,13 @@ const handleSubmit=(e)=>{
         
         </div> 
         <div class=" w-full  row-span-4    ">
-       
-        <form>
+        {fetchQuestion && right && ( 
+        <form onSubmit={handleSubmit} >
+        <h1>HELLO</h1>       
+
  {/* get test data and loop creating div of things below */}
-        <div class="grid w-full  grid-cols-2  h-full ">
-        <Box
+        <div class="grid w-full  grid-cols-1  h-full ">
+        {/* <Box
       sx={{
         flexGrow: 1,
         bgcolor: "background.paper",
@@ -149,14 +276,91 @@ const handleSubmit=(e)=>{
       </TabPanel>
 
 
-    </Box>
+    </Box> */}
+    <div class="grid grid-cols-3">
 
-        </div>
+    <div class="grid place-items-center">
+    <h1>Test Questions </h1>
+
+
+    <div class=" place-items-center h-80  overflow-auto       ">
+      <Grid
+        
+      item>{customList(left)}</Grid>
+      </div>
+
+
+    </div>
+   
+      <div class="  place-items-center grid ">
+      <Grid item>
+        <Grid container direction="column" alignItems="center">
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleAllRight}
+            disabled={left.length === 0}
+            aria-label="move all right"
+          >
+            All ≫
+          </Button>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleCheckedRight}
+            disabled={leftChecked.length === 0}
+            aria-label="move selected right"
+          >
+            Selected &gt;
+          </Button>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleCheckedLeft}
+            disabled={rightChecked.length === 0}
+            aria-label="move selected left"
+          >
+            Selected &lt;
+          </Button>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleAllLeft}
+            disabled={right.length === 0}
+            aria-label="move all left"
+          >
+            ≪ All
+          </Button>
+        </Grid>
+      </Grid>
+     </div>
+     <div class="grid place-items-center">
+    <h1> Question Bank </h1>
+
+
+    <div class=" place-items-center h-80    overflow-auto ">
+<div className='h-full flex flex-col space-y-4' >
+{customList(right)}
+
+</div>
+
+    
+      </div>
+
+
+    </div>
+
+
+</div>        </div>
         <div class=" w-full  grid  place-items-center    p-5 ">
-          <button class="place-self-center w btn btn-active   " >Create Test </button>
+          <button type='"submit' class="place-self-center w btn btn-active   " >Create Test </button>
         </div> 
         </form>
-
+        )}
         
         </div> 
         

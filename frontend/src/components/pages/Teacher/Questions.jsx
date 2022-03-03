@@ -4,12 +4,12 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios'
 
 
-import QuestionData from '../../data/Question.json'
 import { useEffect,useState } from 'react';
 function Questions() {
 
     const[added,setAdded]=useState("")
 
+    const[fetchQuestion,setFetchQuestion]=useState("")
 
     const[question,setQuestion]=useState("")
     function handleChange(e) { 
@@ -21,11 +21,11 @@ function Questions() {
 
         axios({
             method: "GET",
-            url:"/questions"
+            url:"/question"
           })
           .then((response) => {
-            console.log(response.questions)
-            setQuestion(response.questions)
+            console.log(response.data)
+            setFetchQuestion(response.data)
           
       
       
@@ -127,7 +127,7 @@ function Questions() {
                         </div>
 
                         <div class="p-4 flex  flex-col  space-y-4  ">
-                {QuestionData.questions.map((question) => {
+                {fetchQuestion && fetchQuestion?.question.map((question) => {
                     return (
                             <div className='border-2 rounded-xl h-12' > 
                             <h1>  {question.question} </h1>

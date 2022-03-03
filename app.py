@@ -1,11 +1,7 @@
 import datetime
 from flask_cors import CORS
 
-<<<<<<< HEAD
 import sys
-=======
-import sqlite3
->>>>>>> cc4ee6da3232b2261c382aa6c9034e8287a82312
 
 import json
 from sqlalchemy import DateTime
@@ -36,7 +32,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
 
 app.config['DEBUG'] = True
 app.config.from_object(Configuration)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db = SQLAlchemy(app)
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
