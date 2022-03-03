@@ -79,8 +79,10 @@ const handleSubmit=(e)=>{
           {/* able to delete queston tabs or add tes question tabs */}
         
         </div> 
-        <div class="border-b-2 w-full   border-b-gray row-span-4  y  ">
-        {/* get test data and loop creating div of things below */}
+        <div class=" w-full  row-span-4    ">
+       
+        <form>
+ {/* get test data and loop creating div of things below */}
         <div class="grid w-full  grid-cols-2  h-full ">
         <Box
       sx={{
@@ -111,6 +113,8 @@ const handleSubmit=(e)=>{
       </Tabs>
 
 
+
+
       <TabPanel value={tabValue} index={0}>
       <input  className="border-2 border-black rounded-lg p-4" placeholder='question 1 '  />
       </TabPanel>
@@ -132,14 +136,19 @@ const handleSubmit=(e)=>{
       <TabPanel value={tabValue} index={6}>
         Item Seven2
       </TabPanel>
+
+
     </Box>
+
         </div>
+        <div class=" w-full  grid  place-items-center    p-5 ">
+          <button class="place-self-center w btn btn-active   " >Create Test </button>
+        </div> 
+        </form>
 
         
         </div> 
-        <div class="border-b-2 w-full  grid  place-items-center  border-b-gray row-span-1  p-5 ">
-          <button class="place-self-center w btn btn-active   " >Create Test </button>
-        </div> 
+        
 
         
         </div>

@@ -1,11 +1,24 @@
-import {Link} from 'react-router-dom' 
+import {NavLink,useMatch,useResolvedPath} from 'react-router-dom' 
 import {useContext} from 'react'
 import {HiOutlineDesktopComputer} from 'react-icons/hi'
 import {AiOutlineFileDone} from 'react-icons/ai'
 import LoginContext from '../../content/LoginContext'
+import { useNavigate } from 'react-router-dom';
+import AllyProps from '../Tab/AllyProps'
+import TabPanel from '../Tab/TabPanel'
+import Box  from '@mui/material/Box'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import LoginForm from '../LoginForm'
 
+import { useState } from 'react'
 export default function Navbar() {
 
+
+    const [tabValue,setTabValue]=useState(0);
+    const handleChangeTab = (event, newValue) => {
+        setTabValue(newValue);
+      };
     const{token}=useContext(LoginContext)
     const{setToken,user,removeToken}=useContext(LoginContext)
     const handleLogout=()=>{
@@ -35,8 +48,15 @@ export default function Navbar() {
         <a  class="hover:border-bg-orange basis-2/12  ">
         <HiOutlineDesktopComputer size="15px"  />
         </a>
-        <h1 className='text-xs basis-6/12 ml-2' >Dashboard</h1>
-
+        <button   className='text-xs basis-6/12 ml-2'>   
+        
+        
+             <NavLink
+            className={(navData) => (navData.isActive ? 'border-b-2 border-gray-200 ' : '')}
+         to="teacher">Dashboard</NavLink> 
+        
+        
+        </button> 
         </div>
 
         </div>
@@ -47,8 +67,17 @@ export default function Navbar() {
         <a  class="hover:border-bg-orange basis-2/12  ">
         <AiOutlineFileDone size="15px"  />
         </a>
-        <h1 className='text-xs basis-6/12 ml-2' >Questions</h1>
+        <button   className='text-xs basis-6/12 ml-2'>   
+        
+        
+             <NavLink
 
+className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : '')}
+
+                       to="/questions">Questions</NavLink> 
+        
+        
+        </button> 
         </div>
 
         </div>
@@ -57,8 +86,14 @@ export default function Navbar() {
         <a  class="hover:border-bg-orange basis-2/12  ">
         <AiOutlineFileDone size="15px"  />
         </a>
-        <h1 className='text-xs basis-6/12 ml-2' >Submissions</h1>
+        <button   className='text-xs basis-6/12 ml-2'>   
+        
+        
+        <NavLink
+        className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : '')}
 
+         
+         to="/submissions">Submissions</NavLink> </button> 
         </div>
 
         </div>
@@ -72,8 +107,7 @@ export default function Navbar() {
         <a  class="hover:border-bg-orange basis-2/12  ">
         <HiOutlineDesktopComputer  size="15px"  />
         </a>
-        <h1 className='text-xs basis-7/12 ml-2' >DashBoard</h1>
-
+        <NavLink too="/" >  Dashboard </NavLink>
         </div>
 
         </div>
@@ -86,7 +120,7 @@ export default function Navbar() {
         <h1 className='text-xs basis-6/12 ml-2' >Results</h1>
 
         </div>
-
+        
         </div>
         
         </div>
@@ -106,9 +140,9 @@ export default function Navbar() {
 
 
 
-        <Link to="/"  onClick ={handleLogout} className="btn  text-md btn-error     btn-sm rounded-btn">
+        <NavLink to="/"  onClick ={handleLogout} className="btn  text-md btn-error     btn-sm rounded-btn">
             Logout
-        </Link>
+        </NavLink>
           
             </div>
             
