@@ -100,32 +100,46 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         </div>
         ) 
         
-        :
-      (
-        <div class="grid gap-2 h-16"> <div class="grid  grid-cols-1  place-items-center    w-full">
-       <div class=" w-full flex  justify-center">
+        :(
+       <div class="grid gap-2 h-28  "> <div class="grid  grid-cols-1  place-items-center    w-full">
+            <div class="grid  grid-cols-1  place-items-center    w-full">
+       <div class=" w-full flex  justify-start">
         <a  class="hover:border-bg-orange basis-2/12  ">
-        <HiOutlineDesktopComputer  size="15px"  />
+        <HiOutlineDesktopComputer size="15px"  />
         </a>
-        <NavLink too="/" >  Dashboard </NavLink>
+        <button   className='text-xs basis-6/12 ml-2'>   
+        
+        
+             <NavLink
+            className={(navData) => (navData.isActive ? 'border-b-2 border-gray-200 ' : '')}
+         to="teacher">Dashboard</NavLink> 
+        
+        
+        </button> 
         </div>
 
         </div>
-          
-         <div class="grid  grid-cols-1  place-items-center    w-full">
+
+        </div>
+        
+        <div class="grid  grid-cols-1  place-items-center    w-full">
        <div class=" w-full flex  justify-start">
         <a  class="hover:border-bg-orange basis-2/12  ">
         <AiOutlineFileDone size="15px"  />
         </a>
-        <h1 className='text-xs basis-6/12 ml-2' >Results</h1>
+        <button   className='text-xs basis-6/12 ml-2'>   
+        
+        
+        <NavLink
+        className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : '')}
+
+         
+         to="/submissions">Submissions</NavLink> </button> 
+        </div>
 
         </div>
-        
         </div>
-        
-        </div>
-        
-      )
+        ) 
         
         }
         

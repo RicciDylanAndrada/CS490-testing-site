@@ -57,15 +57,15 @@ function App() {
 
 
               <Routes>
-<Route path="/" element={<Layout/>} >
 <Route path="/login" element={<LoginForm/>}/>
+<Route path="/" element={<Layout/>} >
 
     <Route element={<ProtectedRoutes  allowedRoles={0} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/student" element={<Student/>}/>
-       <Route path="/student/test" element={<LoginForm/>}/>
-        <Route path="/student/test/submit" element={<LoginForm/>}/>
+       <Route path="/test" element={<LoginForm/>}/>
+        <Route path="/submit" element={<LoginForm/>}/>
 
 
        {/* </Route> */}

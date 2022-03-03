@@ -116,6 +116,8 @@ def create_token():
     ausername = request.json.get("username", None)
     password = request.json.get("password", None)
     socks = User.query.filter_by(username=ausername).first()
+    # Get query for the users role id and return that in the status
+    # also get their section id
     
     
     if (ausername != socks.username or password!=socks.password):
@@ -125,7 +127,7 @@ def create_token():
         access_token = create_access_token(identity=ausername)
 
         
-        response ={"access_token":access_token,"user":"student"}
+        response ={"access_token":access_token,"status":1}
         return response
         
 @app.route("/logout", methods=["POST"])
