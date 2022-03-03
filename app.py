@@ -1,7 +1,7 @@
 import datetime
 from flask_cors import CORS
 
-import sqlite3
+import sys
 
 import json
 from sqlalchemy import DateTime
@@ -63,6 +63,8 @@ def home():
 @app.route("/api",methods=["GET"])
 def index():
     socks = questions.query.all()
+    print("this is socks", socks, file=sys.stderr)
+
     sock_text = '<ul>'
     for sock in socks:
         sock_text += '<li>' + "username =" + str(sock.question_id) + ', ' + "password =" +sock.question + '</li>'
@@ -125,16 +127,16 @@ def logout():
     unset_jwt_cookies(response)
     return response
 
-@app.route('/add_question',methods=['GET', 'POST'])
+@app.route('/add_question',methods=['POST'])
 def add_question():
-    question = request.json.get("username", None)
+    question = request.json.get("question", None)
     resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
     c.execute("INSERT INTO questions (question) VALUES ('" + resultJSON + "')")
     con.commit()
 
-@app.route('/question',methods=['GET', 'POST'])
+@app.route('/question',methods=['GET'])
 def question():
     #question = request.json.get("username", None)
     #resultJSON = json.dumps(question)
