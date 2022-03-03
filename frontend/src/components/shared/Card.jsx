@@ -1,27 +1,16 @@
 import React from 'react'
 
-function Card({test_id}) {
+function Card({test_id,getButtonId}) {
+   
   return (
     
-    <div >
-        
-    <div className="p-4 card  shadow-xl compact side bg-base-100">
-        <h1 className="flex justify-center mb-4 text-2xl font-bold "  > {test_id}</h1>
-       
-        <div className=" w-80 grid grid-cols-2 mx-auto">
-        <div className="grid  justify-start">
-            <p className="text-lg font-bold">Followers</p>
-        </div>
-        <div className="grid  justify-end w-full ">
+    <div className=" p-4 w-80 grid h-44  card shadow-xl  side bg-white ">
+            
+            <h1 className="   "  >Test: <p>{test_id}</p></h1>
+            <button  onClick={getButtonId} id={test_id} 
+            className='  btn btn-sm bg-blue-500 border-0   w-20  h-4  justify-self-center '  >Enter</button>
 
-
-
-        </div>
-        </div>
-    </div>
-    
-</div>
-
+            </div>
     
 
   )

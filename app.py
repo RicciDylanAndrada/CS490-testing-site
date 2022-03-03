@@ -8,17 +8,19 @@ from sqlalchemy import DateTime
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
-
-
-from core import models
 from crypt import methods
 from venv import create
 from flask import Flask,request,jsonify
+
 from flask_cors import CORS
 import sqlite3 as sql
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
+
+cors = CORS()
+                              
+
+
 
 cors = CORS()
 
@@ -99,11 +101,29 @@ def refresh_expiring_jwts(response):
         return response
 @app.route("/token",methods=["POST"])
 
+# def create_token():
+    
+#     username = request.json.get("username", None)
+#     password = request.json.get("password", None)
+    
+    
+
+#     if (   (username !="teacher" or password!="teacher")):
+#         return {"msg":"Wrong Credentials","status":-1}
+
+#     else:
+#         access_token = create_access_token(identity=username)
+
+        
+#         response ={"access_token":access_token,"status":1}
+
 def create_token():
     
     ausername = request.json.get("username", None)
     password = request.json.get("password", None)
     socks = User.query.filter_by(username=ausername).first()
+    # Get query for the users role id and return that in the status
+    # also get their section id
     
     
     if (ausername != socks.username or password!=socks.password):
@@ -114,7 +134,11 @@ def create_token():
         access_token = create_access_token(identity=ausername)
 
         
+<<<<<<< HEAD
         response ={"access_token":access_token,"user":socks.username,"status":"1"}
+=======
+        response ={"access_token":access_token,"status":1}
+>>>>>>> 5449060f054ecc6652375e20cf4293f4ce4a28d2
         return response
         
 @app.route("/logout", methods=["POST"])
@@ -122,6 +146,7 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
+<<<<<<< HEAD
 
 @app.route('/add_question',methods=['GET', 'POST'])
 def add_question():
@@ -143,3 +168,5 @@ def question():
     return { "data": [
         {"start": data1.question, "end": data1.question, "label": data1.question}
     ]} 
+=======
+>>>>>>> 5449060f054ecc6652375e20cf4293f4ce4a28d2

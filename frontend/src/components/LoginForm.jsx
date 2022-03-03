@@ -24,7 +24,7 @@ function LoginForm({date}) {
 
 
   function logMeIn(event) {
-    console.log("submmitig om fgimctopm ")
+    console.log("FORM = > " , loginForm)
     axios({
       method: "POST",
       url:"/token",
@@ -34,7 +34,22 @@ function LoginForm({date}) {
        }
     })
     .then((response) => {
-      setToken({token:response.data.access_token})
+      console.log(response)
+      setToken({token:response.data.access_token, status:response.data.status})
+
+
+      if(response.data.status == 0){
+        navigate('/student')
+
+      }
+      else if ( response.data.status == 1){
+        navigate('/teacher')
+
+      }
+      else{
+        navigate("/")
+
+      }
     }).catch((error) => {
       if (error.response) {
         console.log(error.response)
@@ -46,7 +61,8 @@ function LoginForm({date}) {
     setLoginForm(({
       email: "",
       password: ""})) 
-      navigate('/student')
+
+      
 
     event.preventDefault()
   }
