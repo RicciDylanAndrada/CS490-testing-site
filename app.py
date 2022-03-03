@@ -105,18 +105,19 @@ def create_token():
     ausername = request.json.get("username", None)
     password = request.json.get("password", None)
     socks = User.query.filter_by(username=ausername).first()
-    
+    socks1 = User_role.query.filter_by(user_id=socks.user_id).first()
     
     if (ausername != socks.username or password!=socks.password):
-        return {"msg":"Wrong Credentials"}
-
+        response = {"status": -1 }
     else:
-        
-        access_token = create_access_token(identity=ausername)
+        if (socks1.role_id == 1):
+            access_token = create_access_token(identity=ausername)
+            response ={"access_token":access_token,"user":socks.username,"status": 1}
 
-        
-        response ={"access_token":access_token,"user":socks.username,"status":"1"}
-        return response
+        if (socks1.role_id == 2):
+            access_token = create_access_token(identity=ausername)
+            response ={"access_token":access_token,"user":socks.username,"status": 0}
+    return response
         
 @app.route("/logout", methods=["POST"])
 def logout():
