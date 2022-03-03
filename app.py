@@ -140,6 +140,4 @@ def question():
     cur = con.cursor()
     cur.execute("SELECT * FROM questions")
     data1 = cur.fetchall()   
-    return { "data": [
-        {"start": data1.question, "end": data1.question, "label": data1.question}
-    ]} 
+    

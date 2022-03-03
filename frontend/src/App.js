@@ -9,6 +9,7 @@ import Navbar from './components/layout/Navbar'
 import LoginContext from './content/LoginContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
+import Questions from './components/pages/Teacher/Questions';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
@@ -37,23 +38,36 @@ function App() {
   
 
   return (
-<div className=' h-screen'>
+<div className=' h-screen font-semibold   ' >
 
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
 <div class="h-full w-full">
-<LoginForm />
+<LoginForm/>
+{/* <Routes>
+<Route path="/" element={<LoginForm/>}/>
+
+</Routes> */}
 
 </div>
         :( 
-          <div class="h-full  w-full">
+          <div class="">
+            {token.status == 0? (
 
-          <Routes>
+
+
+              <Routes>
+<Route path="/login" element={<LoginForm/>}/>
 <Route path="/" element={<Layout/>} >
-    <Route element={<ProtectedRoutes />}>
+
+    <Route element={<ProtectedRoutes  allowedRoles={0} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/student" element={<Student/>}/>
+       <Route path="/test" element={<LoginForm/>}/>
+        <Route path="/submit" element={<LoginForm/>}/>
+
+
        {/* </Route> */}
      
 
@@ -64,7 +78,6 @@ function App() {
       */}
 
      </Route>
-{/* <Route path="*" element={<Missing/>}/> */}
 
 
 
@@ -74,6 +87,43 @@ function App() {
 </Route>
 
 </Routes>
+            )
+:
+
+              (<Routes>
+  <Route path="/login" element={<LoginForm/>}/>
+
+
+<Route path="/" element={<Layout/>} >
+    <Route element={<ProtectedRoutes  allowedRoles={1} />}>
+    {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
+
+       <Route path="/teacher" element={<Teacher/>}/>
+       <Route path="/questions" element={<Questions/>}/>
+
+       <Route path="/submission" element={<LoginForm/>}/>
+       <Route path="/create" element={<LoginForm/>}/>
+
+        <Route path="/submit" element={<LoginForm/>}/>
+
+
+       {/* </Route> */}
+     
+
+   
+
+     </Route>
+
+
+
+
+
+
+</Route>
+
+</Routes>)
+            }
+          
 </div>
 
         )}

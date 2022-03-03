@@ -78,7 +78,10 @@ const [token, setToken] = useState({
 
 function saveToken(userToken) {
   localStorage.setItem('token', userToken);
-  setToken({token:token.token || ''});
+  setToken({
+    token:token.token || '',
+status: '',
+section:token.section|| ''});
 };
 
 function removeToken() {
