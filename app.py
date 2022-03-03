@@ -33,11 +33,17 @@ app.config.from_object(Configuration)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
 db = SQLAlchemy(app)
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True)
     password = db.Column(db.String(80)) 
+class User_role(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    role_id = db.Column(db.Integer, primary_key=True)
 
-
+class roles(db.Model):
+    role_id = db.Column(db.Integer, primary_key=True)
+    role_name = db.Column(db.String(80)) 
+     
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -52,7 +58,7 @@ def index():
     socks = User.query.filter_by(username='Param').order_by(User.username).all()
     sock_text = '<ul>'
     for sock in socks:
-        sock_text += '<li>' + "username =" + str(sock.id) + ', ' + "password =" +sock.username + '</li>'
+        sock_text += '<li>' + "username =" + str(sock.password) + ', ' + "password =" +sock.username + '</li>'
     sock_text += '</ul>'
     return sock_text
     #return 'Hello world!'
@@ -89,16 +95,16 @@ def refresh_expiring_jwts(response):
 
 def create_token():
     
-    username = request.json.get("username", None)
+    ausername = request.json.get("username", None)
     password = request.json.get("password", None)
+    socks = User.query.filter_by(username=ausername).first()
     
     
-
-    if (   (username !="student" or password!="student")):
+    if (ausername != socks.username or password!=socks.password):
         return {"msg":"Wrong Credentials"}
 
     else:
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity=ausername)
 
         
         response ={"access_token":access_token,"user":"student"}
@@ -109,4 +115,3 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
-            
