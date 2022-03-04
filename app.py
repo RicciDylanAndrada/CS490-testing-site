@@ -15,7 +15,7 @@ from flask_migrate import Migrate
 from core import models
 from crypt import methods
 from venv import create
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify, session
 from flask_cors import CORS
 import sqlite3 as sql
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
@@ -49,6 +49,13 @@ class roles(db.Model):
 class questions(db.Model):
     question_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     question = db.Column(db.String(120))
+class tes_t(db.Model):
+    test_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    section = db.Column(db.String(80))
+    tes_t = db.Column(db.String(256))
+class submission(db.Model):
+    test_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    submission = db.Column(db.String(256))
 
      
 
@@ -77,7 +84,7 @@ def my_profile():
     
     response_body = {
         
-        "name": "aa",
+        "name": session['id'],
         "about" :"Testing for this link"
     }
 
@@ -103,7 +110,8 @@ def refresh_expiring_jwts(response):
 @app.route("/token",methods=["POST"])
 
 def create_token():
-    
+
+
     ausername = request.json.get("username", None)
     password = request.json.get("password", None)
     socks = User.query.filter_by(username=ausername).first()
@@ -114,11 +122,12 @@ def create_token():
     else:
         if (socks1.role_id == 1):
             access_token = create_access_token(identity=ausername)
-            response ={"access_token":access_token,"user":socks.username,"status": 1}
+            response ={"access_token":access_token,"user":socks.username,"section":socks.section, "user_id":socks.user_id, "status": 1}
 
         if (socks1.role_id == 2):
             access_token = create_access_token(identity=ausername)
-            response ={"access_token":access_token,"user":socks.username,"status": 0}
+            response ={"access_token":access_token,"user":socks.username,"section":socks.section, "user_id":socks.user_id, "status": 0}
+    #session['id'] = socks.user_id
     return response
         
 @app.route("/logout", methods=["POST"])
@@ -130,10 +139,10 @@ def logout():
 @app.route('/add_question',methods=['POST'])
 def add_question():
     question = request.json.get("question", None)
-    resultJSON = json.dumps(question)
+   # resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT INTO questions (question) VALUES ('" + resultJSON + "')")
+    c.execute("INSERT INTO questions (question) VALUES ('" + question + "')")
     con.commit()
 
 @app.route('/question',methods=['GET'])
@@ -150,9 +159,37 @@ def question():
     response ={"question":result_list }
     return response
    
-    data1 = cur.fetchall()   
-    response = []
-    for data in data1:
-        row_data = {"question_id" : data.question_id, "question" : data.question}
-    response.append(row_data)
+@app.route('/make_test',methods=['POST'])
+def make_test():
+    section = request.json.get("section", None)
+    test_id = request.json.get("test_id", None)
+    tes_t = request.json.get("tes_t", None)
+    #resultJSON = json.dumps(question)
+    con = sql.connect('database.db')
+    c =  con.cursor() 
+    c.execute("INSERT INTO tes_t (test_id, section, tes_t) VALUES ('" + test_id + "','" + section + "', '" + tes_t + "')")
+    con.commit()
+
+@app.route('/show_test',methods=['GET'])
+def show_test():
+    #question = request.json.get("username", None)
+    #resultJSON = json.dumps(question)
+    con = sql.connect('database.db')
+    cur = con.cursor()
+    query = cur.execute("SELECT * FROM questions")
+    colname = [ d[0] for d in query.description ]
+    result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
+    cur.close()
+    cur.connection.close()
+    response ={"question":result_list }
     return response
+
+@app.route('/submission',methods=['POST'])
+def sub():
+    submission = request.json.get("submission", None)
+    test_id = request.json.get("test_id", None)
+    #resultJSON = json.dumps(question)
+    con = sql.connect('database.db')
+    c =  con.cursor() 
+    c.execute("INSERT INTO submission (test_id, submission) VALUES ('" + test_id + "','" + submission + "')")
+    con.commit()
