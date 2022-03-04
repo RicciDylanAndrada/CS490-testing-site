@@ -115,6 +115,7 @@ def logout():
 import datetime
 from flask_cors import CORS
 
+import sys
 
 import json
 from sqlalchemy import DateTime
@@ -130,6 +131,7 @@ from crypt import methods
 from venv import create
 from flask import Flask,request,jsonify
 from flask_cors import CORS
+import sqlite3 as sql
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 
@@ -144,14 +146,25 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
 
 app.config['DEBUG'] = True
 app.config.from_object(Configuration)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db = SQLAlchemy(app)
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(15), unique=True)
     password = db.Column(db.String(80)) 
+    section = db.Column(db.String(80))
+class User_role(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    role_id = db.Column(db.Integer, primary_key=True)
 
+class roles(db.Model):
+    role_id = db.Column(db.Integer, primary_key=True)
+    role_name = db.Column(db.String(80)) 
+class questions(db.Model):
+    question_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    question = db.Column(db.String(120))
 
+     
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -163,10 +176,12 @@ def home():
 #this for testing purposes for react
 @app.route("/api",methods=["GET"])
 def index():
-    socks = User.query.filter_by(username='Param').order_by(User.username).all()
+    socks = questions.query.all()
+    print("this is socks", socks, file=sys.stderr)
+
     sock_text = '<ul>'
     for sock in socks:
-        sock_text += '<li>' + "username =" + str(sock.id) + ', ' + "password =" +sock.username + '</li>'
+        sock_text += '<li>' + "username =" + str(sock.question_id) + ', ' + "password =" +sock.question + '</li>'
     sock_text += '</ul>'
     return sock_text
     #return 'Hello world!'
@@ -203,19 +218,20 @@ def refresh_expiring_jwts(response):
 
 def create_token():
     
-    username = request.json.get("username", None)
+    ausername = request.json.get("username", None)
     password = request.json.get("password", None)
+    socks = User.query.filter_by(username=ausername).first()
     
     
-
-    if (   (username !="teacher" or password!="teacher")):
-        return {"msg":"Wrong Credentials","status":-1}
+    if (ausername != socks.username or password!=socks.password):
+        return {"msg":"Wrong Credentials"}
 
     else:
-        access_token = create_access_token(identity=username)
+        
+        access_token = create_access_token(identity=ausername)
 
         
-        response ={"access_token":access_token,"status":1}
+        response ={"access_token":access_token,"user":socks.username,"status":"1"}
         return response
         
 @app.route("/logout", methods=["POST"])
@@ -223,5 +239,38 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
+<<<<<<< HEAD
             
 >>>>>>> 9ddfe5ef7eb18d900881747eb0764a6456226c65
+=======
+
+@app.route('/add_question',methods=['POST'])
+def add_question():
+    question = request.json.get("question", None)
+    resultJSON = json.dumps(question)
+    con = sql.connect('database.db')
+    c =  con.cursor() 
+    c.execute("INSERT INTO questions (question) VALUES ('" + resultJSON + "')")
+    con.commit()
+
+@app.route('/question',methods=['GET'])
+def question():
+    #question = request.json.get("username", None)
+    #resultJSON = json.dumps(question)
+    con = sql.connect('database.db')
+    cur = con.cursor()
+    query = cur.execute("SELECT * FROM questions")
+    colname = [ d[0] for d in query.description ]
+    result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
+    cur.close()
+    cur.connection.close()
+    response ={"question":result_list }
+    return response
+   
+    data1 = cur.fetchall()   
+    response = []
+    for data in data1:
+        row_data = {"question_id" : data.question_id, "question" : data.question}
+    response.append(row_data)
+    return response
+>>>>>>> f177a802bd3b34b4cb81fac32dd60cf0ecae3f01

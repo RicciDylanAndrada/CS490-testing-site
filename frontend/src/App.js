@@ -147,6 +147,7 @@ import Navbar from './components/layout/Navbar'
 import LoginContext from './content/LoginContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
+import Questions from './components/pages/Teacher/Questions';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
@@ -194,15 +195,15 @@ function App() {
 
 
               <Routes>
-<Route path="/" element={<Layout/>} >
 <Route path="/login" element={<LoginForm/>}/>
+<Route path="/" element={<Layout/>} >
 
     <Route element={<ProtectedRoutes  allowedRoles={0} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/student" element={<Student/>}/>
-       <Route path="/student/test" element={<LoginForm/>}/>
-        <Route path="/student/test/submit" element={<LoginForm/>}/>
+       <Route path="/test" element={<LoginForm/>}/>
+        <Route path="/submit" element={<LoginForm/>}/>
 
 
        {/* </Route> */}
@@ -230,15 +231,18 @@ function App() {
               (<Routes>
   <Route path="/login" element={<LoginForm/>}/>
 
+
 <Route path="/" element={<Layout/>} >
     <Route element={<ProtectedRoutes  allowedRoles={1} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/teacher" element={<Teacher/>}/>
-       <Route path="/teacher/test/submissions" element={<LoginForm/>}/>
-       <Route path="/teacher/test/create" element={<LoginForm/>}/>
+       <Route path="/questions" element={<Questions/>}/>
 
-        <Route path="/student/test/submit" element={<LoginForm/>}/>
+       <Route path="/submission" element={<LoginForm/>}/>
+       <Route path="/create" element={<LoginForm/>}/>
+
+        <Route path="/submit" element={<LoginForm/>}/>
 
 
        {/* </Route> */}
