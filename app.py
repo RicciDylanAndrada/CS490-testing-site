@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import datetime
 from flask_cors import CORS
 
@@ -110,3 +111,117 @@ def logout():
     unset_jwt_cookies(response)
     return response
             
+=======
+import datetime
+from flask_cors import CORS
+
+
+import json
+from sqlalchemy import DateTime
+
+from config import Configuration
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+
+
+from core import models
+from crypt import methods
+from venv import create
+from flask import Flask,request,jsonify
+from flask_cors import CORS
+from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
+                               unset_jwt_cookies, jwt_required, JWTManager
+
+cors = CORS()
+
+
+app = Flask(__name__)
+app.config.from_object(Configuration)
+jwt = JWTManager(app)
+app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
+
+app.config['DEBUG'] = True
+app.config.from_object(Configuration)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
+db = SQLAlchemy(app)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), unique=True)
+    password = db.Column(db.String(80)) 
+
+
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+@app.route("/")
+def home():
+    return "Hello, Flask!"
+
+#this for testing purposes for react
+@app.route("/api",methods=["GET"])
+def index():
+    socks = User.query.filter_by(username='Param').order_by(User.username).all()
+    sock_text = '<ul>'
+    for sock in socks:
+        sock_text += '<li>' + "username =" + str(sock.id) + ', ' + "password =" +sock.username + '</li>'
+    sock_text += '</ul>'
+    return sock_text
+    #return 'Hello world!'
+
+@app.route('/login',methods=["GET"])
+def my_profile():
+    
+    response_body = {
+        
+        "name": "aa",
+        "about" :"Testing for this link"
+    }
+
+    return response_body
+
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(datetime.timezone.utc)
+        target_timestamp = datetime.timestamp(now + datetime.timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
+@app.route("/token",methods=["POST"])
+
+def create_token():
+    
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    
+    
+
+    if (   (username !="teacher" or password!="teacher")):
+        return {"msg":"Wrong Credentials","status":-1}
+
+    else:
+        access_token = create_access_token(identity=username)
+
+        
+        response ={"access_token":access_token,"status":1}
+        return response
+        
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
+            
+>>>>>>> 9ddfe5ef7eb18d900881747eb0764a6456226c65
