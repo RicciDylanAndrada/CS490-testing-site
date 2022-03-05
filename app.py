@@ -161,8 +161,11 @@ def question():
    
 @app.route('/make_test',methods=['POST'])
 def make_test():
+        
     section = request.json.get("section", None)
     tes_t = request.json.get("tes_t", None)
+    print(tes_t, file=sys.stderr)
+
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
@@ -171,12 +174,12 @@ def make_test():
 
 @app.route('/show_test',methods=['GET'])
 def show_test():
-    sec = request.json.get("section", None)
     #socks = User.query.filter_by(username=ausername).first()
    #socks1 = tes_t.query.filter_by(section=sec).all()
+
     con = sql.connect('database.db')
     cur = con.cursor()
-    query = cur.execute("SELECT test_id, tes_t FROM Tes_t where section='"+str(sec)+"'")
+    query = cur.execute("SELECT test_id, tes_t FROM Tes_t")
     colname = [ d[0] for d in query.description ]
     result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
     cur.close()
