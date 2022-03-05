@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import datetime
 from flask_cors import CORS
 
@@ -111,7 +110,6 @@ def logout():
     unset_jwt_cookies(response)
     return response
             
-=======
 import datetime
 from flask_cors import CORS
 
@@ -239,10 +237,6 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
-<<<<<<< HEAD
-            
->>>>>>> 9ddfe5ef7eb18d900881747eb0764a6456226c65
-=======
 
 @app.route('/add_question',methods=['POST'])
 def add_question():
@@ -273,4 +267,4 @@ def question():
         row_data = {"question_id" : data.question_id, "question" : data.question}
     response.append(row_data)
     return response
->>>>>>> f177a802bd3b34b4cb81fac32dd60cf0ecae3f01
+
