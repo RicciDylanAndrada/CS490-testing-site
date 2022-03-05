@@ -162,26 +162,26 @@ def question():
 @app.route('/make_test',methods=['POST'])
 def make_test():
     section = request.json.get("section", None)
-    test_id = request.json.get("test_id", None)
     tes_t = request.json.get("tes_t", None)
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT INTO tes_t (test_id, section, tes_t) VALUES ('" + test_id + "','" + section + "', '" + tes_t + "')")
+    c.execute("INSERT INTO tes_t (section, tes_t) VALUES ('" + section + "', '" + tes_t + "')")
     con.commit()
 
 @app.route('/show_test',methods=['GET'])
 def show_test():
-    #question = request.json.get("username", None)
-    #resultJSON = json.dumps(question)
+    sec = request.json.get("section", None)
+    #socks = User.query.filter_by(username=ausername).first()
+   #socks1 = tes_t.query.filter_by(section=sec).all()
     con = sql.connect('database.db')
     cur = con.cursor()
-    query = cur.execute("SELECT * FROM questions")
+    query = cur.execute("SELECT test_id, tes_t FROM Tes_t where section='"+str(sec)+"'")
     colname = [ d[0] for d in query.description ]
     result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
     cur.close()
     cur.connection.close()
-    response ={"question":result_list }
+    response ={"test":result_list }
     return response
 
 @app.route('/submission',methods=['POST'])
