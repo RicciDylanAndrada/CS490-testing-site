@@ -81,10 +81,15 @@ def index():
 
 @app.route('/login',methods=["GET"])
 def my_profile():
-    
+    ls_dict = [{'question': 'question2', 'question_id': 2}, {'question': 'question3', 'question_id': 3}]
+    json_string = json.dumps(ls_dict)
+    con = sql.connect('database.db')
+    c =  con.cursor() 
+    c.execute("INSERT INTO tes_t (section,tes_t) VALUES ('6','" + json_string + "')")
+    con.commit()
     response_body = {
         
-        "name": session['id'],
+        
         "about" :"Testing for this link"
     }
 
@@ -174,14 +179,16 @@ def make_test():
 
 @app.route('/show_test',methods=['GET'])
 def show_test():
-    #socks = User.query.filter_by(username=ausername).first()
-   #socks1 = tes_t.query.filter_by(section=sec).all()
-
+    sec = request.json.get("section", None)
     con = sql.connect('database.db')
     cur = con.cursor()
-    query = cur.execute("SELECT test_id, tes_t FROM Tes_t")
-    colname = [ d[0] for d in query.description ]
-    result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
+    query = cur.execute("SELECT test_id, tes_t FROM Tes_t where section='"+str(sec)+"'")
+    socks = tes_t.query.filter_by(section=sec).all()
+    result_list = []
+    for sock in socks:
+        y = json.loads(sock.tes_t)
+        lst = {"test_id": sock.test_id, "tes_t": y } 
+        result_list.append(lst) 
     cur.close()
     cur.connection.close()
     response ={"test":result_list }
