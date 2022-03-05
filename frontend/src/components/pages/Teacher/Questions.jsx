@@ -49,8 +49,8 @@ function Questions() {
            }
         })
         .then((response) => {
-          console.log(response)
-          console.log("send question")
+         
+          
 
         
     

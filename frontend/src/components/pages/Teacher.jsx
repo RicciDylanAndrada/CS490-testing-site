@@ -54,7 +54,10 @@ const {token} = useContext(LoginContext)
 
       axios({
         method: "GET",
-        url:"/show_test"
+        url:"/show_test",
+        data:{
+          section: token?.section,
+         }
       })
       .then((response) => {
         console.log("this is the test")
@@ -210,11 +213,64 @@ const handleSubmit=(e)=>{
 ...prev,    questions:left,section:token.section
 
   }))
-  onSubmit()
-    
+  axios({
+    method: "POST",
+    url:"/make_test",
+    data:{
+      section:test.section,
+      tes_t: test.questions,
+     }
+  })
+  .then((response) => {
+    console.log(response)
+    console.log("send question")
+
+  
+
+
+  }).catch((error) => {
+    if (error.response) {
+      console.log(error.response)
+      console.log(error.response.status)
+      console.log(error.response.headers)
+      }
+  })
+
+  setTest({section_id:"",questions:[],test_name:""})  
+  e.preventDefault()
+ 
 }
 function onSubmit() {
-  console.log("here",test)
+  console.log("submmting")
+  axios({
+    method: "POST",
+    url:"/make_test",
+    data:{
+      section:"hello",
+      tes_t: "hello",
+     }
+  })
+  .then((response) => {
+    console.log(response)
+    console.log("send question")
+
+  
+
+
+  }).catch((error) => {
+    if (error.response) {
+      console.log(error.response)
+      console.log(error.response.status)
+      console.log(error.response.headers)
+      }
+  })
+
+  setTest({section_id:"",questions:[],test_name:""})
+  
+  console.log(test)
+
+    
+
 }
 
   return (
