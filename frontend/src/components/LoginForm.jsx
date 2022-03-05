@@ -34,8 +34,8 @@ function LoginForm({date}) {
        }
     })
     .then((response) => {
-      console.log(response)
-      setToken({token:response.data.access_token, status:response.data.status})
+      console.log(response.data)
+      setToken({token:response.data.access_token, status:response.data.status,section:response.data.section})
 
 
       if(response.data.status == 0){

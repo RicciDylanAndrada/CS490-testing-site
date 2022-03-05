@@ -2,7 +2,7 @@ import React from 'react'
 import data from "../data/test.json"
 import Card from '../shared/Card'
 import axios from 'axios'
-import { useState,useEffect } from 'react'
+import { useState,useEffect,useContext } from 'react'
 import { Link } from 'react-router-dom'
 import LoginContext from '../../content/LoginContext'
 import { PathRouteProps } from 'react-router-dom'
@@ -20,16 +20,17 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
 
+import Paper from '@mui/material/Paper';
 
 
 
 function Teacher() {
   const [tabValue,setTabValue]=useState(0);
   const[fetchQuestion,setFetchQuestion]=useState("null")
-
-
+const[test,setTest]=useState({section_id:"",questions:[],test_name:""})
+const {token} = useContext(LoginContext)
 
   useEffect(()=>{
 
@@ -41,6 +42,24 @@ function Teacher() {
         console.log(response.data)
         setFetchQuestion(response.data)
         setRight(response.data.question)
+  
+  
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+          }
+      })
+
+      axios({
+        method: "GET",
+        url:"/show_test"
+      })
+      .then((response) => {
+        console.log("this is the test")
+        console.log(response.data)
+        
   
   
       }).catch((error) => {
@@ -74,8 +93,8 @@ function Teacher() {
 
   //const [right, setRight] = React.useState(fetchQuestion.question);
 
-console.log(fetchQuestion.question)
-console.log(right)
+// console.log(fetchQuestion.question)
+// console.log(right)
 
 //  let getButtonId = (e) => {
 //         console.log(e.currentTarget.id);
@@ -175,22 +194,27 @@ const customList = (items) => (
 
 
 
-
 const handleChangeTab = (event, newValue) => {
   setTabValue(newValue);
 };
 const handleChange = (event) => {
   const {value, name} = event.target
-  setValue(prevNote => ({
+  setTest(prevNote => ({
       ...prevNote, [name]: value})
   )
 };
 
 const handleSubmit=(e)=>{
   e.preventDefault()
+  setTest(prev=>({
+...prev,    questions:left,section:token.section
 
-
-  console.log(left)
+  }))
+  onSubmit()
+    
+}
+function onSubmit() {
+  console.log("here",test)
 }
 
   return (
@@ -217,9 +241,17 @@ const handleSubmit=(e)=>{
         </div> 
         <div class=" w-full  row-span-4    ">
         {fetchQuestion && right && ( 
-        <form onSubmit={handleSubmit} >
-        <h1>HELLO</h1>       
-
+        <form onSubmit={handleSubmit}>
+        <TextField
+          id="outlined-password-input"
+          label="Question"
+          name='test_name'
+          type="question"
+          value={test.test_name}
+          onChange={e => setTest({test_name:e.target.value,questions:left,section:token.section})}
+          autoComplete="current-password"
+          required
+        />
  {/* get test data and loop creating div of things below */}
         <div class="grid w-full  grid-cols-1  h-full ">
         {/* <Box
