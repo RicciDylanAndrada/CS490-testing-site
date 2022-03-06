@@ -1,6 +1,6 @@
 import React from 'react'
 import data from "../data/test.json"
-import Card from '../shared/Card'
+import TeacherCard from '../shared/TeacherCard'
 import axios from 'axios'
 import { useState,useEffect,useContext } from 'react'
 import { Link } from 'react-router-dom'
@@ -28,10 +28,37 @@ import Paper from '@mui/material/Paper';
 
 function Teacher() {
   const [tabValue,setTabValue]=useState(0);
+  const [added,setAdded]=useState("");
   const[fetchQuestion,setFetchQuestion]=useState("null")
-const[test,setTest]=useState({section_id:"",questions:[],test_name:""})
-const {token} = useContext(LoginContext)
+  const[fetchTest,setFetchTest]=useState("null")
+  const[submit,setSubmit]=useState(false)
 
+const [selectedTest,setSelectedTest]=useState(null)
+const [testWindow,setTestWindow]=useState(false)
+
+const[test,setTest]=useState({section:"",questions:[],test_name:""})
+const {token} = useContext(LoginContext)
+let getButtonId = (e) => {
+  console.log(e.currentTarget.id);
+  setSelectedTest(e.currentTarget.id)
+  setTestWindow(true)
+
+}
+const testWindowClick = ()=>{
+  setTestWindow(!testWindow)
+}
+useEffect(()=>{
+  if(submit){
+    console.log(test)
+
+    change()
+  }
+  else{
+    console.log(test)
+
+    console.log("waiting")
+  }
+},[submit])
   useEffect(()=>{
 
     axios({
@@ -39,7 +66,7 @@ const {token} = useContext(LoginContext)
         url:"/question"
       })
       .then((response) => {
-        console.log(response.data)
+        //console.log(response.data)
         setFetchQuestion(response.data)
         setRight(response.data.question)
   
@@ -53,15 +80,16 @@ const {token} = useContext(LoginContext)
       })
 
       axios({
-        method: "GET",
+        method: "POST",
         url:"/show_test",
         data:{
-          section: token?.section,
+          section: '006',
          }
       })
       .then((response) => {
         console.log("this is the test")
         console.log(response.data)
+        setFetchTest(response.data)
         
   
   
@@ -74,7 +102,7 @@ const {token} = useContext(LoginContext)
       })
   
 
-},[])
+},[added])
 
   const [value,setValue]=useState({
     // student_id:null,
@@ -140,6 +168,8 @@ const handleCheckedLeft = () => {
   setLeft(left.concat(rightChecked));
   setRight(not(right, rightChecked));
   setChecked(not(checked, rightChecked));
+  console.log(left)
+
 };
 const handleCheckedRight = () => {
   setRight(right.concat(leftChecked));
@@ -151,6 +181,7 @@ const handleCheckedRight = () => {
 const handleAllLeft = () => {
   setLeft(left.concat(right));
   setRight([]);
+  console.log(left)
 };
 
 const customList = (items) => (
@@ -197,80 +228,54 @@ const customList = (items) => (
 
 
 
-const handleChangeTab = (event, newValue) => {
-  setTabValue(newValue);
-};
-const handleChange = (event) => {
-  const {value, name} = event.target
-  setTest(prevNote => ({
-      ...prevNote, [name]: value})
-  )
-};
+// const handleChangeTab = (event, newValue) => {
+// //   setTabValue(newValue);
+// // };
+// const handleChange = (event) => {
+//   const {value, name} = event.target
+//   setTest(prevNote => ({
+//       ...prevNote, [name]: value})
+//   )
+// };
 
 const handleSubmit=(e)=>{
   e.preventDefault()
+  console.log(left)
   setTest(prev=>({
-...prev,    questions:left,section:token.section
+...prev,   section:token.section,questions:left
 
   }))
-  axios({
-    method: "POST",
-    url:"/make_test",
-    data:{
-      section:test.section,
-      tes_t: test.questions,
-     }
-  })
-  .then((response) => {
-    console.log(response)
-    console.log("send question")
-
-  
-
-
-  }).catch((error) => {
-    if (error.response) {
-      console.log(error.response)
-      console.log(error.response.status)
-      console.log(error.response.headers)
-      }
-  })
-
-  setTest({section_id:"",questions:[],test_name:""})  
-  e.preventDefault()
- 
-}
-function onSubmit() {
-  console.log("submmting")
-  axios({
-    method: "POST",
-    url:"/make_test",
-    data:{
-      section:"hello",
-      tes_t: "hello",
-     }
-  })
-  .then((response) => {
-    console.log(response)
-    console.log("send question")
-
-  
-
-
-  }).catch((error) => {
-    if (error.response) {
-      console.log(error.response)
-      console.log(error.response.status)
-      console.log(error.response.headers)
-      }
-  })
-
-  setTest({section_id:"",questions:[],test_name:""})
-  
   console.log(test)
+e.preventDefault()
+setSubmit(true)
+}
 
-    
 
+
+
+
+const change = ()=>{
+  console.log(test)
+  axios({
+    method: "POST",
+    url:"/make_test",
+    data:{
+      section:test?.section,
+      tes_t: test,
+     }
+  })
+  .then((response) => {
+    console.log(test)
+
+  }).catch((error) => {
+    if (error.response) {
+      console.log(error.response)
+      console.log(error.response.status)
+      console.log(error.response.headers)
+      }
+  })
+  setAdded(" ")
+ setTest({section:"",questions:[],test_name:""})
 }
 
   return (
@@ -282,32 +287,31 @@ function onSubmit() {
         {/* <Link to="test">Favorite hobby link</Link>
         <button onClick={() => navigate("test")}>Go forward</button>
       <button onClick={() => navigate(-1)}>Go back</button> */}
-      
+     
     <div class=" row-span-1 grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
         
     </div>
-    <div class="w-11/12  h-5/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
-
+    {!testWindow?(     <div class="w-11/12  h-5/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
+      
         <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
           <h1 class="justify-self-center place-self-center  text-lg " > New Test</h1>
 
-          {/* Vertical tab for test questions and inside a form  */}
-          {/* able to delete queston tabs or add tes question tabs */}
+         
         
         </div> 
         <div class=" w-full  row-span-4    ">
-        {fetchQuestion && right && ( 
+        {fetchTest && right && ( 
         <form onSubmit={handleSubmit}>
-        <TextField
+        {/* <TextField
           id="outlined-password-input"
           label="Question"
           name='test_name'
           type="question"
           value={test.test_name}
-          onChange={e => setTest({test_name:e.target.value,questions:left,section:token.section})}
+          onChange={e => setTest({test_name:e.target.value,section:token.section})}
           autoComplete="current-password"
           required
-        />
+        /> */}
  {/* get test data and loop creating div of things below */}
         <div class="grid w-full  grid-cols-1  h-full ">
         {/* <Box
@@ -445,18 +449,92 @@ function onSubmit() {
 
 </div>        </div>
         <div class=" w-full  grid  place-items-center    p-5 ">
-          <button type='"submit' class="place-self-center w btn btn-active   " >Create Test </button>
+          <button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
         </div> 
         </form>
         )}
         
         </div> 
+    
+                </div>): (<div class="w-11/12  h-6/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
+      
+      <div class="border-b-2 w-full grid  grid-cols-3    place-items-center border-b-gray row-span-1  y p-4 ">
+        <button class="place-self-start btn btn-warning    text-lg "  onClick={()=>  testWindowClick()}> Exit </button>
+        <h1 class="  place-self-center text-lg " > Test {selectedTest}</h1>
+
+
+       
+      
+      </div> 
+      <div class=" w-full  row-span-4    ">
+      {selectedTest  && ( 
+     
+      <div className="grid w-full  grid-cols-1  h-full ">
+     
+  <div class="grid grid-cols-1">
+
+  <div class="grid  p-3 overflow-auto place-items-center">
+  {fetchTest?.test.filter((value)=>{
+         
+         {/* return(
+          <div className='border-2 w-full rounded-xl h-12' > 
+          <h1>
+          {(value.tes_t) && (
+            value.tes_t.questions.map((x)=>{
+              return(
+                <h1>{x.question}</h1>
+              )
+            })
+          )}
+          </h1>
+ </div>
         
 
-        
-        </div>
-   
 
+
+
+         
+         ) */}
+         return(
+          value.test_id == selectedTest
+
+         
+         )
+       }).map((x)=>{
+
+return(
+        x.tes_t.questions.map((y)=>{
+          return(
+            <div className='border-2 w-full grid  grid-cols-3 p-1 rounded-xl h-24' > 
+            <h1 className='place-self-start ' >{y.question_id}</h1>
+
+            <h1 className='place-self-center '  > {y.question}</h1>
+            </div>
+          )
+        })
+
+       )
+       })}
+
+
+
+
+
+  </div>
+ 
+    
+  
+
+
+</div>     
+
+
+   </div>
+      )}
+      
+      </div> 
+  
+              </div>) }
 
 
         <div class="grid  p-4  lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 row-span-7 md:gap-4 sm:gap-4 h-full w-full place-items-center">
@@ -464,8 +542,8 @@ function onSubmit() {
 {/* DROPDOWN BOX FOR TEST IN SECTIONS*/}
 
 {/* Be able to delete tests   inside teacher Card  */}
-{data?.tests &&
-       data?.tests.map((value)=>{
+{fetchTest?.test&&
+  fetchTest?.test.map((value)=>{
          {/* let key = Object.keys(value.Questions)
         key.forEach((key,index) =>{
           return (        
@@ -475,7 +553,7 @@ function onSubmit() {
 
         }) */}
          return(
-           <Card test_id={value.test_name} />
+           <TeacherCard  test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
 
         
 

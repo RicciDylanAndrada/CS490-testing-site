@@ -169,15 +169,19 @@ def make_test():
         
     section = request.json.get("section", None)
     tes_t = request.json.get("tes_t", None)
+    #tes_name = request.json.get("tes_name", None)
+
     print(tes_t, file=sys.stderr)
 
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT INTO tes_t (section, tes_t) VALUES ('" + section + "', '" + tes_t + "')")
+    c.execute("INSERT INTO tes_t (section, tes_t) VALUES ('" + section + "', '" + json.dumps(tes_t) + "')")
     con.commit()
+    response ={"good":"good" }
+    return response
 
-@app.route('/show_test',methods=['GET'])
+@app.route('/show_test',methods=['POST'])
 def show_test():
     sec = request.json.get("section", None)
     con = sql.connect('database.db')
