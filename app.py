@@ -81,19 +81,19 @@ def index():
 
 @app.route('/login',methods=["GET"])
 def my_profile():
-    ls_dict = [{'question': 'question2', 'question_id': 2}, {'question': 'question3', 'question_id': 3}]
-    json_string = json.dumps(ls_dict)
-    con = sql.connect('database.db')
-    c =  con.cursor() 
-    c.execute("INSERT INTO tes_t (section,tes_t) VALUES ('6','" + json_string + "')")
-    con.commit()
+    #ls_dict = {"sections": ["008", "007", "006"]}
+    #json_string = json.dumps(ls_dict)
+    socks = User.query.filter_by(user_id=4).first()
+    y = json.loads(socks.section)
+    response ={"user":socks.username,"section":y, "user_id":socks.user_id, "status": 0}
+    return response
     response_body = {
         
         
         "about" :"Testing for this link"
     }
 
-    return response_body
+    
 
 
 @app.after_request
@@ -126,8 +126,9 @@ def create_token():
         response = {"status": -1 }
     else:
         if (socks1.role_id == 1):
+            y = json.loads(socks.section)
             access_token = create_access_token(identity=ausername)
-            response ={"access_token":access_token,"user":socks.username,"section":socks.section, "user_id":socks.user_id, "status": 1}
+            response ={"access_token":access_token,"user":socks.username,"section": y, "user_id":socks.user_id, "status": 1}
 
         if (socks1.role_id == 2):
             access_token = create_access_token(identity=ausername)
