@@ -219,6 +219,8 @@ def sub():
     c =  con.cursor() 
     c.execute("INSERT OR IGNORE INTO submission (username, submission, section) VALUES ('" + u_name + "','" + json.dumps(submission)+ "', '" + section + "')")
     con.commit()
+    response ={"good":"good" }
+    return response
 
 @app.route('/show_submission_student',methods=['GET'])
 def show_submission_student():
