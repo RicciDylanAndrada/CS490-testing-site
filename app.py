@@ -224,7 +224,7 @@ def sub():
 def show_submission_student():
     sec = request.json.get("section", None)
     u_name = request.json.get("username", None)
-    status = 2#request.json.get("status", None)
+    status = request.json.get("status", None)
     if (status == 2):
         con = sql.connect('database.db')
         cur = con.cursor()
