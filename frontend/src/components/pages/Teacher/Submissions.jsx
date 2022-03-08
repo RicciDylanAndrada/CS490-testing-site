@@ -12,16 +12,24 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function Submissions() {
 const[pointTest,setPointTest]=useState(false);
+const [section, setsection] = React.useState('');
+
 const [added,setAdded]=useState("");
 const[fetchQuestion,setFetchQuestion]=useState("null")
 const[fetchTest,setFetchTest]=useState("null")
 const[submit,setSubmit]=useState(false)
 const[fetchSubmission,setfetchSubmission]=useState([])
 
+const handleSectionChange = (event) => {
+    setsection(event.target.value);
+  };
 
 const [selectedTest,setSelectedTest]=useState(null)
 const [testWindow,setTestWindow]=useState(false)
@@ -31,8 +39,7 @@ const {token} = useContext(LoginContext)
 let getButtonId = (e) => {
 console.log(e.currentTarget.id);
 setSelectedTest(e.currentTarget.id)
-setTestWindow(true)
-
+testWindowClick(true)
 }
 const testWindowClick = ()=>{
 setTestWindow(!testWindow)
@@ -292,7 +299,7 @@ setSubmit(" ")
 // let Y ={
 //   question1:question1,
 //     category:category,
-//     difficulty:difficulty,
+//     section:section,
 //     test_cases:matrix,
 //     function_name:functionName,
 // }
@@ -447,7 +454,20 @@ return (
 
 <div class=" place-items-center   h-full w-full  overflow-auto ">
 <div className='h-full grid place-items-start grid-cols-3  overflow-auto w-full flex-col space-y-4' >
-
+<FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Age</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={section}
+    label="Age"
+    onChange={handleSectionChange}
+  >
+    <MenuItem value={10}>Ten</MenuItem>
+    <MenuItem value={20}>Twenty</MenuItem>
+    <MenuItem value={30}>Thirty</MenuItem>
+  </Select>
+</FormControl>
 
 {fetchSubmission.map( (x,index)=>{
 return(
@@ -487,7 +507,7 @@ return(
                 <div class="w-11/12  h-6/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
     
     <div class="border-b-2 w-full grid  grid-cols-3    place-items-center border-b-gray row-span-1  y p-4 ">
-      <button class="place-self-start btn btn-warning    text-lg "  onClick={()=>  testWindowClick()}> Exit </button>
+      <button class="place-self-start btn btn-warning    text-lg "  onClick={()=>  testWindowClick(false)}> Exit </button>
       <h1 class="  place-self-center text-lg " > Test {selectedTest}</h1>
 
 
@@ -496,52 +516,67 @@ return(
     </div> 
     <div class=" w-full  row-span-4    ">
     {selectedTest  && ( 
-   
-    <div className="grid w-full  grid-cols-1  h-full ">
-   
-<div class="grid grid-cols-1">
-
-<div class="grid  p-3 overflow-auto place-items-center">
-{fetchTest?.test.filter((value)=>{
-       
      
-       return(
-        value.test_id == selectedTest
+     <div className="grid w-full overflow-auto grid-cols-1  h-full ">
+     {fetchTest?.test&& 
+       fetchTest?.test.filter((x)=>{
+   return(
+     x.test_id == selectedTest
+   )
+ })
+     
+ .map((val)=>{
+   return (val.tes_t.questions.map((value)=>{
+     return(
+       <div className='border-2 grid grid-cols-3 rounded-xl h-24 ' > 
 
-       
-       )
-     }).map((x)=>{
+       <div>
 
-return(
-      x.tes_t.questions.map((y)=>{
-        return(
-          <div className='border-2 w-full grid  grid-cols-3 p-1 rounded-xl h-24' > 
-          <h1 className='place-self-start ' >{y.question_id}</h1>
-
-          <h1 className='place-self-center '  > {y.question}</h1>
-          </div>
-        )
-      })
-
-     )
-     })}
-
-
-
-
+<h1 className="text-sm" >  Category:</h1>
+<h1>{value.question.category}</h1>
 
 </div>
+       <h1>{value.question.question}</h1>
+         <div>
 
-  
+         <h1 className="text-sm" >  Difficulty:</h1>
+         <h1> {value.question.difficulty}</h1>
 
+         </div>
+
+
+
+     </div>)
+   }))
+ })
+     
+     
+     
+     }
+
+
+
+ <div class="grid grid-cols-1">
+
+ <div class="grid  p-3 overflow-auto place-items-center">
+
+
+
+
+
+
+ </div>
+
+   
+ 
 
 
 </div>     
 
 
- </div>
- 
-    )}
+  </div>
+  
+     )}
     
     </div> 
 

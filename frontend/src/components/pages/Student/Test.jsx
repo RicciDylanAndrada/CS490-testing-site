@@ -130,41 +130,54 @@ return (studentTest)
  <form classNamew="h-fit w-full" onSubmit={handleSubmit} >
  <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
 <div className="w-full h-full grid gap-24 ">
+{fetchTest?.test&& 
+       fetchTest?.test.filter((x)=>{
+   return(
+     x.test_id == selectedTest
+   )
+ })
+     
+ .map((val)=>{
+   return (val.tes_t.questions.map((value,index)=>{
+     return(
+      <div key={value.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
 
-{fetchTest?.test.filter((value)=>{
-         
-    
-         return(
-          value.test_id == selectedTest
+       <div>
 
-         
-         )
-       }).map((x)=>{
+<h1 className="text-sm" >  Category:</h1>
+<h1>{value.question.category}</h1>
 
-return( 
-        x.tes_t.questions.map((y,index)=>{
-          return(
-            <div key={y.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
-              <div className="grid grid-cols-3 row-span-1 rounded-md">
+</div>
+       <h1>{value.question.question}</h1>
+         <div>
 
-              <h1 className='place-self-start ' >{y.question_id}</h1>
+         <h1 className="text-sm" >  Difficulty:</h1>
+         <h1> {value.question.difficulty}</h1>
 
-                      <h1 className='text-center '  > {y.question.question}</h1>
-                      <div></div>
+         </div>
 
-              </div>
-              <div className="row-span-4 text-center border-2 overflow-auto ">
 
-              <textarea  required placeholder='Enter Answer' name={y.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
+         <div className="row-span-4 text-center border-2 overflow-auto ">
 
-              </div>
-          
-            </div>
-          )
-        })
+<textarea  required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
 
-       )
-       })}
+</div>
+     </div>)
+   }))
+ })
+     
+     
+     
+     }
+
+
+
+
+
+
+
+
+
 </div>
  
        
@@ -176,7 +189,7 @@ return(
 
    </div>
        </form>
-       <button  className='btn btn-info'><Link onClick={togglePopup()} to="/student" >Back</Link></button>
+       <button  className='btn  w-full btn-info'><Link onClick={togglePopup()} to="/student" >Back to Dashboard</Link></button>
 </div>
 
 
