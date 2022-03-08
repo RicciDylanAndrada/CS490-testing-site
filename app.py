@@ -4,7 +4,7 @@ from flask_cors import CORS
 import sys
 
 import json
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, null
 
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
@@ -32,7 +32,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
 
 app.config['DEBUG'] = True
 app.config.from_object(Configuration)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
 db = SQLAlchemy(app)
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -54,8 +54,11 @@ class tes_t(db.Model):
     section = db.Column(db.String(80))
     tes_t = db.Column(db.String(256))
 class submission(db.Model):
-    test_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    submission_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(15))
     submission = db.Column(db.String(256))
+    section = db.Column(db.String(80))
+    show = db.Column(db.String(10), nullable=True)
 
      
 
@@ -210,27 +213,55 @@ def show_test():
 @app.route('/submission',methods=['POST'])
 def sub():
     submission = request.json.get("submission", None)
-    test_id = request.json.get("test_id", None)
-    #resultJSON = json.dumps(question)
+    section = request.json.get("section", None)
+    u_name = request.json.get("username", None)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT OR IGNORE INTO submission (test_id, submission) VALUES ('" + str(test_id) + "','" + json.dumps(submission)+ "')")
+    c.execute("INSERT OR IGNORE INTO submission (username, submission, section) VALUES ('" + u_name + "','" + json.dumps(submission)+ "', '" + section + "')")
     con.commit()
-    response={"status":submission}
-    return response
-@app.route('/show_submission',methods=['POST'])
-def show_submission():
-    sec = request.json.get("section", None)
+
+@app.route('/show_submission_student',methods=['GET'])
+def show_submission_student():
+   # section = request.json.get("section", None)
+    #u_name = request.json.get("username", None)
+    status = 2#request.json.get("status", None)
+    if (status == 2):
+        con = sql.connect('database.db')
+        cur = con.cursor()
+        #query = cur.execute("SELECT * FROM submission where user_id='"+str(user_id)+"'")
+        socks = submission.query.filter_by(username='Ricci').all()
+        
+        result_list = []
+        for sock in socks:
+            if(sock.show != None):
+                y = json.loads(sock.submission)
+                lst = {'submission': y } 
+                result_list.append(lst) 
+            cur.close()
+            cur.connection.close()
+            response ={"submissions":result_list }
+            return response
+    if (status == 1):
+        con = sql.connect('database.db')
+        cur = con.cursor()
+        #query = cur.execute("SELECT * FROM submission where user_id='"+str(user_id)+"'")
+        socks = submission.query.filter_by(section='006').all()
+        result_list = []
+        for sock in socks:
+            y = json.loads(sock.submission)
+            lst = {'submission': y } 
+            result_list.append(lst) 
+        cur.close()
+        cur.connection.close()
+        response ={"submissions":result_list }
+        return response
+
+@app.route('/view_test',methods=['POST'])
+def view_test():
+    u_name = request.json.get("username", None)
     con = sql.connect('database.db')
-    cur = con.cursor()
-    query = cur.execute("SELECT test_id, submission FROM submission where section='"+str(sec)+"'")
-    socks = submission.query.filter_by(section=sec).all()
-    result_list = []
-    for sock in socks:
-        y = json.loads(sock.submission)
-        lst = {"test_id": sock.test_id, "submission": y } 
-        result_list.append(lst) 
-    cur.close()
-    cur.connection.close()
-    response ={"test":result_list }
+    c =  con.cursor() 
+    c.execute("update table submission set show='asasa' where username='" + u_name + "'")
+    con.commit()
+    response ={"good":"good" }
     return response
