@@ -82,12 +82,6 @@ newArray(result,questionArray)
   })
 }
 
-
-
-
-
-
-
 const newArray=(x,questionArray)=>{
   let arrayC = [];
   console.log(x)

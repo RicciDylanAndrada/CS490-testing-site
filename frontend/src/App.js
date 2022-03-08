@@ -40,7 +40,7 @@ function App() {
   
 
   return (
-<div className=' h-screen font-semibold   ' >
+<div className=' bg-gray-100  h-screen font-semibold   ' >
 
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
@@ -64,6 +64,7 @@ function App() {
 
     <Route element={<ProtectedRoutes  allowedRoles={0} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
+    <Route path="/" element={<Student/>}/>
 
        <Route path="/student" element={<Student/>}/>
        <Route path="/test" element={<Test/>}/>
@@ -102,7 +103,9 @@ function App() {
     <Route element={<ProtectedRoutes  allowedRoles={1} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
+       <Route path="/" element={<Teacher/>}/>
        <Route path="/teacher" element={<Teacher/>}/>
+
        <Route path="/questions" element={<Questions/>}/>
 
        <Route path="/submission" element={<Submissions/>}/>

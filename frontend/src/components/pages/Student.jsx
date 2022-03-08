@@ -30,7 +30,7 @@ const [test,setTest]=useState("")
   }
   
 
-
+console.log(token.section.sections.find['006'])
 
 
 

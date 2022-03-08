@@ -1,5 +1,5 @@
 import React from 'react'
-import TeacherCard from '../../shared/TeacherCard'
+import SubmissionCard from '../../shared/SubmissionCard'
 import axios from 'axios'
 import { useState,useEffect,useContext } from 'react'
 import LoginContext from '../../../content/LoginContext'
@@ -58,29 +58,12 @@ else{
 },[submit])
 useEffect(()=>{
 
-  axios({
-      method: "GET",
-      url:"/question"
-    })
-    .then((response) => {
-      //console.log(response.data)
-      setFetchQuestion(response.data)
-      setRight(response.data?.question)
-
-
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-        }
-    })
 
     axios({
       method: "POST",
-      url:"/show_test",
+      url:"/show_submission_teacher",
       data:{
-        section: token?.section,
+        section: section,
        }
     })
     .then((response) => {
@@ -99,27 +82,26 @@ useEffect(()=>{
     })
 
 
-},[added])
-
-const [value,setValue]=useState({
-  
-  question_id:null, 
-  answer:null  
-});
+},[added,section])
 
 
-const navigate = useNavigate();
+let studentTest=fetchTest?.test.filter((x)=>{
+    return(
+        x.tes_t.user_id == selectedTest
+    )
+})
+
+
 
 
 const [checked, setChecked] = React.useState([]);
 const [left, setLeft] = React.useState([]);
-const [points, setPoints] = React.useState({
+const [teacherPoints, setTeacherPoints] = React.useState({
   point:[
 
   ]
 });
 
-const [right, setRight] = useState(fetchQuestion?.question);
 
 
 
@@ -150,45 +132,45 @@ setChecked(newChecked);
 
 
 
-const customList = (items) => (
+// const customList = (items) => (
 
-<div className="overflow-auto h-full w-80  flex flex-col space-y-4    ">
+// <div className="overflow-auto h-full w-80  flex flex-col space-y-4    ">
 
   
-    {items.map((value) => {
-      const labelId = `transfer-list-item-${value.question_id}-label`;
+//     {items.map((value) => {
+//       const labelId = `transfer-list-item-${value.question_id}-label`;
 
-      return (
-        <div className='border-2'>
+//       return (
+//         <div className='border-2'>
 
        
-        <ListItem
-          key={value.question_id}
-          role="listitem"
-          className="border-2"
-          button
-          onClick={handleToggle(value)}
-        >
-          <ListItemIcon>
-            <Checkbox
-              checked={checked.indexOf(value) !== -1}
+//         <ListItem
+//           key={value.question_id}
+//           role="listitem"
+//           className="border-2"
+//           button
+//           onClick={handleToggle(value)}
+//         >
+//           <ListItemIcon>
+//             <Checkbox
+//               checked={checked.indexOf(value) !== -1}
               
-              tabIndex={-1}
-              disableRipple
-              inputProps={{
-                'aria-labelledby': labelId,
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText id={labelId} primary={value.question.question} />
-        </ListItem>
-        </div>
-      );
-    })}
-    <ListItem />
+//               tabIndex={-1}
+//               disableRipple
+//               inputProps={{
+//                 'aria-labelledby': labelId,
+//               }}
+//             />
+//           </ListItemIcon>
+//           <ListItemText id={labelId} primary={value.question.question} />
+//         </ListItem>
+//         </div>
+//       );
+//     })}
+//     <ListItem />
     
-</div>
-);
+// </div>
+// );
 
 
 const handleSubmit=(e)=>{
@@ -296,229 +278,20 @@ setTest(prev=>({
 
   }))
 setSubmit(" ")
-// let Y ={
-//   question1:question1,
-//     category:category,
-//     section:section,
-//     test_cases:matrix,
-//     function_name:functionName,
-// }
+
 
 return (arrayC)
 
 
 }
 
-// const change = (x)=>{
-//   console.log(test)
-//   axios({
-//     method: "POST",
-//     url:"/make_test",
-//     data:{
-//       section:test?.section,
-//       tes_t: x,
-//      }
-//   })
-//   .then((response) => {
-//     console.log(test)
 
-//   }).catch((error) => {
-//     if (error.response) {
-//       console.log(error.response)
-//       console.log(error.response.status)
-//       console.log(error.response.headers)
-//       }
-//   })
-//   setAdded(" ")
-//  setTest({section:"",questions:[],test_name:""})
-// }
-
-return (
-
-
-  
-  <div className='h-full text-black bg-gray-100  place-items-center   grid grid-rows-6   '>
-      {/* {test?<h1>hello</h1>:<h1>no</h1>} */}
-      {/* <Link to="test">Favorite hobby link</Link>
-      <button onClick={() => navigate("test")}>Go forward</button>
-    <button onClick={() => navigate(-1)}>Go back</button> */}
-   
-  <div class=" row-span-1 grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
-      
-  </div>
-  {!testWindow?( 
-    <div class="row-span-3 w-11/12">
-
-       {!pointTest? (
-        <div class="w-11/12  h-full relative  md:bottom-12 lg:bottom-32  bg-white shadow-xl grid grid-rows-6 1 text-center ">
-
-       
-      <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
-        <h1 class="justify-self-center place-self-center  text-lg " > New Test</h1>
-
-       
-      
-      </div> 
-      <div class=" w-full  row-span-4    ">
-      {fetchTest && right && ( 
-      <form onSubmit={handleSubmit}>
-      <TextField
-        id="outlined-password-input"
-        label="Test Name"
-        name='test_name'
-        type="question"
-        value={test.test_name}
-        onChange={e => setTest({test_name:e.target.value,section:token.section})}
-        autoComplete="current-password"
-        required
-      />
-      <div class="grid w-full  grid-cols-1  h-full ">
-      
-  <div class="grid grid-cols-3">
-
-  <div class="grid place-items-center">
-  <h1>Test Questions </h1>
-
-
-  
-
-
-  </div>
- 
-    <div class="  place-items-center grid ">
-  
-   </div>
-   <div class="grid place-items-center">
-  <h1> Question Bank </h1>
-
-
-  <div class=" place-items-center h-80    overflow-auto ">
-
-
-  
-    </div>
-
-
-  </div>
-
-
-</div>        </div>
-      <div class=" w-full  grid  place-items-center    p-5 ">
-        <button type='"submit'  class="place-self-center  w btn btn-active   " >Add Points </button>
-      </div> 
-      </form>
-      )}
-      
-      </div> 
-      </div>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      )
-      :
-              (
-                <div className='' >
-                <div class="w-11/12  h-screen relative  md:bottom-12 lg:bottom-32  bg-white shadow-xl grid grid-rows-6 1 text-center ">
-
-       
-<div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
-<h1 class="justify-self-center place-self-center  text-lg " > Question Bank </h1>
-
-
-
-</div> 
-<div class=" w-full  row-span-5   ">
-{fetchTest && right && ( 
-<form  className='h-full' onSubmit={handleSubmitFinal}>
-
-<div class="grid w-full  grid-cols-1  h-full ">
-
-<div class="grid grid-cols-1">
+console.log(section)
 
 
 
 
-<div class="grid place-items-center  w-full">
-
-
-<div class=" place-items-center   h-full w-full  overflow-auto ">
-<div className='h-full grid place-items-start grid-cols-3  overflow-auto w-full flex-col space-y-4' >
-<FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">Age</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    value={section}
-    label="Age"
-    onChange={handleSectionChange}
-  >
-    <MenuItem value={10}>Ten</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
-  </Select>
-</FormControl>
-
-{fetchSubmission.map( (x,index)=>{
-return(
-
-  <div className='border-2  grid place-items-center rounded-xl' > 
-  <h1>{x.question.question}</h1>
-  <input  type='number'  required placeholder='points' name={x.question_id}  onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200  rounded-md" ></input>
-  </div>
-)
-})
-
-}
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>        </div>
-<div class=" w-full  grid  place-items-center    p-5 ">
-<button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
-</div> 
-</form>
-)}
-
-</div> 
-</div>
-              </div>)}
-              </div>):
-              
-              
-               (
-                <div class="w-11/12  h-6/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
-    
-    <div class="border-b-2 w-full grid  grid-cols-3    place-items-center border-b-gray row-span-1  y p-4 ">
-      <button class="place-self-start btn btn-warning    text-lg "  onClick={()=>  testWindowClick(false)}> Exit </button>
-      <h1 class="  place-self-center text-lg " > Test {selectedTest}</h1>
-
-
-     
-    
-    </div> 
-    <div class=" w-full  row-span-4    ">
-    {selectedTest  && ( 
-     
-     <div className="grid w-full overflow-auto grid-cols-1  h-full ">
-     {fetchTest?.test&& 
+{/* {fetchSubmission?.test&& 
        fetchTest?.test.filter((x)=>{
    return(
      x.test_id == selectedTest
@@ -526,9 +299,9 @@ return(
  })
      
  .map((val)=>{
-   return (val.tes_t.questions.map((value)=>{
+   return (val.tes_t.questions.map((value,index)=>{
      return(
-       <div className='border-2 grid grid-cols-3 rounded-xl h-24 ' > 
+      <div key={value.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
 
        <div>
 
@@ -544,76 +317,161 @@ return(
 
          </div>
 
+       <h1>{value.question.answer}</h1>
 
+         <div className="row-span-4 text-center border-2 overflow-auto ">
+<textarea  value={value.question.answer} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
 
+<textarea  required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
+
+</div>
      </div>)
    }))
  })
      
      
      
-     }
-
-
-
- <div class="grid grid-cols-1">
-
- <div class="grid  p-3 overflow-auto place-items-center">
+     } */}
 
 
 
 
+//      <FormControl fullWidth>
+//      <InputLabel id="demo-simple-select-label">Section</InputLabel>
+//      <Select
+//        labelId="demo-simple-select-label"
+//        id="demo-simple-select"
+//        value={section}
+//        label="Section"
+//        onChange={handleSectionChange}
+//      >
+        //token?.section.sections.map((x)=>{
+//             return(
+
+//                 <div>
+//        <MenuItem value={x}>x</MenuItem>
 
 
- </div>
-
+//                 </div>
+//             )
+//         })
+//        <MenuItem value={"006"}>006</MenuItem>
+//        <MenuItem value={"008"}>008</MenuItem>
+//        <MenuItem value={"002"}>002</MenuItem>
+//      </Select>
+//    </FormControl>
+//          </div>
+//    <div class="grid h-screen w-full  gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
    
- 
+//    {fetchTest?.test&&
+//    fetchTest?.test.map((value)=>{
+          
+//           return(
+//             <SubmissionCard  test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+   
+         
+   
+   
+   
+   
+          
+//           )
+//         })
+//       }
 
-
-</div>     
-
-
-  </div>
+return (
+    <div className='h-full text-black bg-gradient-to-r from-red-700 to-blue-300  place-items-center p-10  flex flex-grow '>
+   
   
-     )}
+    { studentTest && (
+     
+     <div className="h-screen w-full">
     
-    </div> 
-
-            </div>) }
-
-
-      <div class="grid  p-4  lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 row-span-2 md:gap-4 sm:gap-4 h-full w-full place-items-center">
-
-
-{fetchTest?.test&&
-fetchTest?.test.map((value)=>{
-       
+     <form classNamew="h-fit w-full" onSubmit={handleSubmit} >
+     <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
+    <div className="w-full h-full grid gap-24 ">
+    {fetchTest?.test&& 
+           fetchTest?.test.filter((x)=>{
        return(
-         <TeacherCard  test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
-
-      
-
-
-
-
-       
+         x.test_id == selectedTest
        )
      })
-   }
-</div>
-     
+         
+     .map((val)=>{
+       return (val.tes_t.questions.map((value,index)=>{
+         return(
+          <div key={value.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
     
-
-
-
-
-
-
-
-
-  </div>
-)
+           <div>
+    
+    <h1 className="text-sm" >  Category:</h1>
+    <h1>{value.question.category}</h1>
+    
+    </div>
+           <h1>{value.question.question}</h1>
+             <div>
+    
+             <h1 className="text-sm" >  Difficulty:</h1>
+             <h1> {value.question.difficulty}</h1>
+    
+             </div>
+    
+    
+             <div className="row-span-4 text-center border-2 overflow-auto ">
+    
+    <textarea  required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
+    
+    </div>
+         </div>)
+       }))
+     })
+         
+         
+         
+         }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </div>
+     
+           
+           </div>
+           <div className="grid p-4 bg-white h-full w-full place-items-center ">
+    
+    <button  className="btn btn-success"  type="submit">Submit</button>
+    
+    
+       </div>
+           </form>
+           <button  className='btn  w-full btn-info'><Link onClick={togglePopup()} to="/student" >Back to Dashboard</Link></button>
+    </div>
+    
+    
+    
+    
+    
+    
+    )
+    
+    }
+       
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </div>
+      )
 }
 
 

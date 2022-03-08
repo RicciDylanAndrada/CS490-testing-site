@@ -384,20 +384,16 @@ if(fetchTest.test){
 
 
     
-    <div className='h-full text-black bg-gray-100  place-items-center   grid grid-rows-6   '>
-        {/* {test?<h1>hello</h1>:<h1>no</h1>} */}
-        {/* <Link to="test">Favorite hobby link</Link>
-        <button onClick={() => navigate("test")}>Go forward</button>
-      <button onClick={() => navigate(-1)}>Go back</button> */}
-     
-    <div class=" row-span-1 grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
+    <div className='h-fit  text-black p-4  place-items-center bg-gradient-to-r from-red-700 to-blue-300   grid   '>
+       
+    <div class=" row-span-2 rid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
         
     </div>
     {!testWindow?( 
       <div class="row-span-3 w-11/12">
 
          {!pointTest? (
-          <div class="w-11/12  h-full relative  md:bottom-12 lg:bottom-32  bg-white shadow-xl grid grid-rows-6 1 text-center ">
+          <div class="  h-full     bg-white shadow-xl grid grid-rows-6 1 text-center ">
 
          
         <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
@@ -526,7 +522,7 @@ if(fetchTest.test){
         :
                 (
                   <div className='' >
-                  <div class="w-11/12  h-screen relative  md:bottom-12 lg:bottom-32  bg-white shadow-xl grid grid-rows-6 1 text-center ">
+                  <div class="w-11/12  h-screen     bg-white shadow-xl grid grid-rows-6 1 text-center ">
 
          
 <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
@@ -550,7 +546,7 @@ if(fetchTest.test){
 
 
 <div class=" place-items-center   h-full w-full  overflow-auto ">
-<div className='h-full grid place-items-start grid-cols-3  overflow-auto w-full flex-col space-y-4' >
+<div className='h-full grid p-4 place-items-start grid-cols-3  overflow-auto w-full flex-col space-y-4' >
 
 
 {testQuestions.map( (x,index)=>{
@@ -574,10 +570,12 @@ if(fetchTest.test){
 </div>
 
 
-</div>        </div>
+</div>   
 <div class=" w-full  grid  place-items-center    p-5 ">
   <button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
 </div> 
+     </div>
+
 </form>
 )}
 
@@ -589,10 +587,10 @@ if(fetchTest.test){
                 
                 
                  (
-                  <div class="w-11/12  h-6/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
+                  <div class="w-11/12  h-6/6   row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
       
       <div class="border-b-2 w-full grid  grid-cols-3    place-items-center border-b-gray row-span-1  y p-4 ">
-        <button class="place-self-start btn btn-warning    text-lg "  > Exit </button>
+        <button  onClick={()=>  testWindowClick(false)} className="place-self-start btn btn-warning    text-lg "   > Exit </button>
         <h1 class="  place-self-center text-lg " > Test {selectedTest}</h1>
 
 
@@ -602,7 +600,7 @@ if(fetchTest.test){
       <div class=" w-full  row-span-4    ">
       {selectedTest  && ( 
      
-      <div className="grid w-full overflow-auto grid-cols-1  h-full ">
+      <div className="grid w-full p-4 overflow-auto grid-cols-1  h-full ">
       {fetchTest?.test&& 
         fetchTest?.test.filter((x)=>{
     return(
@@ -668,7 +666,7 @@ if(fetchTest.test){
               </div>) }
 
 
-        <div class="grid  p-4  lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 row-span-2 md:gap-4 sm:gap-4 h-full w-full place-items-center">
+        <div class="grid  p-4 gap-4 lg:grid-cols-3 xl:grid-cols-4  md:grid-cols-3 sm:grid-cols-2 row-span-2 md:gap-4 sm:gap-4 h-full  place-items-center">
 
 
 {fetchTest?.test&&
