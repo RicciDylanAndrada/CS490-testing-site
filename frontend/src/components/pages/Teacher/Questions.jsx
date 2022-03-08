@@ -3,25 +3,71 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from 'axios'
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import { useEffect,useState } from 'react';
 function Questions() {
+  const [difficulty, setDifficulty] = React.useState('');
+  const [category, setCategory] = React.useState('');
+  const [functionName, setFunctionName] = React.useState('');
 
+  const [matrix, setMatrix] = useState(
+    Array.from({ length: 1 }, () => Array.from({ length: 2 }, () => null))
+  );
     const[added,setAdded]=useState("")
 
     const[fetchQuestion,setFetchQuestion]=useState("")
+    const[submit,setSubmit]=useState(false)
+    const[question1,setQuestion]=useState("")
+    const[newQuestion,setNewQuestion]=useState()
 
-    const[question,setQuestion]=useState("")
+    const handleFunctionChange = (event) => {
+      setFunctionName(event.target.value);
+    };
+    const handleDifficultyChange = (event) => {
+      setDifficulty(event.target.value);
+    }; const handleCategoryChange = (event) => {
+      setCategory(event.target.value);
+    };
     function handleChange(e) { 
         setQuestion(e.target.value) 
-        console.log(e.target.value)
+       // console.log(e.target.value)
     }
+    const handleRemoveClick = index => {
+    const list = [...matrix];
+    list.splice(index, 1);
+    setMatrix(list);
+  };
+  const handleAddClick = () => {
+    setMatrix([
+      ...matrix,
+      Array.from({ length: 2 }, () => Array.from({ length: 1 }, () => null))
+    ]);
+  };
+  const handleMatrixChange = (row, column, event) => {
+    let copy = [...matrix];
+    copy[row][column] = +event.target.value;
+    setMatrix(copy);
 
+  };
+    const [inputList, setInputList] = useState([{ firstName: "", lastName: "" }]);
+
+    const handleInputChange = (e, index) => {
+      const { name, value } = e.target;
+      const list = [...inputList];
+      list[index][name] = value;
+      setInputList(list);
+    };
+   
     useEffect(()=>{
 
         axios({
             method: "GET",
-            url:"/question"
+            url:"/question",
+            
           })
           .then((response) => {
             console.log(response.data)
@@ -41,20 +87,41 @@ function Questions() {
     },[added])
 
     function onSubmit(event) {
+      event.preventDefault()
+console.log(newQuestion)
+let newa = newArray(question1,category,difficulty,matrix,functionName)
+console.log(newa)
+change(newa)
+  
+      }
+
+      const  newArray =(question1,category,difficulty,matrix,functionName)=>{
+
+
+        let x ={
+          question1:question1,
+            category:category,
+            difficulty:difficulty,
+            test_cases:matrix,
+            function_name:functionName,
+        }
+        setNewQuestion(x)
+
+        
+          
+
+          return x
+        }
+      const change = (x)=>{
+        console.log(x)
         axios({
           method: "POST",
           url:"/add_question",
           data:{
-            question: question,
+            question1: x,
            }
         })
         .then((response) => {
-          console.log(response)
-          console.log("send question")
-
-        
-    
-    
         }).catch((error) => {
           if (error.response) {
             console.log(error.response)
@@ -62,16 +129,25 @@ function Questions() {
             console.log(error.response.headers)
             }
         })
-    
-        setQuestion("")
         setAdded(" ")
-        console.log(question)
-    
-          
-    
-        event.preventDefault()
-      }
+       setNewQuestion({
 
+        question1:"",
+        difficulty:"",
+        test_cases:[]    , 
+           matrix:[],
+
+  
+        category:""
+ 
+       })
+       setSubmit(false)
+      }
+      // console.log(fetchQuestion.question.map((x)=>{
+      //   return(x.question)
+      // }))
+      
+         console.log(fetchQuestion)  
     return (
 
 
@@ -91,7 +167,7 @@ function Questions() {
               <h1 class="justify-self-center place-self-center  text-lg " > Question Box</h1>
     
               {/* Vertical tab for test questions and inside a form  */}
-              {/* able to delete queston tabs or add tes question tabs */}
+              {/* able to delete queston tabs or add tes question1 tabs */}
             
             </div> 
             
@@ -110,12 +186,77 @@ function Questions() {
                                         <TextField
           id="outlined-password-input"
           label="Question"
-          type="question"
-          value={question}
+          type="question1"
+          value={question1}
           onChange={handleChange}
           autoComplete="current-password"
+          required
         />
-                                
+        <TextField
+        required
+          id="outlined-password-input"
+          label="Function Name"
+          type="Function Name"
+          value={functionName}
+          onChange={handleFunctionChange}
+          autoComplete="current-password"
+        />
+        <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
+        <Select
+        required
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={difficulty}
+          label="Difficulty"
+          onChange={handleDifficultyChange}
+        >
+          <MenuItem value={'Easy'}>Easy</MenuItem>
+          <MenuItem value={'Medium'}>Medium</MenuItem>
+          <MenuItem value={'Hard'}>Hard</MenuItem>
+        </Select>
+      </FormControl>
+
+
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Category</InputLabel>
+        <Select
+        required
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={category}
+          label="Category"
+          onChange={handleCategoryChange}
+        >
+          <MenuItem value={'Chapter 4'}>Chapter 1</MenuItem>
+          <MenuItem value={'Chapter 3' }>Chapter2</MenuItem>
+          <MenuItem value={'Chapter 5'}>Chapter 3 </MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+    <table className="border-2" >
+        <tbody className="border-2" >
+          {matrix.map((row, rowIndex) => (
+            <tr className="border-2" key={rowIndex}>
+              {row.map((column, columnIndex) => (
+                <td  className="border-2" key={columnIndex}>
+                  <input
+                  className="border-2"
+                  required
+                  type='number'
+                    onChange={(e) => handleMatrixChange(rowIndex, columnIndex, e)}
+                  />
+                </td>
+              ))}
+              {matrix.length !== 1 && <button
+                className="mr10"
+                onClick={() => handleRemoveClick(rowIndex)}>Remove</button>}
+              {matrix.length - 1 === rowIndex && <button onClick={handleAddClick}>Add</button>}
+            </tr>
+          ))}
+        </tbody>
+      </table>   
 
                                         <button type="submit" class="place-self-center w btn btn-active   " >Add Question </button>
 
@@ -126,15 +267,17 @@ function Questions() {
                                         </form>
                         </div>
 
-                        <div class="p-4 flex  flex-col  space-y-4  ">
-                {fetchQuestion && fetchQuestion?.question.map((question) => {
+                        <div class="p-4 flex  flex-col  overflow-auto space-y-4  ">
+
+                {fetchQuestion?.question && fetchQuestion?.question.map((value)=>{
                     return (
                             <div className='border-2 rounded-xl h-12' > 
-                            <h1>  {question.question} </h1>
- </div>
+                            <h1>  {value.question.question} </h1>
+                      </div>
                     )
 
                 } )}
+                
 
 
                         </div>
