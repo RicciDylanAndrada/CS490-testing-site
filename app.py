@@ -222,14 +222,14 @@ def sub():
 
 @app.route('/show_submission_student',methods=['GET'])
 def show_submission_student():
-   # section = request.json.get("section", None)
-    #u_name = request.json.get("username", None)
+    sec = request.json.get("section", None)
+    u_name = request.json.get("username", None)
     status = 2#request.json.get("status", None)
     if (status == 2):
         con = sql.connect('database.db')
         cur = con.cursor()
         #query = cur.execute("SELECT * FROM submission where user_id='"+str(user_id)+"'")
-        socks = submission.query.filter_by(username='Ricci').all()
+        socks = submission.query.filter_by(username=u_name).all()
         
         result_list = []
         for sock in socks:
@@ -245,7 +245,7 @@ def show_submission_student():
         con = sql.connect('database.db')
         cur = con.cursor()
         #query = cur.execute("SELECT * FROM submission where user_id='"+str(user_id)+"'")
-        socks = submission.query.filter_by(section='006').all()
+        socks = submission.query.filter_by(section=sec).all()
         result_list = []
         for sock in socks:
             y = json.loads(sock.submission)
