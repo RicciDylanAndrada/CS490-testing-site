@@ -12,13 +12,26 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-
-
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 
 
 
 function Teacher() {
+  const [section, setsection] = React.useState('');
+  const handleSectionChange = (event) => {
+    event.preventDefault();
+
+
+    const pressed = event.target.value
+    const here = pressed
+    setsection(here);
+
+  };
+
   const [tabValue,setTabValue]=useState(0);
   const[pointTest,setPointTest]=useState(false);
   const [added,setAdded]=useState("");
@@ -78,7 +91,7 @@ useEffect(()=>{
         method: "POST",
         url:"/show_test",
         data:{
-          section: token?.section,
+          section: section,
          }
       })
       .then((response) => {
@@ -96,8 +109,8 @@ useEffect(()=>{
           }
       })
   
-
-},[added])
+      setsection(" ")
+},[added,section])
 
   const [value,setValue]=useState({
     // student_id:null,
@@ -188,14 +201,14 @@ const handleAllLeft = () => {
 
 const customList = (items) => (
 
-  <div className="overflow-auto h-full w-80  flex flex-col space-y-4    ">
+  <div className="overflow-auto h-full w-full   flex flex-col space-y-4    ">
   
     
       {items.map((value) => {
         const labelId = `transfer-list-item-${value.question_id}-label`;
 
         return (
-          <div className='border-2'>
+          <div className='border-2 rounded-lg'>
 
          
           <ListItem
@@ -237,10 +250,9 @@ const handleSubmit=(e)=>{
       }))
   setTestQuestions(left)
 
-
+      setLeft([])
 
 }
-console.log(token.section)
 
 
 
@@ -393,7 +405,7 @@ if(fetchTest.test){
       <div class="row-span-3 w-11/12">
 
          {!pointTest? (
-          <div class="  h-full     bg-white shadow-xl grid grid-rows-6 1 text-center ">
+          <div class="  h-Sscreen    bg-white shadow-xl grid grid-rows-6 1 text-center ">
 
          
         <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
@@ -402,28 +414,29 @@ if(fetchTest.test){
          
         
         </div> 
-        <div class=" w-full  row-span-4    ">
+        <div class=" w-full  row-span-5 text-center    ">
         {fetchTest && right && ( 
         <form onSubmit={handleSubmit}>
         <TextField
           id="outlined-password-input"
           label="Test Name"
           name='test_name'
-          type="question"
+          className='w-full'
+          type="question text-center "
           value={test.test_name}
           onChange={e => setTest({test_name:e.target.value,section:token.section})}
           autoComplete="current-password"
           required
         />
-        <div class="grid w-full  grid-cols-1  h-full ">
+        <div class="grid w-full  grid-cols-1   border-b-2 border-t-2 h-full ">
         
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-3 border-l-2  border-gray-200">
 
-    <div class="grid place-items-center">
+    <div class="grid place-items-center w-full border-r-2 ">
     <h1>Test Questions </h1>
 
 
-    <div class=" place-items-center h-80  overflow-auto       ">
+    <div class=" place-items-center h-full w-full p-4 overflow-auto       ">
       <Grid
         
       item>{customList(left)}</Grid>
@@ -478,12 +491,12 @@ if(fetchTest.test){
         </Grid>
       </Grid>
      </div>
-     <div class="grid place-items-center">
+     <div class="grid place-items-center border-l-2">
     <h1> Question Bank </h1>
 
 
-    <div class=" place-items-center h-80    overflow-auto ">
-<div className='h-full flex flex-col space-y-4' >
+    <div class=" place-items-center h-full  w-full p-4   overflow-auto ">
+<div className='h-full flex flex-col  space-y-4' >
 {customList(right)}
 
 </div>
@@ -546,15 +559,15 @@ if(fetchTest.test){
 
 
 <div class=" place-items-center   h-full w-full  overflow-auto ">
-<div className='h-full grid p-4 place-items-start grid-cols-3  overflow-auto w-full flex-col space-y-4' >
+<div className='h-full grid  place-items-start grid-cols-2  overflow-auto w-full flex-col ' >
 
 
 {testQuestions.map( (x,index)=>{
   return(
 
-    <div className='border-2  grid place-items-center rounded-xl' > 
+    <div className='border-2  grid place-items-start rounded-xl  w-full'  > 
     <h1>{x.question.question}</h1>
-    <input  type='number'  required placeholder='points' name={x.question_id}  onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200  rounded-md" ></input>
+    <input  type='number'  required placeholder='points' name={x.question_id}  onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200  w-full rounded-md" ></input>
     </div>
   )
 })
@@ -665,15 +678,32 @@ if(fetchTest.test){
   
               </div>) }
 
+   <div class=" grid grid-cols-3 p-4 w-full h-52   place-items-center">
 
+   { token?.section.sections.map((x,i)=>{
+            return(
+
+                <div  key={i} >
+                
+       <button className='btn btn-square w-32  ' onClick={handleSectionChange} value={x}>Section{x}</button>
+
+
+                </div>
+            )
+        })}
+   </div>
+       
+       {/* <MenuItem value={"006"}>006</MenuItem>
+       <MenuItem value={"008"}>008</MenuItem>
+       <MenuItem value={"002"}>002</MenuItem> */}
         <div class="grid  p-4 gap-4 lg:grid-cols-3 xl:grid-cols-4  md:grid-cols-3 sm:grid-cols-2 row-span-2 md:gap-4 sm:gap-4 h-full  place-items-center">
-
+   
 
 {fetchTest?.test&&
-  fetchTest?.test.map((value)=>{
+  fetchTest?.test.map((value,i)=>{
          
          return(
-           <TeacherCard key={value.test_id} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+           <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
 
         
 

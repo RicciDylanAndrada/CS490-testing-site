@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useState,useEffect,useContext } from 'react'
 import LoginContext from '../../../content/LoginContext'
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom'
 import Grid from '@mui/material/Grid';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -105,16 +105,19 @@ const [teacherPoints, setTeacherPoints] = React.useState({
 
 
 
-const changePoints=(e)=>{
-setPoints({
+// const changePoints=(e)=>{
+// setPoints({
   
-  point: [
-    ...points.point,
-     e.target.value
-    ]
+//   point: [
+//     ...points.point,
+//      e.target.value
+//     ]
 
    
-})}
+// })}
+
+
+
 const handleToggle = (value) => () => {
 const currentIndex = checked.indexOf(value);
 const newChecked = [...checked];
@@ -449,7 +452,7 @@ return (
     
        </div>
            </form>
-           <button  className='btn  w-full btn-info'><Link onClick={togglePopup()} to="/student" >Back to Dashboard</Link></button>
+           <button  className='btn  w-full btn-info'><Link  to="/teacher" >Back to Dashboard</Link></button>
     </div>
     
     

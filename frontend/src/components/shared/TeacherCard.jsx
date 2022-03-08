@@ -1,9 +1,9 @@
 // import React from 'react'
 
-function TeacherCard({test_name,getButtonId,test_id}) {
+function TeacherCard({test_name,getButtonId,test_id,key}) {
   return (
     
-    <div className=" p-4 w-64  grid h-44  card shadow-xl  side bg-white ">
+    <div key={key} className=" p-4 w-64  grid h-44  card shadow-xl  side bg-white ">
            {test_name && (
 
            <div  class="grid place-items-center">

@@ -1,15 +1,11 @@
 import React from 'react'
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import TestContext from '../../../content/TestContext';
 import {useState,useContext} from 'react'
-import { TextareaAutosize } from '@mui/material';
 import { Link } from 'react-router-dom';
 import LoginContext from '../../../content/LoginContext';
 function Test() {
 
-
-  
 const {selectedTest,fetchTest,setTest,setTestWindow,testWindow,togglePopup,inTest}=useContext(TestContext)
 const{token}=useContext(LoginContext)
 const[studentSub,setStudentSub]=useState({
@@ -21,10 +17,16 @@ studentTest.map((x)=>{
   return(
     x.tes_t.usesrname=token.username,
     x.tes_t.user_id=token.user_id
-
-
   )
 })
+
+
+
+
+
+
+
+
 
 
 
@@ -124,6 +126,11 @@ return (studentTest)
  <form classNamew="h-fit w-full" onSubmit={handleSubmit} >
  <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
 <div className="w-full h-full grid gap-24 ">
+
+
+
+
+
 {fetchTest?.test&& 
        fetchTest?.test.filter((x)=>{
    return(
@@ -167,11 +174,6 @@ return (studentTest)
 
 
 
-
-
-
-
-
 </div>
  
        
@@ -183,7 +185,7 @@ return (studentTest)
 
    </div>
        </form>
-       <button  className='btn  w-full btn-info'><Link onClick={togglePopup()} to="/student" >Back to Dashboard</Link></button>
+       <button  className='btn  w-full btn-info'><Link onClick={togglePopup} to="/student" >Back to Dashboard</Link></button>
 </div>
 
 
