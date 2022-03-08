@@ -11,7 +11,7 @@ function Layout() {
   return (
 
 
-    <div class=" ">
+    <div class=" h-full">
 
 
  
@@ -19,7 +19,7 @@ function Layout() {
   
   
   
-  <div class="h-screen w-full">
+  <div class="h-full w-full">
       <LoginForm/>
 
 </div>

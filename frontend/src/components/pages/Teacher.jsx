@@ -1,20 +1,11 @@
 import React from 'react'
-import data from "../data/test.json"
 import TeacherCard from '../shared/TeacherCard'
 import axios from 'axios'
 import { useState,useEffect,useContext } from 'react'
-import { Link } from 'react-router-dom'
 import LoginContext from '../../content/LoginContext'
-import { PathRouteProps } from 'react-router-dom'
-import {BrowserRouter, BrowserRouter as Router,Route,Routes,useLocation} from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import AllyProps from '../Tab/AllyProps'
-import TabPanel from '../Tab/TabPanel'
-import Box  from '@mui/material/Box'
-import Tab from '@mui/material/Tab'
-import Tabs from '@mui/material/Tabs'
+
 import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -22,16 +13,20 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
+
 import Paper from '@mui/material/Paper';
 
 
 
 function Teacher() {
   const [tabValue,setTabValue]=useState(0);
+  const[pointTest,setPointTest]=useState(false);
   const [added,setAdded]=useState("");
   const[fetchQuestion,setFetchQuestion]=useState("null")
   const[fetchTest,setFetchTest]=useState("null")
   const[submit,setSubmit]=useState(false)
+  const[testQuestions,setTestQuestions]=useState([])
+
 
 const [selectedTest,setSelectedTest]=useState(null)
 const [testWindow,setTestWindow]=useState(false)
@@ -68,7 +63,7 @@ useEffect(()=>{
       .then((response) => {
         //console.log(response.data)
         setFetchQuestion(response.data)
-        setRight(response.data.question)
+        setRight(response.data?.question)
   
   
       }).catch((error) => {
@@ -83,7 +78,7 @@ useEffect(()=>{
         method: "POST",
         url:"/show_test",
         data:{
-          section: '006',
+          section: token?.section,
          }
       })
       .then((response) => {
@@ -111,26 +106,33 @@ useEffect(()=>{
     answer:null  // from input 
   });
 
-  //fetch the test acconuts
-  // would also have to check for section ID to display the certain test
+
   const navigate = useNavigate();
 
 
   const [checked, setChecked] = React.useState([]);
   const [left, setLeft] = React.useState([]);
+  const [points, setPoints] = React.useState({
+    point:[
+
+    ]
+  });
+
   const [right, setRight] = useState(fetchQuestion?.question);
 
-    // have to set right use state the array of question_id
+  
 
-  //const [right, setRight] = React.useState(fetchQuestion.question);
+const changePoints=(e)=>{
+  setPoints({
+    
+    point: [
+      ...points.point,
+       e.target.value
+      ]
+  
+     
+})}
 
-// console.log(fetchQuestion.question)
-// console.log(right)
-
-//  let getButtonId = (e) => {
-//         console.log(e.currentTarget.id);
-//         setTest(e.currentTarget.id)
-//       }
 const not =(a, b)=> {
   return a.filter((value) => b.indexOf(value) === -1);
 }
@@ -214,7 +216,7 @@ const customList = (items) => (
                 }}
               />
             </ListItemIcon>
-            <ListItemText id={labelId} primary={value.question} />
+            <ListItemText id={labelId} primary={value.question.question} />
           </ListItem>
           </div>
         );
@@ -225,37 +227,73 @@ const customList = (items) => (
 );
 
 
-
-
-
-// const handleChangeTab = (event, newValue) => {
-// //   setTabValue(newValue);
-// // };
-// const handleChange = (event) => {
-//   const {value, name} = event.target
-//   setTest(prevNote => ({
-//       ...prevNote, [name]: value})
-//   )
-// };
-
 const handleSubmit=(e)=>{
   e.preventDefault()
-  console.log(left)
-  setTest(prev=>({
-...prev,   section:token.section,questions:left
 
-  }))
-  console.log(test)
-e.preventDefault()
-setSubmit(true)
+  setPointTest(!pointTest)
+  setTest(prev=>({
+    ...prev,   section:token.section
+    
+      }))
+  setTestQuestions(left)
+
+
+
 }
 
 
 
 
 
-const change = ()=>{
+
+const[studentSub,setStudentSub]=useState({
+  answers:[]
+})
+
+
+const handleInputChange = (evt, id) => {
+  setStudentSub({
+    answers:{
+      ...studentSub.answers,
+      [evt.target.name]:evt.target.value
+    }
+  });
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+const handleSubmitFinal=(e)=>{
   console.log(test)
+
+  e.preventDefault()
+  const result = Object.entries(studentSub.answers).map(([id, answer]) => ({id:id,answer}));
+  console.log(result)
+  let finalArray = newArray(result,testQuestions)
+  console.log(finalArray)
+  
+  setTest(prev=>({
+    ...prev,   questions:finalArray
+    
+      }))
+let finalTest=test
+
+console.log(test)
+}
+
+
+
+
+const change=()=>{
   axios({
     method: "POST",
     url:"/make_test",
@@ -265,8 +303,7 @@ const change = ()=>{
      }
   })
   .then((response) => {
-    console.log(test)
-
+  
   }).catch((error) => {
     if (error.response) {
       console.log(error.response)
@@ -274,8 +311,72 @@ const change = ()=>{
       console.log(error.response.headers)
       }
   })
-  setAdded(" ")
- setTest({section:"",questions:[],test_name:""})
+}
+
+const newArray=(x,questionArray)=>{
+  let arrayC = [];
+  console.log(x)
+  let flatArray = (questionArray.flat())
+
+  flatArray.forEach(function(element){
+  arrayC.push({
+  question:element.question,
+  question_id:element.question_id,
+  points:x.find(e=>e.id==element.question_id)?.answer
+  });
+
+});
+
+setTest(prev=>({
+  ...prev,   questions:arrayC
+  
+    }))
+setSubmit(" ")
+// let Y ={
+//   question1:question1,
+//     category:category,
+//     difficulty:difficulty,
+//     test_cases:matrix,
+//     function_name:functionName,
+// }
+
+return (arrayC)
+
+
+}
+
+// const change = (x)=>{
+//   console.log(test)
+//   axios({
+//     method: "POST",
+//     url:"/make_test",
+//     data:{
+//       section:test?.section,
+//       tes_t: x,
+//      }
+//   })
+//   .then((response) => {
+//     console.log(test)
+
+//   }).catch((error) => {
+//     if (error.response) {
+//       console.log(error.response)
+//       console.log(error.response.status)
+//       console.log(error.response.headers)
+//       }
+//   })
+//   setAdded(" ")
+//  setTest({section:"",questions:[],test_name:""})
+// }
+if(fetchTest.test){
+
+  let newFilter = fetchTest.test.filter((x)=>{
+    return(
+      x.test_id == selectedTest
+    )
+  })
+
+  console.log()
 }
 
   return (
@@ -291,8 +392,13 @@ const change = ()=>{
     <div class=" row-span-1 grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
         
     </div>
-    {!testWindow?(     <div class="w-11/12  h-5/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
-      
+    {!testWindow?( 
+      <div class="row-span-3 w-11/12">
+
+         {!pointTest? (
+          <div class="w-11/12  h-full relative  md:bottom-12 lg:bottom-32  bg-white shadow-xl grid grid-rows-6 1 text-center ">
+
+         
         <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
           <h1 class="justify-self-center place-self-center  text-lg " > New Test</h1>
 
@@ -302,73 +408,18 @@ const change = ()=>{
         <div class=" w-full  row-span-4    ">
         {fetchTest && right && ( 
         <form onSubmit={handleSubmit}>
-        {/* <TextField
+        <TextField
           id="outlined-password-input"
-          label="Question"
+          label="Test Name"
           name='test_name'
           type="question"
           value={test.test_name}
           onChange={e => setTest({test_name:e.target.value,section:token.section})}
           autoComplete="current-password"
           required
-        /> */}
- {/* get test data and loop creating div of things below */}
+        />
         <div class="grid w-full  grid-cols-1  h-full ">
-        {/* <Box
-      sx={{
-        flexGrow: 1,
-        bgcolor: "background.paper",
-        display: "flex",
-        height: 298,
-        width: "w-full",
-
         
-      }}
-    >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={tabValue}
-        onChange={handleChangeTab}
-        aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        <Tab label="Item One" {...AllyProps(0)} />
-        <Tab label="Item Two" {...AllyProps(1)} />
-        <Tab label="Item Three" {...AllyProps(2)} />
-        <Tab label="Item Four" {...AllyProps(3)} />
-        <Tab label="Item Five" {...AllyProps(4)} />
-        <Tab label="Item Six" {...AllyProps(5)} />
-        <Tab label="Item Seven" {...AllyProps(6)} />
-      </Tabs>
-
-
-
-
-      <TabPanel value={tabValue} index={0}>
-      <input  className="border-2 border-black rounded-lg p-4" placeholder='question 1 '  />
-      </TabPanel>
-      <TabPanel value={tabValue} index={1}>
-      <input placeholder='question 2'  />
-      </TabPanel>
-      <TabPanel value={tabValue} index={2}>
-      <input placeholder='question 3 '  />
-      </TabPanel>
-      <TabPanel value={tabValue} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={tabValue} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={tabValue} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={tabValue} index={6}>
-        Item Seven2
-      </TabPanel>
-
-
-    </Box> */}
     <div class="grid grid-cols-3">
 
     <div class="grid place-items-center">
@@ -449,17 +500,98 @@ const change = ()=>{
 
 </div>        </div>
         <div class=" w-full  grid  place-items-center    p-5 ">
-          <button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
+          <button type='"submit'  class="place-self-center  w btn btn-active   " >Add Points </button>
         </div> 
         </form>
         )}
         
         </div> 
-    
-                </div>): (<div class="w-11/12  h-6/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        )
+        :
+                (
+                  <div className='' >
+                  <div class="w-11/12  h-screen relative  md:bottom-12 lg:bottom-32  bg-white shadow-xl grid grid-rows-6 1 text-center ">
+
+         
+<div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
+  <h1 class="justify-self-center place-self-center  text-lg " > Question Bank </h1>
+
+ 
+
+</div> 
+<div class=" w-full  row-span-5   ">
+{fetchTest && right && ( 
+<form  className='h-full' onSubmit={handleSubmitFinal}>
+
+<div class="grid w-full  grid-cols-1  h-full ">
+
+<div class="grid grid-cols-1">
+
+
+
+
+<div class="grid place-items-center  w-full">
+
+
+<div class=" place-items-center   h-full w-full  overflow-auto ">
+<div className='h-full grid place-items-start grid-cols-3  overflow-auto w-full flex-col space-y-4' >
+
+
+{testQuestions.map( (x,index)=>{
+  return(
+
+    <div className='border-2  grid place-items-center rounded-xl' > 
+    <h1>{x.question.question}</h1>
+    <input  type='number'  required placeholder='points' name={x.question_id}  onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200  rounded-md" ></input>
+    </div>
+  )
+})
+
+}
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>        </div>
+<div class=" w-full  grid  place-items-center    p-5 ">
+  <button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
+</div> 
+</form>
+)}
+
+</div> 
+</div>
+                </div>)}
+                
+                </div>):
+                
+                
+                 (
+                  <div class="w-11/12  h-6/6 relative  md:bottom-12 lg:bottom-32 row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
       
       <div class="border-b-2 w-full grid  grid-cols-3    place-items-center border-b-gray row-span-1  y p-4 ">
-        <button class="place-self-start btn btn-warning    text-lg "  onClick={()=>  testWindowClick()}> Exit </button>
+        <button class="place-self-start btn btn-warning    text-lg "  > Exit </button>
         <h1 class="  place-self-center text-lg " > Test {selectedTest}</h1>
 
 
@@ -469,52 +601,49 @@ const change = ()=>{
       <div class=" w-full  row-span-4    ">
       {selectedTest  && ( 
      
-      <div className="grid w-full  grid-cols-1  h-full ">
-     
+      <div className="grid w-full overflow-auto grid-cols-1  h-full ">
+      {fetchTest?.test&& 
+        fetchTest?.test.filter((x)=>{
+    return(
+      x.test_id == selectedTest
+    )
+  })
+      
+  .map((val)=>{
+    return (val.tes_t.questions.map((value)=>{
+      return(
+        <div className='border-2 grid grid-cols-3 rounded-xl h-24 ' > 
+
+        <div>
+
+<h1 className="text-sm" >  Category:</h1>
+<h1>{value.question.category}</h1>
+
+</div>
+        <h1>{value.question.question}</h1>
+          <div>
+
+          <h1 className="text-sm" >  Difficulty:</h1>
+          <h1> {value.question.difficulty}</h1>
+
+          </div>
+
+
+
+      </div>)
+    }))
+  })
+      
+      
+      
+      }
+
+
+
   <div class="grid grid-cols-1">
 
   <div class="grid  p-3 overflow-auto place-items-center">
-  {fetchTest?.test.filter((value)=>{
-         
-         {/* return(
-          <div className='border-2 w-full rounded-xl h-12' > 
-          <h1>
-          {(value.tes_t) && (
-            value.tes_t.questions.map((x)=>{
-              return(
-                <h1>{x.question}</h1>
-              )
-            })
-          )}
-          </h1>
- </div>
-        
-
-
-
-
-         
-         ) */}
-         return(
-          value.test_id == selectedTest
-
-         
-         )
-       }).map((x)=>{
-
-return(
-        x.tes_t.questions.map((y)=>{
-          return(
-            <div className='border-2 w-full grid  grid-cols-3 p-1 rounded-xl h-24' > 
-            <h1 className='place-self-start ' >{y.question_id}</h1>
-
-            <h1 className='place-self-center '  > {y.question}</h1>
-            </div>
-          )
-        })
-
-       )
-       })}
+ 
 
 
 
@@ -530,6 +659,7 @@ return(
 
 
    </div>
+   
       )}
       
       </div> 
@@ -537,23 +667,14 @@ return(
               </div>) }
 
 
-        <div class="grid  p-4  lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 row-span-7 md:gap-4 sm:gap-4 h-full w-full place-items-center">
+        <div class="grid  p-4  lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 row-span-2 md:gap-4 sm:gap-4 h-full w-full place-items-center">
 
-{/* DROPDOWN BOX FOR TEST IN SECTIONS*/}
 
-{/* Be able to delete tests   inside teacher Card  */}
 {fetchTest?.test&&
   fetchTest?.test.map((value)=>{
-         {/* let key = Object.keys(value.Questions)
-        key.forEach((key,index) =>{
-          return (        
-          console.log(value.Questions[index])
-          )
-          
-
-        }) */}
+         
          return(
-           <TeacherCard  test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+           <TeacherCard key={value.test_id} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
 
         
 
