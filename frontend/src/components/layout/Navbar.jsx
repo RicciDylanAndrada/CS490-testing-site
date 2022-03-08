@@ -3,6 +3,7 @@ import {useContext} from 'react'
 import {HiOutlineDesktopComputer} from 'react-icons/hi'
 import {AiOutlineFileDone} from 'react-icons/ai'
 import LoginContext from '../../content/LoginContext'
+import TestContext from '../../content/TestContext'
 import { useNavigate } from 'react-router-dom';
 import AllyProps from '../Tab/AllyProps'
 import TabPanel from '../Tab/TabPanel'
@@ -21,6 +22,8 @@ export default function Navbar() {
       };
     const{token}=useContext(LoginContext)
     const{setToken,user,removeToken}=useContext(LoginContext)
+    const{inTest}=useContext(TestContext)
+
     const handleLogout=()=>{
         removeToken()
       }   
@@ -93,7 +96,7 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : '')}
 
          
-         to="/submissions">Submissions</NavLink> </button> 
+         to="/submission">Submissions</NavLink> </button> 
         </div>
 
         </div>
@@ -111,8 +114,12 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         
         
              <NavLink
-            className={(navData) => (navData.isActive ? 'border-b-2 border-gray-200 ' : '')}
-         to="teacher">Dashboard</NavLink> 
+            className={(navData) => (navData.isActive ?   inTest? 'btn btn-warning': 'border-b-2 border-gray-200 '
+                
+             :
+             
+              '')}
+         to="student">Dashboard</NavLink> 
         
         
         </button> 

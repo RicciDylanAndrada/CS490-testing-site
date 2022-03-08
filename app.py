@@ -48,7 +48,7 @@ class roles(db.Model):
     role_name = db.Column(db.String(80)) 
 class questions(db.Model):
     question_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    question = db.Column(db.String(120))
+    question = db.Column(db.String(256))
 class tes_t(db.Model):
     test_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     section = db.Column(db.String(80))
@@ -147,8 +147,11 @@ def add_question():
    # resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT INTO questions (question) VALUES ('" + question + "')")
+    c.execute("INSERT INTO questions (question) VALUES ('" + json.dumps(question) + "')")
     con.commit()
+    response ={"question":question }
+
+    return response
 
 @app.route('/question',methods=['GET'])
 def question():
@@ -156,12 +159,17 @@ def question():
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     cur = con.cursor()
-    query = cur.execute("SELECT * FROM questions")
-    colname = [ d[0] for d in query.description ]
-    result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
+    query = cur.execute("SELECT question_id,question FROM questions")
+    result_list = []
+    socks = questions.query.all()
+    for sock in socks:
+        y = json.loads(sock.question)
+        lst = {"question_id": sock.question_id, "question": y } 
+        result_list.append(lst) 
     cur.close()
     cur.connection.close()
     response ={"question":result_list }
+
     return response
    
 @app.route('/make_test',methods=['POST'])
@@ -205,5 +213,23 @@ def sub():
     #resultJSON = json.dumps(question)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT INTO submission (test_id, submission) VALUES ('" + test_id + "','" + submission + "')")
+    c.execute("INSERT OR IGNORE INTO submission (test_id, submission) VALUES ('" + str(test_id) + "','" + json.dumps(submission)+ "')")
     con.commit()
+    response={"status":submission}
+    return response
+@app.route('/show_submission',methods=['POST'])
+def show_submission():
+    sec = request.json.get("section", None)
+    con = sql.connect('database.db')
+    cur = con.cursor()
+    query = cur.execute("SELECT test_id, submission FROM submission where section='"+str(sec)+"'")
+    socks = submission.query.filter_by(section=sec).all()
+    result_list = []
+    for sock in socks:
+        y = json.loads(sock.submission)
+        lst = {"test_id": sock.test_id, "submission": y } 
+        result_list.append(lst) 
+    cur.close()
+    cur.connection.close()
+    response ={"test":result_list }
+    return response

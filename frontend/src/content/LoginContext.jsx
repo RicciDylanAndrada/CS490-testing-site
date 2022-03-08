@@ -12,58 +12,6 @@ export const LoginProvider=({children})=>{
 
 
 
- // useEffect(()=>{
-
-
-//     if(token){
-//         //then check if the user exists
-//       const fetchProfile= async ()=>{
-//         try{
-//            const user = await fetch("/user",{
-//                 method:'POST',
-//                 headers:{
-//                      Authorization:`Bearer ${token}`,
-//                           },                     
-//                       })
-//                           const userInfo= await user.json()
-//                           // check if student
-//                           if(userInfo === 0){
-//                               setUser("student")
-
-
-//                           }
-//                           //check if teacher
-//                           else if ( userInfo ===1 ){
-//                             setUser("teacher")
-
-
-//                           }
-//                           else{
-//                               setUser("invaid")
-//                           }
-
-//                   }
-//                   catch(err){
-//           console.log(err)
-//                   }
-//               }
-            
-//               fetchProfile()
-//     }
-//     else{
-//         // GET FROM FLASK
-//       const hash = window.location.hash 
-//           let token= window.localStorage.getItem("token")
-//           if(!token && hash){
-      
-//             token = hash.substring(1).split("&").find(elem=>elem.startsWith("access_token")).split("=")[1]
-//             window.location.hash=""
-//             window.localStorage.setItem("token",token)
-//           }
-//           setToken(token)
-//     }
-    
-//   },[])
 
 
   
@@ -81,6 +29,9 @@ function saveToken(userToken) {
   setToken({
     token:token.token || '',
 status: '',
+token:token.usesrname || '',
+user_id:"",
+
 section:token.section|| ''});
 };
 

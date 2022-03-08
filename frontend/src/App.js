@@ -5,11 +5,13 @@ import axios from "axios";
 import {BrowserRouter, BrowserRouter as Router,Route,Routes,useLocation} from 'react-router-dom'
 import Teacher from './components/pages/Teacher'
 import Student from './components/pages/Student'
+import Test from './components/pages/Student/Test'
 import Navbar from './components/layout/Navbar'
 import LoginContext from './content/LoginContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
 import Questions from './components/pages/Teacher/Questions';
+import Submissions from './components/pages/Teacher/Submissions';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
@@ -51,7 +53,7 @@ function App() {
 
 </div>
         :( 
-          <div class="">
+          <div class="h-full">
             {token.status == 0? (
 
 
@@ -64,7 +66,9 @@ function App() {
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
        <Route path="/student" element={<Student/>}/>
-       <Route path="/test" element={<LoginForm/>}/>
+       <Route path="/test" element={<Test/>}/>
+
+      
         <Route path="/submit" element={<LoginForm/>}/>
 
 
@@ -101,7 +105,7 @@ function App() {
        <Route path="/teacher" element={<Teacher/>}/>
        <Route path="/questions" element={<Questions/>}/>
 
-       <Route path="/submission" element={<LoginForm/>}/>
+       <Route path="/submission" element={<Submissions/>}/>
        <Route path="/create" element={<LoginForm/>}/>
 
         <Route path="/submit" element={<LoginForm/>}/>
