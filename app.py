@@ -249,7 +249,7 @@ def show_test():
 
 @app.route('/submission',methods=['POST'])
 def sub():
-    submission = request.json.get("sub_id", None)
+    submission = request.json.get("submission", None)
     section = request.json.get("section", None)
     u_name = request.json.get("username", None)
     con = sql.connect('database.db')
