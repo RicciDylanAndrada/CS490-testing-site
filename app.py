@@ -318,8 +318,6 @@ def show_test():
     response ={"test":result_list }
     return response
 
-<<<<<<< HEAD
-=======
 @app.route('/submission',methods=['POST'])
 def sub():
     submission = request.json.get("submission", None)
@@ -347,4 +345,3 @@ def show_submission():
     cur.connection.close()
     response ={"test":result_list }
     return response
->>>>>>> e6e1d5ec62695538f87af5828613ac03c46e2c32
