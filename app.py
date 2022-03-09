@@ -217,7 +217,7 @@ def sub():
     u_name = request.json.get("username", None)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT OR IGNORE INTO submission (username, submission, section) VALUES ('" + u_name + "','" + json.dumps(submission)+ "', '" + section + "')")
+    c.execute("INSERT INTO submission (username, submission, section) VALUES ('" + u_name + "','" + json.dumps(submission)+ "', '" + section + "')")
     con.commit()
     response ={"good":"good" }
     return response
