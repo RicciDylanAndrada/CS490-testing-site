@@ -282,11 +282,7 @@ def autograde():
 
 
 @app.route('/submission_update',methods=['POST'])
-<<<<<<< HEAD
-def sub1():
-=======
 def submission_update():
->>>>>>> 255c10917920a11813608e70715822e8199489c5
     sub_id = request.json.get("sub_id", None)
     submission = request.json.get("submission", None)
     con = sql.connect('database.db')
