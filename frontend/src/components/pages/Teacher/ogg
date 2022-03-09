@@ -4,23 +4,24 @@ import TeacherContext from '../../../content/TeacherContext'
 import axios from 'axios'
 import LoginContext from '../../../content/LoginContext'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 function GradeTest() {
 
-    const {selectedTest,studentID,fetchTest,setTest,setfetchSubmission,fetchSubmission,setTestWindow,testWindow,togglePopup,inTest,filterSubmissionTest}=useContext(TeacherContext)
+    const {selectedTest,studentID,section,fetchTest,setTest,setfetchSubmission,autoGraded,fetchSubmission,setTestWindow,testWindow,togglePopup,inTest,filterSubmissionTest}=useContext(TeacherContext)
     const{token}=useContext(LoginContext)
-    const[autoGraded,setAutograded]=useState()
-
+    const[toGrade,setToGrade]=useState()
+    
     const[teacherSub,setTeacherSub]=useState({
-      
+      grade:{
         comment:[],
         grade:"",
-        functio_name:"",
-      
+        points:"",
+        name_correct:"",
+      }
       
 
 
     })
-
     const [points, setPoints] = React.useState({
       point:[
   
@@ -39,6 +40,8 @@ function GradeTest() {
     })}
 console.log(studentID)
 console.log(fetchSubmission)
+console.log(autoGraded)
+
 
     let studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
       return(
@@ -58,8 +61,17 @@ console.log(fetchSubmission)
             }
         }
     
+
+
+        
+
+
+
+
     const callAutoGrade=()=>{
-      let studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
+      const on = fetchSubmission
+      const onOn =on
+      let studenttest1 = (onOn?.submissions?.filter((x)=>{
         return(
           x?.submission?.map((y)=>{
             return(y.tes_t.usser_id==studentID)
@@ -71,103 +83,107 @@ console.log(fetchSubmission)
 
       console.log(studenttest1[0].submission)
 
- axios({
-        method: "POST",
-        url:"/autograde",
-        data:{
-          submission:studenttest1[0].submission
+  axios({
+    method: "POST",
+    url:"/autograde",
+    data:{
+      submission:fetchSubmission?.submissions?.filter((x)=>{
+        return(
+          x?.submission?.map((y)=>{
+            return(y.tes_t.usser_id==studentID)
+          })
+        )
+      })[0]?.submission
 
-         }
-      })
-      .then((response) => {
-        console.log(response.data)
-        setAutograded(response.data)
-    
-        console.log("returned")
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-          }
-      })
-      setTemp(autoGraded)
-      setfetchSubmission({})
+     }
+  })
+  .then((response) => {
+    console.log(response.data)
+    console.log(response.data)
+
+    console.log("returned")
+  }).catch((error) => {
+    if (error.response) {
+      console.log(error.response)
+      console.log(error.response.status)
+      console.log(error.response.headers)
+      }
+  })
+      //setfetchSubmission({})
       setTeacherSub({
         comment:[]
       })
     }
     
-    const studentTest = autoGraded
-    console.log(studentTest)
-    const[temp,setTemp]=useState(studentTest)
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
     
     
     const handleInputChange = (evt, id) => {
-      console.log(studentTest)
-
-      console.log(temp)
-      // setTeacherSub({
-      //     ...teacherSub,
-      //     [evt.target.name]:evt.target.value
-        
-      // });
-      var result = [...studentTest];
-      // result = result.map((x) => {
-      //   if (x.id === id) {
-      //     x.room = e.target.value;
-      //     return x;
-      //   } else return x;
-      // });
-
-
-      // result = result.map((w,index)=>{
-      //   return(
-          
-      // w.tes_t.questions.map((value,index)=>{
-      //   return(
-      //     if(index === id){
-
-      //       value?.question?.evt.target.name=evt.target.value
-      //       return value
-      //     }
-      //     else{
-      //       retrun value
-      //     })}))}
-        result = result.map((x,index)=>{
-
-          return(
-                x.tes_t.questions.map((y)=>{
-
-                     if(index === id){
-                       y.question.grade[evt.target.name] = evt.target.value
-                       return y
-                     }
-                     else{
-                       return y
-                     }
-                         
-                      
-                  
-                 
-                })
-
-          )
-        })
-
-      setTemp(result);
-      console.log(temp)
+      setTeacherSub({
+        comment:{
+          ...teacherSub.comment,
+          [evt.target.name]:evt.target.value
+        }
+      });
     
+      
     };
     const handleSubmit=(e)=>{
+      e.preventDefault()
+      console.log(teacherSub)
+      const result = Object.entries(teacherSub.comment).map(([id, comment,grade,points,name_correct]) => ({id:id,comment,grade,points,name_correct}));
+      console.log(result)
+    console.log(result)
+      studenttest1.map((x)=>{ 
+        return(
+          x.tes_t.questions.test=[teacherSub.comment]
       
+        )
+      })
+    let questionArray = studenttest1.map((x)=>{
+      return (
+        x.tes_t.questions
+      )
+    })
+    
+    newArray(result,questionArray)
+    
+      console.log(studenttest1)
       axios({
         method: "POST",
         url:"/submission_update",
         data:{
-          submission:temp,
+          submission:studenttest1,
           section: token?.section,
           username:token?.username
          }
@@ -183,7 +199,9 @@ console.log(fetchSubmission)
           console.log(error.response.headers)
           }
       })
-     setTemp([])
+      setTeacherSub({
+        comment:[]
+      })
     }
 
 
@@ -228,18 +246,8 @@ console.log(fetchSubmission)
     return (studenttest1)
     }
     
- 
-
-
-
-
-
-
-
-
-
-
-
+    console.log(autoGraded)
+    const value = autoGraded
       return (
     
         <div className='h-full text-black bg-gradient-to-r from-red-700 to-blue-300  place-items-center p-10  flex flex-grow '>
@@ -248,12 +256,10 @@ console.log(fetchSubmission)
     
      
      <div className="h-screen w-full">
-     <button  className='btn btn-warning w-full' onClick={callAutoGrade}>AutoGrade</button>
-
      <form classNamew="h-fit w-full" onSubmit={handleSubmit} >
      <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
     <div className="w-full h-full grid gap-24 ">
-    { !autoGraded && fetchSubmission? (
+    {  fetchSubmission? (
 
      fetchSubmission?.submissions &&
        
@@ -287,19 +293,7 @@ console.log(fetchSubmission)
 
 
          </div>
-
-
-        <div >
-        <label>Default Points:  </label>
-         <p   type='number'   placeholder='points'   name='grade'   className= "border-2 border-gray-200">{value?.points}</p>
-         <label>Function Name:  </label>
-         <p       name='name_correct'   className= "border-2 border-gray-200" >{value?.question?.function_name}</p>
-
-
-
-        </div>
-        
-        
+         {/* <input  type='number'   placeholder='points'  defaultValue={value.points}   className= "border-2 border-gray-200" ></input> */}
               </div>
        
          
@@ -308,6 +302,7 @@ console.log(fetchSubmission)
          <div className="row-span-4 text-center border-2 overflow-auto grid ">
          <h1> Student Answer: {value.answer}</h1>
 
+<textarea  onKeyDown={(e)=>keyHandler(e)}  placeholder='Enter Comment' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-3/5 place-self-end rounded-md" ></textarea>
 
 </div>
      </div>
@@ -321,12 +316,9 @@ console.log(fetchSubmission)
     (
       <div>
 
-<h1>Auto Graded Done</h1>
-
 
 {
-  autoGraded &&
-autoGraded.map((w)=>{
+  autoGraded && autoGraded?.map((w)=>{
           return(
             
            <h1>{w.tes_t.questions.map((value,index)=>{
@@ -354,9 +346,9 @@ autoGraded.map((w)=>{
 
         <div >
         <label>Auto Graded Points:  </label>
-         <input  onChange={e=>{handleInputChange(e,index) }}  type='number'   placeholder='points'  defaultValue={value?.question.grade.grade} name='grade'   className= "border-2 border-gray-200" ></input>
+         <input  onChange={e=>{handleInputChange(e,index) }}  type='number'   placeholder='points'  defaultValue={value?.question.grade.grade} name='points'   className= "border-2 border-gray-200" ></input>
          <label>Function Name?:  </label>
-         <input    onChange={e=>{handleInputChange(e,index) }}   defaultValue={value?.question.grade.name_correct?'true':'false'} name='name_correct'   className= "border-2 border-gray-200" ></input>
+         <input    onChange={e=>{handleInputChange(e,index) }}   defaultValue={value?.question.grade.name_correct?'true':'false'} name='function_name'   className= "border-2 border-gray-200" ></input>
 
 
 
@@ -370,29 +362,8 @@ autoGraded.map((w)=>{
 
          <div className="row-span-4 text-center border-2 overflow-auto grid ">
          <h1> Student Answer: {value.answer}</h1>
-         <div>
-         {value.question.grade.test_cases.map((val)=>{
 
-return(
-     <div className='grid grid-cols-3'>
-          <h1> Case  {val.case.map((x,i)=>{
-            if(i===0){
-              return "["+x +', '
-            }
-            else{
-              return x +"]"
-            }
-            
-            }}  </h1>
-       <h1>Correct Output: {val.correct_output}</h1>
-       <h1> Student Output: {val.output}</h1>
-
-     </div>
-
-         )})}
-         </div>
-
-<textarea  onKeyDown={(e)=>keyHandler(e)}  placeholder='Enter Comment' name='comment' onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-3/5 place-self-end rounded-md" ></textarea>
+<textarea  onKeyDown={(e)=>keyHandler(e)}  placeholder='Enter Comment' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-3/5 place-self-end rounded-md" ></textarea>
 
 </div>
      </div>
@@ -400,30 +371,6 @@ return(
            })}</h1>
             
             )})}
-
-   
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         </div>
     )
@@ -441,8 +388,8 @@ return(
            
            </div>
            <div className="grid p-4 bg-white h-full w-full place-items-center ">
-    <div class="grid gap-4 row w-full place-items-center ">
-    <button  className="btn btn-success"  type="submit">Submit</button>
+    <div class="grid grid-cols-2 gap-4">
+    <button  className="btn btn-success"  type="submit">Submiert</button>
     </div>
    
 
@@ -450,8 +397,9 @@ return(
     
        </div>
            </form>
+           <button  className='btn btn-warning' onClick={callAutoGrade}>AutoGrade</button>
 
-           <button  className='btn  w-full btn-info'><Link onClick={togglePopup} to="/teacher" >Back to Dashboard</Link></button>
+           <button  className='btn  w-full btn-info'><Link onClick={togglePopup} to="/student" >Back to Dashboard</Link></button>
 
     </div>
     

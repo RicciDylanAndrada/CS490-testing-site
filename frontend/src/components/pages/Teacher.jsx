@@ -32,17 +32,15 @@ function Teacher() {
 
   };
 
-  const [tabValue,setTabValue]=useState(0);
   const[pointTest,setPointTest]=useState(false);
   const [added,setAdded]=useState("");
   const[fetchQuestion,setFetchQuestion]=useState("null")
   const[fetchTest,setFetchTest]=useState("null")
   const[submit,setSubmit]=useState(false)
   const[testQuestions,setTestQuestions]=useState([])
-
-
 const [selectedTest,setSelectedTest]=useState(null)
 const [testWindow,setTestWindow]=useState(false)
+const [done,setDone]=useState(false)
 
 const[test,setTest]=useState({section:"",questions:[],test_name:""})
 const {token} = useContext(LoginContext)
@@ -54,7 +52,12 @@ let getButtonId = (e) => {
 }
 const testWindowClick = ()=>{
   setTestWindow(!testWindow)
-  selectedTest("")
+  setSelectedTest(" ")
+if(pointTest){
+  setPointTest(false)
+  setLeft([])
+setDone(true)
+}
 }
 useEffect(()=>{
   if(submit){
@@ -111,7 +114,7 @@ useEffect(()=>{
       })
   
       setsection(" ")
-},[added,section])
+},[added,section,done])
 
   const [value,setValue]=useState({
     // student_id:null,
@@ -121,31 +124,17 @@ useEffect(()=>{
   });
 
 
-  const navigate = useNavigate();
 
 
   const [checked, setChecked] = React.useState([]);
   const [left, setLeft] = React.useState([]);
-  const [points, setPoints] = React.useState({
-    point:[
-
-    ]
-  });
+ 
 
   const [right, setRight] = useState(fetchQuestion?.question);
 
   
 
-const changePoints=(e)=>{
-  setPoints({
-    
-    point: [
-      ...points.point,
-       e.target.value
-      ]
-  
-     
-})}
+
 
 const not =(a, b)=> {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -312,7 +301,7 @@ const handleSubmitFinal=(e)=>{
       }))
 let finalTest=test
 
-console.log(test)
+change(finalTest)
 }
 
 
@@ -357,42 +346,13 @@ setTest(prev=>({
   
     }))
 setSubmit(" ")
-// let Y ={
-//   question1:question1,
-//     category:category,
-//     difficulty:difficulty,
-//     test_cases:matrix,
-//     function_name:functionName,
-// }
 
 return (arrayC)
 
 
 }
 
-// const change = (x)=>{
-//   console.log(test)
-//   axios({
-//     method: "POST",
-//     url:"/make_test",
-//     data:{
-//       section:test?.section,
-//       tes_t: x,
-//      }
-//   })
-//   .then((response) => {
-//     console.log(test)
 
-//   }).catch((error) => {
-//     if (error.response) {
-//       console.log(error.response)
-//       console.log(error.response.status)
-//       console.log(error.response.headers)
-//       }
-//   })
-//   setAdded(" ")
-//  setTest({section:"",questions:[],test_name:""})
-// }
 if(fetchTest.test){
 
   let newFilter = fetchTest.test.filter((x)=>{
@@ -631,14 +591,18 @@ if(fetchTest.test){
 
 </div>   
 <div class=" w-full  grid  place-items-center    p-5 ">
-  <button type='"submit'  class="place-self-center  w btn btn-active   " onClick={testWindowClick} >Create Test </button>
+  <button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
+
 </div> 
      </div>
 
 </form>
+
 )}
 
 </div> 
+  <button type='"'  class="place-self-center  w btn btn-active   " onClick={testWindowClick} >Return to Dashboard </button>
+
 </div>
                 </div>)}
                 

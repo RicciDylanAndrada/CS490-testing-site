@@ -37,15 +37,17 @@ db = SQLAlchemy(app)
 
 
 def grade_question(subq):
-    
     code = subq['answer']
     question = subq['question']
     test_cases = question['test_cases']
-    question_graded = {'grade' : question['points'], 'test_cases' : []}
+    points = int(subq['points'])
+    question_graded = {'grade' : points, 'test_cases' : []}
 
     correct_name = re.search(f"def\s{question['function_name']}\(", code)
+
+    question_graded['name_correct'] = True
     if(correct_name == None):
-        question_graded['grade'] -= question['points'] * 0.2
+        question_graded['grade'] -= points * 0.2
         question_graded['name_correct'] = False
 
     print(f"grade after namecheck is {question_graded['grade']}")
@@ -54,13 +56,20 @@ def grade_question(subq):
 
     for tcase in test_cases:
         return_space = {}
-        exec(f"{code}\n\ntest_output = {question['func_name']}({tcase[0]})", {}, return_space)
-        
+
         correct = False
-        if(return_space['test_output'] == eval(tcase[1])):
-            correct = True
-        else:
-            question_graded['grade'] -= (question['points'] / len(test_cases))
+
+        try:
+            exec(f"{code}\n\ntest_output = {question['function_name']}({tcase[0]})", {}, return_space)
+            if(return_space['test_output'] == eval(str(tcase[1]))):
+                correct = True
+            else:
+                question_graded['grade'] -= (points / len(test_cases))
+        
+        except:
+            return_space['test_output'] = "Execution failed."
+            question_graded['grade'] -= (points / len(test_cases))
+            
         
         question_graded['test_cases'].append({'case' : tcase, 'output' : return_space['test_output'], 'correct_output' : correct})
 
@@ -68,6 +77,8 @@ def grade_question(subq):
         question_graded['grade'] = 0
 
     return question_graded
+
+
 
 
 
@@ -260,20 +271,18 @@ def sub():
     return response
 @app.route("/autograde",methods=['POST'])
 def autograde():
-    submission = request.get_json("submission")
-    print(submission)
 
-    for question in submission['submission'][0]['tes_t']['questions']:
-        question['grade'] = grade_question(question)
+    submission = request.json.get('submission')
+    print(submission[0])
+
+    for question in submission[0]['tes_t']['questions']:
+        question['question']['grade'] = grade_question(question)
 
     return json.dumps(submission)
 
 
-<<<<<<< HEAD
-@app.route('/show_submission_student',methods=['POST'])
-=======
 @app.route('/submission_update',methods=['POST'])
-def sub():
+def sub1():
     sub_id = request.json.get("sub_id", None)
     submission = request.json.get("submission", None)
     con = sql.connect('database.db')
@@ -284,8 +293,7 @@ def sub():
     return response
 
 
-@app.route('/show_submission_student',methods=['GET'])
->>>>>>> 08d603b64fecea6147e69ca91af468622b0bd6ef
+@app.route('/show_submission_student',methods=['POST'])
 def show_submission_student():
     sec = request.json.get("section", None)
     u_name = request.json.get("username", None)
@@ -300,7 +308,7 @@ def show_submission_student():
         for sock in socks:
             if(sock.show != None):
                 y = json.loads(sock.submission)
-                lst = {'submission': y } 
+                lst = {'submission': y, "sub_id":sock.submission_id }
                 result_list.append(lst) 
             cur.close()
             cur.connection.close()

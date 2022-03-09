@@ -19,7 +19,10 @@ export const TeacherProvider=({children})=>{
     const [filterSubmissionTest,setFilterSubmissionTest]=useState(false)
     const[fetchSubmission,setfetchSubmission]=useState([])
     const [section, setsection] = useState('');
-    const [studentID,setStudentID]=useState("")
+    const [studentID,setStudentID]=useState("");
+    const[toGrade,setToGrade]=useState();
+    const[autoGraded,setAutograded]=useState([])
+
 
 
 const sec = token.section
@@ -33,7 +36,7 @@ useEffect(()=>{
        }
     })
     .then((response) => {
-      console.log("this is the test")
+      console.log("Show Test()")
       console.log(response.data)
       setFetchTest(response.data)
       
@@ -58,7 +61,7 @@ useEffect(()=>{
          }
       })
       .then((response) => {
-        console.log("this is the test")
+        console.log("Submission()")
         console.log(response.data)
         setfetchSubmission(response.data)
         
@@ -71,7 +74,37 @@ useEffect(()=>{
           console.log(error.response.headers)
           }
       })
-  
+      const fetchData =async()=>{
+        const res = await  axios({
+          method: "POST",
+          url:"/show_submission_student",
+          data:{
+            section: section,
+            username:token?.username,
+            status:1,
+    
+            
+           }
+        })
+        const data = await res
+        console.log(data.data)
+
+        const nextRes =  axios({
+          method: "POST",
+          url:"/autograde",
+          data:{
+            submission:data.data.submissions[0]?.submission
+      
+           }
+        })
+        const nextData = await nextRes;
+
+
+        setAutograded(nextData.data)
+
+
+      }
+      fetchData()
   
   },[section,selectedTest,filterSubmissionTest,studentID])
   const togglePopup=()=>{
@@ -98,10 +131,12 @@ useEffect(()=>{
        testWindow,
        fetchSubmission,
        setfetchSubmission,
+       
        filterSubmissionTest,
        setFilterSubmissionTest,
        setFilter,
-       studentID
+       studentID,
+       autoGraded
     
 
 
