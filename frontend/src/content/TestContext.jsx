@@ -46,7 +46,7 @@ const sec = token.section
   
   },[token])
   const togglePopup=()=>{
-    setInTests(false)
+    setInTests(!inTest)
   }
   
   return(

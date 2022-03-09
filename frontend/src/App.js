@@ -12,6 +12,7 @@ import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
 import Questions from './components/pages/Teacher/Questions';
 import Submissions from './components/pages/Teacher/Submissions';
+import GradeTest from './components/pages/Teacher/GradeTest';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
@@ -53,7 +54,7 @@ function App() {
 
 </div>
         :( 
-          <div class="h-full">
+          <div class="h-fit">
             {token.status == 0? (
 
 
@@ -109,6 +110,8 @@ function App() {
        <Route path="/questions" element={<Questions/>}/>
 
        <Route path="/submission" element={<Submissions/>}/>
+       <Route path="/grade" element={<GradeTest/>}/>
+
        <Route path="/create" element={<LoginForm/>}/>
 
         <Route path="/submit" element={<LoginForm/>}/>

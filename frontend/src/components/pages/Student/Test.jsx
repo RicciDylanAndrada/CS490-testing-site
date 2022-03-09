@@ -24,7 +24,15 @@ studentTest.map((x)=>{
 
 
 
-
+    function keyHandler(e) {
+        var TABKEY = 9;
+        if(e.target.keyCode == TABKEY) {
+            e.target.value += "\t";
+            if(e.preventDefault) {
+                e.preventDefault();
+            }
+        }
+    }
 
 
 
@@ -65,7 +73,8 @@ newArray(result,questionArray)
     url:"/submission",
     data:{
       submission:studentTest,
-      test_id: studentTest[0]?.test_id,
+      section: token?.section,
+      username:token?.username
      }
   })
   .then((response) => {
@@ -160,7 +169,7 @@ return (studentTest)
 
          <div className="row-span-4 text-center border-2 overflow-auto ">
 
-<textarea  required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
+<textarea  onKeyDown={(e)=>keyHandler(e)} required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
 
 </div>
      </div>)

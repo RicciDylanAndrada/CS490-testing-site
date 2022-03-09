@@ -4,6 +4,8 @@ import axios from 'axios'
 import { useState,useEffect,useContext } from 'react'
 import LoginContext from '../../../content/LoginContext'
 import { useNavigate } from 'react-router-dom';
+import TeacherCard from '../../shared/TeacherCard'
+
 import { Link } from 'react-router-dom'
 import Grid from '@mui/material/Grid';
 import ListItem from '@mui/material/ListItem';
@@ -16,30 +18,50 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import TeacherContext from '../../../content/TeacherContext'
 function Submissions() {
 const[pointTest,setPointTest]=useState(false);
-const [section, setsection] = React.useState('');
 
-const [added,setAdded]=useState("");
-const[fetchQuestion,setFetchQuestion]=useState("null")
-const[fetchTest,setFetchTest]=useState("null")
 const[submit,setSubmit]=useState(false)
-const[fetchSubmission,setfetchSubmission]=useState([])
-
+const {setFilterSubmissionTest,
+  fetchSubmission,setSelectedTest,fetchTest,setFetchTest,setsection,section,setFilter,filterSubmissionTest,setStudentID}=useContext(TeacherContext)
 const handleSectionChange = (event) => {
     setsection(event.target.value);
   };
 
-const [selectedTest,setSelectedTest]=useState(null)
 const [testWindow,setTestWindow]=useState(false)
 
 const[test,setTest]=useState({section:"",questions:[],test_name:""})
 const {token} = useContext(LoginContext)
+
+
+
 let getButtonId = (e) => {
 console.log(e.currentTarget.id);
 setSelectedTest(e.currentTarget.id)
 testWindowClick(true)
+
+filterTest(e.currentTarget.id)
+}
+let getButtonId1 = (e) => {
+  console.log(e.currentTarget.id)
+  setStudentID(e.currentTarget.id)
+  testWindowClick(true)
+  
+  }
+let filterTest=(id)=>{
+  console.log("here->",fetchSubmission)
+  console.log(section)
+  let filtersubmissionTest= fetchSubmission?.submissions?.map((x)=>{
+    return(
+      x?.submission?.filter((y)=>{
+        return(y.test_id==id)
+      })
+    )
+  })
+  setFilter(filtersubmissionTest)
+    console.log(filterSubmissionTest)
+
 }
 const testWindowClick = ()=>{
 setTestWindow(!testWindow)
@@ -56,139 +78,6 @@ else{
   console.log("waiting")
 }
 },[submit])
-useEffect(()=>{
-
-
-    axios({
-      method: "POST",
-      url:"/show_submission_teacher",
-      data:{
-        section: section,
-       }
-    })
-    .then((response) => {
-      console.log("this is the test")
-      console.log(response.data)
-      setFetchTest(response.data)
-      
-
-
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-        }
-    })
-
-
-},[added,section])
-
-
-let studentTest=fetchTest?.test.filter((x)=>{
-    return(
-        x.tes_t.user_id == selectedTest
-    )
-})
-
-
-
-
-const [checked, setChecked] = React.useState([]);
-const [left, setLeft] = React.useState([]);
-const [teacherPoints, setTeacherPoints] = React.useState({
-  point:[
-
-  ]
-});
-
-
-
-
-// const changePoints=(e)=>{
-// setPoints({
-  
-//   point: [
-//     ...points.point,
-//      e.target.value
-//     ]
-
-   
-// })}
-
-
-
-const handleToggle = (value) => () => {
-const currentIndex = checked.indexOf(value);
-const newChecked = [...checked];
-
-if (currentIndex === -1) {
-  newChecked.push(value);
-} else {
-  newChecked.splice(currentIndex, 1);
-}
-
-setChecked(newChecked);
-};
-
-
-
-
-
-// const customList = (items) => (
-
-// <div className="overflow-auto h-full w-80  flex flex-col space-y-4    ">
-
-  
-//     {items.map((value) => {
-//       const labelId = `transfer-list-item-${value.question_id}-label`;
-
-//       return (
-//         <div className='border-2'>
-
-       
-//         <ListItem
-//           key={value.question_id}
-//           role="listitem"
-//           className="border-2"
-//           button
-//           onClick={handleToggle(value)}
-//         >
-//           <ListItemIcon>
-//             <Checkbox
-//               checked={checked.indexOf(value) !== -1}
-              
-//               tabIndex={-1}
-//               disableRipple
-//               inputProps={{
-//                 'aria-labelledby': labelId,
-//               }}
-//             />
-//           </ListItemIcon>
-//           <ListItemText id={labelId} primary={value.question.question} />
-//         </ListItem>
-//         </div>
-//       );
-//     })}
-//     <ListItem />
-    
-// </div>
-// );
-
-
-const handleSubmit=(e)=>{
-e.preventDefault()
-
-setPointTest(!pointTest)
-setTest(prev=>({
-  ...prev,   section:token.section
-  
-    }))
-setfetchSubmission(left)
-
-
-
-}
 
 
 
@@ -382,18 +271,116 @@ console.log(section)
 //         })
 //       }
 
+
 return (
-    <div className='h-full text-black bg-gradient-to-r from-red-700 to-blue-300  place-items-center p-10  flex flex-grow '>
-   
-  
-    { studentTest && (
-     
-     <div className="h-screen w-full">
+    <div className='h-screen text-black bg-gradient-to-r from-red-700 to-blue-300 p-4 '>
     
-     <form classNamew="h-fit w-full" onSubmit={handleSubmit} >
-     <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
-    <div className="w-full h-full grid gap-24 ">
-    {fetchTest?.test&& 
+ 
+
+
+<div class="row-span-1 grid w-full grid-cols-3 h-fit  place-items-center">
+
+{ token?.section.sections.map((x,i)=>{
+            return(
+
+                <div  key={i} >
+                
+       <button className='btn btn-square w-32  ' onClick={handleSectionChange} value={x}>Section{x}</button>
+
+
+                </div>
+            )
+        })}
+
+</div>
+{/* {fetchTest?.test&&
+  <div class="grid w-full ">
+<table class="table-auto border-gray-400 row-span-3">
+  <thead className='border-2 border-gray-400 col-span-3' >
+    <tr className='border-2 border-gray-400'>
+      <th className='col-span-2' >Test</th>
+      <th className='col-span-2'>Section</th>
+      <th className='col-span-2' ># of Questions</th>
+    </tr>
+  </thead>
+  <tbody className='border-2 border-gray-400' >
+   
+    {
+  fetchTest?.test.map((value,i)=>{
+         
+         return(
+
+          <tr className='border-2 border-gray-400 0'>
+           <td onClick={console.log("hello")} >{value.tes_t?.test_name}</td>
+          <td className='text-black col-span-2' >{value.tes_t?.section}</td>
+          <td className='text-black' >{value.tes_t?.questions?.length}</td>
+
+           </tr>
+         
+         )
+       })
+     }
+   
+  </tbody>
+</table>
+</div>
+     } */}
+{fetchTest?.test&& 
+
+
+<div className='grid grid-cols-3 grid-rows-2 ' >
+
+{
+
+  fetchTest?.test.map((value,i)=>{
+         
+         return(
+           <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+
+        
+
+
+
+
+         
+         )
+       })
+}  
+
+
+
+
+<div class="">
+{filterSubmissionTest &&
+
+(
+<div class="">
+{fetchSubmission?.submissions?.map((x)=>{
+    return(
+      x?.submission?.map((y)=>{
+        return(
+
+
+
+          <SubmissionCard test_name={y.tes_t.usesrname} student_id = {y.tes_t.user_id} getButtonId1={getButtonId1}/>
+        )
+      })
+    )
+  })}</div>
+)
+  
+}
+
+</div>
+</div>
+  
+     }
+
+
+
+
+    
+    {/* {fetchTest?.test&& 
            fetchTest?.test.filter((x)=>{
        return(
          x.test_id == selectedTest
@@ -431,7 +418,7 @@ return (
          
          
          
-         }
+         } */}
     
     
     
@@ -441,29 +428,21 @@ return (
     
     
     
-    </div>
+    
      
            
-           </div>
-           <div className="grid p-4 bg-white h-full w-full place-items-center ">
-    
-    <button  className="btn btn-success"  type="submit">Submit</button>
-    
-    
-       </div>
-           </form>
-           <button  className='btn  w-full btn-info'><Link  to="/teacher" >Back to Dashboard</Link></button>
-    </div>
+           
+           
+           
     
     
     
     
     
     
-    )
     
-    }
-       
+    
+    
     
     
     
