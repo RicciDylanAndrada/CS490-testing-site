@@ -1,15 +1,11 @@
 import React from 'react'
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import TestContext from '../../../content/TestContext';
 import {useState,useContext} from 'react'
-import { TextareaAutosize } from '@mui/material';
 import { Link } from 'react-router-dom';
 import LoginContext from '../../../content/LoginContext';
 function Test() {
 
-
-  
 const {selectedTest,fetchTest,setTest,setTestWindow,testWindow,togglePopup,inTest}=useContext(TestContext)
 const{token}=useContext(LoginContext)
 const[studentSub,setStudentSub]=useState({
@@ -21,10 +17,24 @@ studentTest.map((x)=>{
   return(
     x.tes_t.usesrname=token.username,
     x.tes_t.user_id=token.user_id
-
-
   )
 })
+
+
+
+
+
+    function keyHandler(e) {
+        var TABKEY = 9;
+        if(e.target.keyCode == TABKEY) {
+            e.target.value += "\t";
+            if(e.preventDefault) {
+                e.preventDefault();
+            }
+        }
+    }
+
+
 
 
 
@@ -63,7 +73,8 @@ newArray(result,questionArray)
     url:"/submission",
     data:{
       submission:studentTest,
-      test_id: studentTest[0]?.test_id,
+      section: token?.section,
+      username:token?.username
      }
   })
   .then((response) => {
@@ -81,12 +92,6 @@ newArray(result,questionArray)
     answers:[]
   })
 }
-
-
-
-
-
-
 
 const newArray=(x,questionArray)=>{
   let arrayC = [];
@@ -131,40 +136,53 @@ return (studentTest)
  <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
 <div className="w-full h-full grid gap-24 ">
 
-{fetchTest?.test.filter((value)=>{
-         
-    
-         return(
-          value.test_id == selectedTest
 
-         
-         )
-       }).map((x)=>{
 
-return( 
-        x.tes_t.questions.map((y,index)=>{
-          return(
-            <div key={y.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
-              <div className="grid grid-cols-3 row-span-1 rounded-md">
 
-              <h1 className='place-self-start ' >{y.question_id}</h1>
 
-                      <h1 className='text-center '  > {y.question.question}</h1>
-                      <div></div>
+{fetchTest?.test&& 
+       fetchTest?.test.filter((x)=>{
+   return(
+     x.test_id == selectedTest
+   )
+ })
+     
+ .map((val)=>{
+   return (val.tes_t.questions.map((value,index)=>{
+     return(
+      <div key={value.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
 
-              </div>
-              <div className="row-span-4 text-center border-2 overflow-auto ">
+       <div>
 
-              <textarea  required placeholder='Enter Answer' name={y.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
+<h1 className="text-sm" >  Category:</h1>
+<h1>{value.question.category}</h1>
 
-              </div>
-          
-            </div>
-          )
-        })
+</div>
+       <h1>{value.question.question}</h1>
+         <div>
 
-       )
-       })}
+         <h1 className="text-sm" >  Difficulty:</h1>
+         <h1> {value.question.difficulty}</h1>
+
+         </div>
+
+
+         <div className="row-span-4 text-center border-2 overflow-auto ">
+
+<textarea  onKeyDown={(e)=>keyHandler(e)} required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
+
+</div>
+     </div>)
+   }))
+ })
+     
+     
+     
+     }
+
+
+
+
 </div>
  
        
@@ -176,7 +194,7 @@ return(
 
    </div>
        </form>
-       <button  className='btn btn-info'><Link onClick={togglePopup()} to="/student" >Back</Link></button>
+       <button  className='btn  w-full btn-info'><Link onClick={togglePopup} to="/student" >Back to Dashboard</Link></button>
 </div>
 
 

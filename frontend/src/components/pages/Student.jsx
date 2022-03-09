@@ -18,14 +18,12 @@ const{token,} =useContext(LoginContext)
 const{fetchTest,setSelectedTest,selectedTest,inTest,togglePopup} =useContext(TestContext)
 
 const [test,setTest]=useState("")
-  //fetch the test acconuts
-  // would also have to check for section ID to display the certain test
+
   const navigate = useNavigate();
 
   let getButtonId = (e) => {
-    //console.log(e.currentTarget.id);
     setSelectedTest(e.currentTarget.id)
-    //setTestWindow(true)
+    togglePopup()
   
   }
   
@@ -38,20 +36,15 @@ const [test,setTest]=useState("")
 
 
     
-    <div className='h-screen text-black bg-gray-100  place-items-center   grid grid-rows-10 '>
-        {/* {test?<h1>hello</h1>:<h1>no</h1>} */}
-        {/* <Link to="test">Favorite hobby link</Link>
-        <button onClick={() => navigate("test")}>Go forward</button>
-      <button onClick={() => navigate(-1)}>Go back</button> */}
+    <div className='h-full text-black bg-gray-100  place-items-center   '>
+       
       
-    <div className='w-full h-full text-black   place-items-center   grid grid-rows-10 '>
+    <div className='w-full h-full text-black  bg-gradient-to-r from-red-700 to-blue-300  place-items-center    '>
 
-    <div class=" row-span-1   grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
+    <div class=" row-span-1   grid place-items-center  p-4  w-full h-full">
 
-     <div class=" row-span-1   grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
-        
-    </div>
-    <div class="w-11/12  h-4/6 relative bottom-28 row-span-1 bg-white shadow-xl grid grid-rows-6 1 text-center rounded-md ">
+     
+    <div class="w-11/12   row-span-1 bg-white shadow-xl grid grid-rows-6 1 text-center rounded-md ">
 
         <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
           <h2 class="justify-self-start" >Completed Tests</h2>
@@ -76,7 +69,7 @@ const [test,setTest]=useState("")
 
 
 
-<div class="grid grid-cols-3 gap-5 row-span-7 h-full w-full place-items-center content-start ">
+<div class="grid lg:grid-cols-3 md:grid-cols-2 p-4 gap-5 row-span-7 h-full w-full place-items-center content-start ">
 
 {fetchTest?.test&&
   fetchTest?.test.map((value)=>{
@@ -89,7 +82,7 @@ const [test,setTest]=useState("")
 
         }) */}
          return(
-          <div className=" p-4 w-80 grid h-44  card shadow-xl  side bg-white ">
+          <div className=" p-4 w-full grid h-44  card shadow-xl  side bg-white ">
            {value?.tes_t.test_name && (
 
 

@@ -9,7 +9,7 @@ from sqlalchemy import DateTime, null
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+import re
 
 
 from core import models
@@ -32,8 +32,45 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
 
 app.config['DEBUG'] = True
 app.config.from_object(Configuration)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/parampatel/cs490/CS490-testing-site/database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db = SQLAlchemy(app)
+
+
+def grade_question(subq):
+    
+    code = subq['answer']
+    question = subq['question']
+    test_cases = question['test_cases']
+    question_graded = {'grade' : question['points'], 'test_cases' : []}
+
+    correct_name = re.search(f"def\s{question['function_name']}\(", code)
+    if(correct_name == None):
+        question_graded['grade'] -= question['points'] * 0.2
+        question_graded['name_correct'] = False
+
+    print(f"grade after namecheck is {question_graded['grade']}")
+
+    code = re.sub("def\s[a-zA-Z0-9]+", f"def {question['function_name']}", code)
+
+    for tcase in test_cases:
+        return_space = {}
+        exec(f"{code}\n\ntest_output = {question['func_name']}({tcase[0]})", {}, return_space)
+        
+        correct = False
+        if(return_space['test_output'] == eval(tcase[1])):
+            correct = True
+        else:
+            question_graded['grade'] -= (question['points'] / len(test_cases))
+        
+        question_graded['test_cases'].append({'case' : tcase, 'output' : return_space['test_output'], 'correct_output' : correct})
+
+    if(question_graded['grade'] < 0):
+        question_graded['grade'] = 0
+
+    return question_graded
+
+
+
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(15), unique=True)
@@ -221,7 +258,20 @@ def sub():
     con.commit()
     response ={"good":"good" }
     return response
+@app.route("/autograde",methods=['POST'])
+def autograde():
+    submission = request.get_json("submission")
+    print(submission)
 
+    for question in submission['submission'][0]['tes_t']['questions']:
+        question['grade'] = grade_question(question)
+
+    return json.dumps(submission)
+
+
+<<<<<<< HEAD
+@app.route('/show_submission_student',methods=['POST'])
+=======
 @app.route('/submission_update',methods=['POST'])
 def sub():
     sub_id = request.json.get("sub_id", None)
@@ -235,6 +285,7 @@ def sub():
 
 
 @app.route('/show_submission_student',methods=['GET'])
+>>>>>>> 9460e1fd5e6eead7a1c7f8a7635526f698907eb0
 def show_submission_student():
     sec = request.json.get("section", None)
     u_name = request.json.get("username", None)

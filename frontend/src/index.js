@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import { LoginProvider } from "./content/LoginContext";
 import { TestProvider } from './content/TestContext';
+import { TeacherProvider } from './content/TeacherContext';
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 
 ReactDOM.render(
@@ -13,10 +14,14 @@ ReactDOM.render(
 
       <LoginProvider>
       <TestProvider>
+      <TeacherProvider>
+
 
 <Routes>
   <Route  path="/*" element={<App/>}/>
 </Routes>
+      </TeacherProvider>
+
       </TestProvider>
 
     </LoginProvider>

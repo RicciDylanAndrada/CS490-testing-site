@@ -12,6 +12,7 @@ import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
 import Questions from './components/pages/Teacher/Questions';
 import Submissions from './components/pages/Teacher/Submissions';
+import GradeTest from './components/pages/Teacher/GradeTest';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
@@ -40,7 +41,7 @@ function App() {
   
 
   return (
-<div className=' h-screen font-semibold   ' >
+<div className=' bg-gray-100  h-screen font-semibold   ' >
 
 
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
@@ -53,7 +54,7 @@ function App() {
 
 </div>
         :( 
-          <div class="h-full">
+          <div class="h-fit">
             {token.status == 0? (
 
 
@@ -64,6 +65,7 @@ function App() {
 
     <Route element={<ProtectedRoutes  allowedRoles={0} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
+    <Route path="/" element={<Student/>}/>
 
        <Route path="/student" element={<Student/>}/>
        <Route path="/test" element={<Test/>}/>
@@ -102,10 +104,14 @@ function App() {
     <Route element={<ProtectedRoutes  allowedRoles={1} />}>
     {/* <Route element={<ProtectedRoutes allowedRoles={['student']}/>}> */}
 
+       <Route path="/" element={<Teacher/>}/>
        <Route path="/teacher" element={<Teacher/>}/>
+
        <Route path="/questions" element={<Questions/>}/>
 
        <Route path="/submission" element={<Submissions/>}/>
+       <Route path="/grade" element={<GradeTest/>}/>
+
        <Route path="/create" element={<LoginForm/>}/>
 
         <Route path="/submit" element={<LoginForm/>}/>
