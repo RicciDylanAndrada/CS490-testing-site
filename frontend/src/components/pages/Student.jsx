@@ -9,11 +9,7 @@ import { PathRouteProps } from 'react-router-dom'
 import Teacher from "../pages/Teacher"
 import {BrowserRouter, BrowserRouter as Router,Route,Routes,useLocation} from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
-import axios from 'axios'
-=======
 import TestContext from '../../content/TestContext'
->>>>>>> e6e1d5ec62695538f87af5828613ac03c46e2c32
 
 function Student() {
   //const[fetchTest,setFetchTest]=useState("null")
@@ -120,42 +116,11 @@ const [test,setTest]=useState("")
        })
      }
 </div>
-<<<<<<< HEAD
-       const[added, setAdded]=useState("")
-       const[fetchTest, setFetchTest]=useState("")
-
-       const[question, setQuestion]=useState("")
-       function handleChange(e) 
-       {
-         setQuestion(e.target.value)
-         console.log(e.target.value)
-       }
-
-       useEffect(() => {
-
-         axios({
-           method: "GET",
-           url:"/question"
-         })
-         .then((response) =>{
-           console.log(response.data)
-           setFetchTest(response.data)
-         }).catch((error) =>{
-           if(error.response){
-             console.log(error.response)
-             console.log(error.response.status)
-             console.log(error.response.headers)
-           }
-         })
-       },[])
-      
-=======
      </div>
      </div>
   
        
 
->>>>>>> e6e1d5ec62695538f87af5828613ac03c46e2c32
 
 
 
