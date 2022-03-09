@@ -13,6 +13,7 @@ import Layout from './components/Layout';
 import Questions from './components/pages/Teacher/Questions';
 import Submissions from './components/pages/Teacher/Submissions';
 import GradeTest from './components/pages/Teacher/GradeTest';
+import StudentSubmission from './components/pages/Student/StudentSubmission';
 function App() {
   const {user,token,setToken}=useContext(LoginContext)
 
@@ -71,7 +72,7 @@ function App() {
        <Route path="/test" element={<Test/>}/>
 
       
-        <Route path="/submit" element={<LoginForm/>}/>
+        <Route path="/results" element={<StudentSubmission/>}/>
 
 
        {/* </Route> */}
