@@ -212,7 +212,7 @@ def show_test():
 
 @app.route('/submission',methods=['POST'])
 def sub():
-    submission = request.json.get("submission", None)
+    submission = request.json.get("sub_id", None)
     section = request.json.get("section", None)
     u_name = request.json.get("username", None)
     con = sql.connect('database.db')
@@ -221,6 +221,18 @@ def sub():
     con.commit()
     response ={"good":"good" }
     return response
+
+@app.route('/submission_update',methods=['POST'])
+def sub():
+    sub_id = request.json.get("sub_id", None)
+    submission = request.json.get("sub_id", None)
+    con = sql.connect('database.db')
+    c =  con.cursor() 
+    c.execute("update table submission set submission='" + submission + "' where submission_id='" + sub_id + "'")
+    con.commit()
+    response ={"good":"good" }
+    return response
+
 
 @app.route('/show_submission_student',methods=['GET'])
 def show_submission_student():
@@ -237,7 +249,7 @@ def show_submission_student():
         for sock in socks:
             if(sock.show != None):
                 y = json.loads(sock.submission)
-                lst = {'submission': y } 
+                lst = {'submission': y, "sub_id":sock.submission_id } 
                 result_list.append(lst) 
             cur.close()
             cur.connection.close()
@@ -251,11 +263,11 @@ def show_submission_student():
         result_list = []
         for sock in socks:
             y = json.loads(sock.submission)
-            lst = {'submission': y } 
+            lst = {'submission': y, "sub_id":sock.submission_id } 
             result_list.append(lst) 
         cur.close()
         cur.connection.close()
-        response ={"submissions":result_list }
+        response ={"submissions":result_list}
         return response
 
 @app.route('/view_test',methods=['POST'])
