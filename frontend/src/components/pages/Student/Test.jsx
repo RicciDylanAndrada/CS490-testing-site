@@ -1,9 +1,12 @@
 import React from 'react'
 import axios from 'axios';
 import TestContext from '../../../content/TestContext';
-import {useState,useContext} from 'react'
+import {useState,useContext,useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import LoginContext from '../../../content/LoginContext';
+import { AutoTabProvider } from 'react-auto-tab'
+import * as indentation from 'indent-textarea';
+
 function Test() {
 
 const {selectedTest,fetchTest,setTest,setTestWindow,testWindow,togglePopup,inTest}=useContext(TestContext)
@@ -51,6 +54,10 @@ const handleInputChange = (evt, id) => {
   });
 
 };
+
+useEffect(() => {
+  const textarea = document.querySelector('textarea');
+  indentation.watch(textarea);}, []);
 const handleSubmit=(e)=>{
   e.preventDefault()
   console.log(studentSub)
@@ -67,6 +74,7 @@ let questionArray = studentTest.map((x)=>{
     x.tes_t.questions
   )
 })
+
 
 newArray(result,questionArray)
 
@@ -153,27 +161,38 @@ return (studentTest)
  .map((val)=>{
    return (val.tes_t.questions.map((value,index)=>{
      return(
-      <div key={value.question_id} className='border-2 w-full h-80  p-4 grid-rows-6 grid ' > 
-
-       <div>
+      <div key={value.question_id} className='border-2 w-full h-80 grid-rows-2  p-4  grid ' > 
+      <div class="w-full grid-rows-2  place-items-center grid">
+         
+<div className='w-full grid grid-cols-2 place-items-center' >
+<div>
 
 <h1 className="text-sm" >  Category:</h1>
 <h1>{value.question.category}</h1>
 
 </div>
-       <h1>{value.question.question}</h1>
-         <div>
 
-         <h1 className="text-sm" >  Difficulty:</h1>
-         <h1> {value.question.difficulty}</h1>
+<div>
 
-         </div>
+<h1 className="text-sm" >  Difficulty:</h1>
+<h1> {value.question.difficulty}</h1>
+
+</div>
+</div>
+<div class="w-full grid text-center">
+<h1>{value.question.question}</h1>
+
+</div>       
+      </div>
+      
+         
 
 
          <div className="row-span-4 text-center border-2 overflow-auto ">
+         <AutoTabProvider>
 
 <textarea  onKeyDown={(e)=>keyHandler(e)} required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
-
+</AutoTabProvider>
 </div>
      </div>)
    }))

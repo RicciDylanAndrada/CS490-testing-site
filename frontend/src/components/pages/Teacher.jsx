@@ -25,7 +25,29 @@ function Teacher() {
   const handleSectionChange = (event) => {
     event.preventDefault();
 
+    axios({
+      method: "POST",
+      url:"/show_test",
+      data:{
+        section: event.target.value,
+       }
+    })
+    .then((response) => {
+      console.log("this is the test")
+      console.log(response.data)
+      setFetchTest(response.data)
+      
 
+
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response)
+        console.log(error.response.status)
+        console.log(error.response.headers)
+        }
+    })
+
+    setsection(" ")
     const pressed = event.target.value
     const here = pressed
     setsection(here);
@@ -71,6 +93,9 @@ useEffect(()=>{
     console.log("waiting")
   }
 },[submit])
+
+
+
   useEffect(()=>{
 
     axios({
@@ -91,30 +116,8 @@ useEffect(()=>{
           }
       })
 
-      axios({
-        method: "POST",
-        url:"/show_test",
-        data:{
-          section: section,
-         }
-      })
-      .then((response) => {
-        console.log("this is the test")
-        console.log(response.data)
-        setFetchTest(response.data)
-        
-  
-  
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-          }
-      })
-  
-      setsection(" ")
-},[added,section,done])
+      
+},[added,done])
 
   const [value,setValue]=useState({
     // student_id:null,
@@ -715,12 +718,6 @@ if(fetchTest.test){
          return(
            <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
 
-        
-
-
-
-
-         
          )
        })
      }

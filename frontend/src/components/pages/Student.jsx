@@ -88,6 +88,10 @@ const [test,setTest]=useState("")
 
            <div class=" grid place-items-center">
            <h1 className="   "  ><p>{value.tes_t.test_name}</p></h1>
+           <h1 className="   "  ><p>{value.tes_t.section}</p></h1>
+           <h1 className="   "  ><p>{value.test_it}</p></h1>
+
+
             <button  onClick={getButtonId} id={value.test_id} 
             className='  btn btn-sm bg-blue-500 border-0    w-20  h-4  justify-self-center '  ><Link to="/test" >Enter</Link>
 </button>

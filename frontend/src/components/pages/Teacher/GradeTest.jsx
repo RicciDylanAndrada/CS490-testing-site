@@ -321,7 +321,6 @@ console.log(fetchSubmission)
     (
       <div>
 
-<h1>Auto Graded Done</h1>
 
 
 {
@@ -332,7 +331,8 @@ autoGraded.map((w)=>{
            <h1>{w.tes_t.questions.map((value,index)=>{
              return(
 
-              <div key={value.question_id} className='border-2 w-full h-80  p-4  grid ' > 
+              <div key={value.question_id} className='border-2 w-full h-96   p-4  grid ' > 
+              
               <div class=" grid grid-cols-4 place-items-center ">
              
               <div className='grid place-items-center' >
@@ -352,7 +352,7 @@ autoGraded.map((w)=>{
          </div>
 
 
-        <div >
+        <div className='grid gri-cols-1 place-items-center' >
         <label>Auto Graded Points:  </label>
          <input  onChange={e=>{handleInputChange(e,index) }}  type='number'   placeholder='points'  defaultValue={value?.question.grade.grade} name='grade'   className= "border-2 border-gray-200" ></input>
          <label>Function Name?:  </label>
@@ -374,7 +374,7 @@ autoGraded.map((w)=>{
          {value.question.grade.test_cases.map((val)=>{
 
 return(
-     <div className='grid grid-cols-3'>
+     <div className='grid grid-cols-3 overflow-auto'>
           <h1> Case  {val.case.map((x,i)=>{
             if(i===0){
               return "["+x +', '
@@ -383,8 +383,8 @@ return(
               return x +"]"
             }
             
-            }}  </h1>
-       <h1>Correct Output: {val.correct_output}</h1>
+            })}  </h1>
+       <h1>Correct Output: { typeof val.correct_output == 'boolean'? val.correct_output.toString():val.correct_output}</h1>
        <h1> Student Output: {val.output}</h1>
 
      </div>

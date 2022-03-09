@@ -1,5 +1,5 @@
 import React from 'react'
-import SubmissionCard from '../../shared/SubmissionCard'
+import StudentSubmissionCard from '../../shared/StudentSubmissionCard'
 import axios from 'axios'
 import { useState,useEffect,useContext } from 'react'
 import LoginContext from '../../../content/LoginContext'
@@ -72,6 +72,20 @@ function StudentSubmission() {
   
   
   },[selectedTest])
+
+
+
+
+console.log(selectedTest)
+  console.log(fetchSubmission.submissions?.map((x)=>{
+    return(
+      x.submission.map((x)=>{
+        return (
+          x.test_id === selectedTest
+        )})
+    )
+  }))
+  
   
     return (
   
@@ -79,7 +93,128 @@ function StudentSubmission() {
       
       <div className='h-screen text-black bg-gray-100  place-items-center   grid grid-rows-10 '>
          
-       {testWindow?(  <h1>True</h1>     ):(
+       {testWindow&& fetchSubmission?( <div class="">
+
+
+
+
+       {fetchSubmission&& (
+         
+         
+         
+         
+         
+         
+         
+         
+         <div> 
+         <h1>hi</h1>
+         {fetchSubmission.submissions[0].submission.filter((x)=>{
+           return(
+            x.test_id ==selectedTest
+
+           )
+         }).map((x)=>{
+             return(
+
+               <div>
+                {x.tes_t.questions.map((value,index)=>{
+
+
+                  return(
+
+<div key={value.question_id} className='border-2 w-full h-96   p-4  grid ' > 
+
+<div class=" grid grid-cols-4 place-items-center ">
+
+<div className='grid place-items-center' >
+
+<h1 className="text-sm" >  Category:</h1>
+<h1>{value.question.category}</h1>
+
+
+</div> 
+<h1>{value.question.question}</h1>
+<div className='grid place-items-center grid-cols-1'  >
+
+<h1 className="text-sm" >  Difficulty:</h1>
+<h1> {value.question.difficulty}</h1>
+
+
+</div>
+
+
+<div className='grid gri-cols-1 place-items-center' >
+<label>Auto Graded Points:  </label>
+<input   type='number'   placeholder='points'  defaultValue={value?.question?.grade?.grade} name='grade'   className= "border-2 border-gray-200" ></input>
+<label>Function Name?:  </label>
+<input       defaultValue={value?.question.grade.name_correct?'true':'false'} name='name_correct'   className= "border-2 border-gray-200" ></input>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+<div className="row-span-4 text-center border-2 overflow-auto grid ">
+<h1> Student Answer: {value.answer}</h1>
+<div>
+{value.question.grade.test_cases.map((val)=>{
+
+return(
+<div className='grid grid-cols-3 overflow-auto'>
+<h1> Case  {val.case.map((x,i)=>{
+if(i===0){
+return "["+x +', '
+}
+else{
+return x +"]"
+}
+
+})}  </h1>
+<h1>Correct Output: { typeof val.correct_output == 'boolean'? val.correct_output.toString():val.correct_output}</h1>
+<h1> Student Output: {val.output}</h1>
+
+</div>
+
+)})}
+</div>
+
+<textarea   placeholder='Enter Comment' name='comment'  className= "p-5 bg-gray-200 w-full h-3/5 place-self-end rounded-md" ></textarea>
+
+</div>
+</div>
+)
+
+
+
+
+
+
+                })}
+               </div>
+             )
+           })
+         }
+         
+         
+         
+         
+         </div>
+         
+         
+         
+         )
+       }
+  
+       </div>
+     
+       
+        ):(
 
 
 
@@ -115,7 +250,7 @@ function StudentSubmission() {
        
       
      
-  
+    
   
   
   <div class="grid grid-cols-3 gap-5 row-span-7 h-full w-full place-items-center content-start ">
@@ -127,7 +262,7 @@ function StudentSubmission() {
 
 
 
-          <SubmissionCard test_name={y.tes_t.usesrname} student_id = {y.tes_t.user_id} getButtonId1={getButtonId1}/>
+          <StudentSubmissionCard test_name={y.tes_t.usesrname} test_id = {y.test_id} getButtonId1={getButtonId1}/>
         )
       })
     )
