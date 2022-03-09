@@ -269,9 +269,6 @@ def autograde():
     return json.dumps(submission)
 
 
-<<<<<<< HEAD
-@app.route('/show_submission_student',methods=['POST'])
-=======
 @app.route('/submission_update',methods=['POST'])
 def sub():
     sub_id = request.json.get("sub_id", None)
@@ -285,7 +282,6 @@ def sub():
 
 
 @app.route('/show_submission_student',methods=['GET'])
->>>>>>> 9460e1fd5e6eead7a1c7f8a7635526f698907eb0
 def show_submission_student():
     sec = request.json.get("section", None)
     u_name = request.json.get("username", None)
