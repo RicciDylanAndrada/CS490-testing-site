@@ -269,7 +269,23 @@ def autograde():
     return json.dumps(submission)
 
 
+<<<<<<< HEAD
 @app.route('/show_submission_student',methods=['POST'])
+=======
+@app.route('/submission_update',methods=['POST'])
+def sub():
+    sub_id = request.json.get("sub_id", None)
+    submission = request.json.get("submission", None)
+    con = sql.connect('database.db')
+    c =  con.cursor() 
+    c.execute("update table submission set submission='" + submission + "' where submission_id='" + sub_id + "'")
+    con.commit()
+    response ={"good":"good" }
+    return response
+
+
+@app.route('/show_submission_student',methods=['GET'])
+>>>>>>> 08d603b64fecea6147e69ca91af468622b0bd6ef
 def show_submission_student():
     sec = request.json.get("section", None)
     u_name = request.json.get("username", None)
