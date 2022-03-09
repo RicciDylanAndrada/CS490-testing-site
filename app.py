@@ -225,7 +225,7 @@ def sub():
 @app.route('/submission_update',methods=['POST'])
 def sub():
     sub_id = request.json.get("sub_id", None)
-    submission = request.json.get("sub_id", None)
+    submission = request.json.get("submission", None)
     con = sql.connect('database.db')
     c =  con.cursor() 
     c.execute("update table submission set submission='" + submission + "' where submission_id='" + sub_id + "'")
