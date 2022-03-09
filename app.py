@@ -270,12 +270,12 @@ def autograde():
 
 
 @app.route('/submission_update',methods=['POST'])
-def sub():
+def submission_update():
     sub_id = request.json.get("sub_id", None)
     submission = request.json.get("submission", None)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("update table submission set submission='" + submission + "' where submission_id='" + sub_id + "'")
+    c.execute("update submission set submission='" + submission + "' where submission_id='" + sub_id + "'")
     con.commit()
     response ={"good":"good" }
     return response
@@ -283,9 +283,9 @@ def sub():
 
 @app.route('/show_submission_student',methods=['GET'])
 def show_submission_student():
-    sec = request.json.get("section", None)
-    u_name = request.json.get("username", None)
-    status = request.json.get("status", None)
+    #sec = request.json.get("section", None)
+    u_name = 'Ricci'#request.json.get("username", None)
+    status = 2#request.json.get("status", None)
     if (status == 2):
         con = sql.connect('database.db')
         cur = con.cursor()
@@ -317,12 +317,12 @@ def show_submission_student():
         response ={"submissions":result_list}
         return response
 
-@app.route('/view_test',methods=['POST'])
+@app.route('/view_test',methods=['GET'])
 def view_test():
-    u_name = request.json.get("username", None)
+    u_name = 'Ricci'#request.json.get("username", None)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("update table submission set show='asasa' where username='" + u_name + "'")
+    c.execute("update submission set show='asasa' where username='" + u_name + "'")
     con.commit()
     response ={"good":"good" }
     return response
