@@ -22,7 +22,6 @@ function LoginForm({date}) {
 
   const{setToken,setUser,token}=useContext(LoginContext)
 
-
   function logMeIn(event) {
     console.log("FORM = > " , loginForm)
     axios({
@@ -34,8 +33,8 @@ function LoginForm({date}) {
        }
     })
     .then((response) => {
-      console.log(response)
-      setToken({token:response.data.access_token, status:response.data.status})
+      console.log(response.data)
+      setToken({token:response.data.access_token, status:response.data.status,section:response.data.section,username:response.data.user,user_id:response.data.user_id})
 
 
       if(response.data.status == 0){
@@ -96,7 +95,7 @@ function handleChange(event) {
                     </label>
                     <label>
                     Password
-                    <input  onChange={handleChange} type="password"  t value ={loginForm.password || ''} name="password" className='border-2  h-10 rounded-l  w-5/6 ' required></input>
+                    <input  onChange={handleChange} type="password"  value ={loginForm.password || ''} name="password" className='border-2  h-10 rounded-l  w-5/6 ' required></input>
 
                     </label>
                         <button className='btn  w-3/6 h-3 mb-10 ' type='submit' >Enter</button>
