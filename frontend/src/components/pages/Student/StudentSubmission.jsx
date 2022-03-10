@@ -50,7 +50,7 @@ function StudentSubmission() {
         data:{
           section: token?.section,
           username:token?.username,
-          status:1,
+          status:2,
   
           
          }
@@ -262,7 +262,7 @@ return x +"]"
 
 
 
-          <StudentSubmissionCard test_name={y.tes_t.usesrname} test_id = {y.test_id} getButtonId1={getButtonId1}/>
+          <StudentSubmissionCard test_name={y.tes_t.username} test_id = {y.test_id} getButtonId1={getButtonId1}/>
         )
       })
     )

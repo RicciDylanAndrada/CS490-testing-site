@@ -231,10 +231,10 @@ const customList = (items) => (
 
             <ListItemText 
 
-             id={labelId} secondary={value.question.category} />
+             id={labelId} secondary={value?.question?.category} />
             <ListItemText
- id={labelId} primary={value.question.question} />
-            <ListItemText id={labelId} secondary={value.question.difficulty} />
+ id={labelId} primary={value?.question?.question} />
+            <ListItemText id={labelId} secondary={value?.question?.difficulty} />
 
             </div>
           </ListItem>
@@ -304,13 +304,14 @@ const handleSubmitFinal=(e)=>{
       }))
 let finalTest=test
 
-change(finalTest)
+setSubmit(true)
 }
 
 
 
 
-const change=()=>{
+const change=(x)=>{
+  console.log(x)
   axios({
     method: "POST",
     url:"/make_test",
@@ -716,7 +717,7 @@ if(fetchTest.test){
   fetchTest?.test.map((value,i)=>{
          
          return(
-           <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+           <TeacherCard key={i} test_name ={value?.tes_t?.test_name}  test_id = {value?.test_id} getButtonId={getButtonId} />
 
          )
        })

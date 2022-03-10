@@ -9,41 +9,14 @@ function GradeTest() {
     const {selectedTest,studentID,fetchTest,setTest,setfetchSubmission,fetchSubmission,setTestWindow,testWindow,togglePopup,inTest,filterSubmissionTest}=useContext(TeacherContext)
     const{token}=useContext(LoginContext)
     const[autoGraded,setAutograded]=useState()
-
-    const[teacherSub,setTeacherSub]=useState({
-      
-        comment:[],
-        grade:"",
-        functio_name:"",
-      
-      
-
-
-    })
-
-    const [points, setPoints] = React.useState({
-      point:[
   
-      ]
-    });
-
-    const changePoints=(e)=>{
-      setPoints({
-        
-        point: [
-          ...points.point,
-           e.target.value
-          ]
-      
-         
-    })}
 console.log(studentID)
-console.log(fetchSubmission)
+console.log(selectedTest)
 
     let studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
       return(
         x?.submission?.map((y)=>{
-          return(y.tes_t.usser_id==studentID)
+          return(y.test_id==selectedTest)
         })
       )
     }))
@@ -59,23 +32,23 @@ console.log(fetchSubmission)
         }
     
     const callAutoGrade=()=>{
+      console.log(selectedTest)
       let studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
         return(
           x?.submission?.map((y)=>{
-            return(y.tes_t.usser_id==studentID)
+            return(y.test_id==selectedTest && y.tes_t.user_id ==studentID)
           })
         )
       }))
       console.log("hi")
       console.log(studenttest1)
 
-      console.log(studenttest1[0].submission)
 
  axios({
         method: "POST",
         url:"/autograde",
         data:{
-          submission:studenttest1[0].submission
+          submission:studenttest1
 
          }
       })
@@ -92,14 +65,10 @@ console.log(fetchSubmission)
           }
       })
       setTemp(autoGraded)
-      setfetchSubmission({})
-      setTeacherSub({
-        comment:[]
-      })
+     
     }
     
     const studentTest = autoGraded
-    console.log(studentTest)
     const[temp,setTemp]=useState(studentTest)
 
     
@@ -109,80 +78,91 @@ console.log(fetchSubmission)
       console.log(studentTest)
 
       console.log(temp)
-      // setTeacherSub({
-      //     ...teacherSub,
-      //     [evt.target.name]:evt.target.value
-        
-      // });
+     
       var result = [...studentTest];
-      // result = result.map((x) => {
-      //   if (x.id === id) {
-      //     x.room = e.target.value;
-      //     return x;
-      //   } else return x;
-      // });
+   
+        
 
 
-      // result = result.map((w,index)=>{
-      //   return(
-          
-      // w.tes_t.questions.map((value,index)=>{
-      //   return(
-      //     if(index === id){
-
-      //       value?.question?.evt.target.name=evt.target.value
-      //       return value
-      //     }
-      //     else{
-      //       retrun value
-      //     })}))}
-        result = result.map((x,index)=>{
-
+        result =  result?.[0].submission?.map((x,index)=>{
           return(
-                x.tes_t.questions.map((y)=>{
+            x.tes_t?.questions.map((y,idex)=>{
 
-                     if(index === id){
-                       y.question.grade[evt.target.name] = evt.target.value
-                       return y
-                     }
-                     else{
-                       return y
-                     }
-                         
-                      
+                 if(index === id){
+                   y.question.grade[evt.target.name] = evt.target.value
+                   return y
+                 }
+                 else{
+                   return y
+                 }
+                     
                   
-                 
-                })
+              
+             
+            })
 
-          )
-        })
+      )
+            
+           
+          })
 
       setTemp(result);
-      console.log(temp)
-    
+      
+
     };
     const handleSubmit=(e)=>{
-      
-      axios({
-        method: "POST",
-        url:"/submission_update",
-        data:{
-          submission:temp,
-          section: token?.section,
-          username:token?.username
-         }
-      })
-      .then((response) => {
-        console.log(studenttest1)
     
-        console.log("returned")
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-          }
-      })
+      console.log(temp)
+      e.preventDefault()
+      console.log(fetchSubmission?.sub_id)
+      console.log(fetchSubmission.submissions[0].sub_id)
+console.log(temp)
+      if(temp){
+        autoGraded.map((x)=>{
+          return(
+            x.submission.map((y)=>{
+              return(y.tes_t.question=temp)
+            })
+          )
+        })
+        axios({
+          method: "POST",
+          url:"/submission_update",
+          data: (autoGraded[0]),
+           
+        })
+        .then((response) => {
+      
+          console.log("returned")
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+            }
+        })
+      }
+      else{
+        axios({
+          method: "POST",
+          url:"/submission_update",
+          data:(autoGraded[0]),
+           
+        })
+        .then((response) => {
+          console.log(autoGraded)
+      
+          console.log("returned")
+        }).catch((error) => {
+          if (error.response) {
+
+            console.log(error.response)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+            }
+        })
+      }
+    
      setTemp([])
     }
 
@@ -229,7 +209,18 @@ console.log(fetchSubmission)
     }
     
  
-
+console.log(fetchSubmission?.submissions?.filter((x)=>{
+  return(
+    x.submission.some((v)=>{
+      return(
+        v.tes_t.user_id == studentID
+  
+      )
+    })
+  )
+}
+)
+)
 
 
 
@@ -243,7 +234,7 @@ console.log(fetchSubmission)
       return (
     
         <div className='h-full text-black bg-gradient-to-r from-red-700 to-blue-300  place-items-center p-10  flex flex-grow '>
-{     studenttest1&&    <h1></h1>
+{   selectedTest&&  studenttest1&&    <h1></h1>
 }      
     
      
@@ -255,18 +246,17 @@ console.log(fetchSubmission)
     <div className="w-full h-full grid gap-24 ">
     { !autoGraded && fetchSubmission? (
 
-     fetchSubmission?.submissions &&
-       
-       fetchSubmission?.submissions?.filter((x)=>{
+  
+fetchSubmission?.submissions?.filter((x)=>{
       return(
-        x?.submission?.map((y)=>{
-          return(y.tes_t.usser_id==studentID)
+        x?.submission?.some((v)=>{
+          return(  v.tes_t.user_id == studentID)
         }))}).map((x)=>{
       return(
         x?.submission?.map((w)=>{
           return(
             
-           <h1>{w.tes_t.questions.map((value,index)=>{
+           <h1>{w.tes_t?.questions.map((value,index)=>{
              return(
 
               <div key={value.question_id} className='border-2 w-full h-80  p-4  grid ' > 
@@ -323,12 +313,10 @@ console.log(fetchSubmission)
 
 
 
-{
-  autoGraded &&
-autoGraded.map((w)=>{
+{autoGraded &&autoGraded?.[0].submission?.map((w)=>{
           return(
             
-           <h1>{w.tes_t.questions.map((value,index)=>{
+           <h1>{w.tes_t?.questions.map((value,index)=>{
              return(
 
               <div key={value.question_id} className='border-2 w-full h-96   p-4  grid ' > 
@@ -399,7 +387,8 @@ return(
              )
            })}</h1>
             
-            )})}
+            )})
+          }
 
    
     

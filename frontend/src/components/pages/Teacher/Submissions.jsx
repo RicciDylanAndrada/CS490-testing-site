@@ -24,7 +24,7 @@ const[pointTest,setPointTest]=useState(false);
 
 const[submit,setSubmit]=useState(false)
 const {setFilterSubmissionTest,
-  fetchSubmission,setSelectedTest,fetchTest,setFetchTest,setsection,section,setFilter,filterSubmissionTest,setStudentID}=useContext(TeacherContext)
+  fetchSubmission,setSelectedTest,fetchTest,setFetchTest,setsection,section,setFilter,filterSubmissionTest,setStudentID,selectedTest}=useContext(TeacherContext)
 const handleSectionChange = (event) => {
     setsection(event.target.value);
   };
@@ -42,6 +42,7 @@ setSelectedTest(e.currentTarget.id)
 testWindowClick(true)
 
 filterTest(e.currentTarget.id)
+
 }
 let getButtonId1 = (e) => {
   console.log(e.currentTarget.id)
@@ -188,7 +189,7 @@ console.log(section)
 
 
 
-
+console.log(selectedTest)
 
 return (
     <div className='h-screen text-black bg-gradient-to-r from-red-700 to-blue-300 p-4 '>
@@ -247,9 +248,9 @@ return (
       x?.submission?.map((y)=>{
         return(
 
+              
 
-
-          <SubmissionCard test_name={y.tes_t.usesrname} student_id = {y.tes_t.user_id} getButtonId1={getButtonId1}/>
+          y.test_id == selectedTest &&    <SubmissionCard test_name={y.tes_t.usesrname} student_id = {y.tes_t.user_id} getButtonId1={getButtonId1}/>
         )
       })
     )

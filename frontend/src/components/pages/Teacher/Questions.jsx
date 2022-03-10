@@ -21,7 +21,7 @@ function Questions() {
 
     const[fetchQuestion,setFetchQuestion]=useState("")
     const[submit,setSubmit]=useState(false)
-    const[question1,setQuestion]=useState("")
+    const[question,setQuestion]=useState("")
     const[newQuestion,setNewQuestion]=useState()
 
     const handleFunctionChange = (event) => {
@@ -89,17 +89,17 @@ function Questions() {
     function onSubmit(event) {
       event.preventDefault()
 console.log(newQuestion)
-let newa = newArray(question1,category,difficulty,matrix,functionName)
+let newa = newArray(question,category,difficulty,matrix,functionName)
 console.log(newa)
 change(newa)
   
       }
 
-      const  newArray =(question1,category,difficulty,matrix,functionName)=>{
+      const  newArray =(question,category,difficulty,matrix,functionName)=>{
 
 
         let x ={
-          question1:question1,
+          question:question,
             category:category,
             difficulty:difficulty,
             test_cases:matrix,
@@ -118,7 +118,7 @@ change(newa)
           method: "POST",
           url:"/add_question",
           data:{
-            question1: x,
+            question: x,
            }
         })
         .then((response) => {
@@ -132,7 +132,7 @@ change(newa)
         setAdded(" ")
        setNewQuestion({
 
-        question1:"",
+        question:"",
         difficulty:"",
         test_cases:[]    , 
            matrix:[],
@@ -167,7 +167,7 @@ change(newa)
               <h1 class="justify-self-center place-self-center  text-lg " > Question Box</h1>
     
               {/* Vertical tab for test questions and inside a form  */}
-              {/* able to delete queston tabs or add tes question1 tabs */}
+              {/* able to delete queston tabs or add tes question tabs */}
             
             </div> 
             
@@ -186,8 +186,8 @@ change(newa)
                                         <TextField
           id="outlined-password-input"
           label="Question"
-          type="question1"
-          value={question1}
+          type="question"
+          value={question}
           className="w-full"
           onChange={handleChange}
           autoComplete="current-password"
@@ -285,7 +285,7 @@ change(newa)
                 {fetchQuestion?.question && fetchQuestion?.question.map((value)=>{
                     return (
                             <div className='border-2 rounded-xl h-12' > 
-                            <h1>  {value.question.question} </h1>
+                            <h1>  {value.question?.question} </h1>
                       </div>
                     )
 

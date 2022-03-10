@@ -55,9 +55,7 @@ const handleInputChange = (evt, id) => {
 
 };
 
-useEffect(() => {
-  const textarea = document.querySelector('textarea');
-  indentation.watch(textarea);}, []);
+
 const handleSubmit=(e)=>{
   e.preventDefault()
   console.log(studentSub)
