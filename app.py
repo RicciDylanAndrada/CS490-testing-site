@@ -4,12 +4,12 @@ from flask_cors import CORS
 import sys
 
 import json
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, null
 
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+import re
 
 
 from core import models
@@ -34,6 +34,54 @@ app.config['DEBUG'] = True
 app.config.from_object(Configuration)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db = SQLAlchemy(app)
+
+
+def grade_question(subq):
+    code = subq['answer']
+    question = subq['question']
+    test_cases = question['test_cases']
+    points = int(subq['points'])
+    question_graded = {'grade' : points, 'test_cases' : []}
+
+    correct_name = re.search(f"def\s{question['function_name']}\(", code)
+
+    question_graded['name_correct'] = True
+    if(correct_name == None):
+        question_graded['grade'] -= points * 0.2
+        question_graded['name_correct'] = False
+
+    print(f"grade after namecheck is {question_graded['grade']}")
+
+    code = re.sub("def\s[a-zA-Z0-9]+", f"def {question['function_name']}", code)
+
+    for tcase in test_cases:
+        return_space = {}
+
+        correct = False
+
+        try:
+            exec(f"{code}\n\ntest_output = {question['function_name']}({tcase[0]})", {}, return_space)
+            if(return_space['test_output'] == eval(str(tcase[1]))):
+                correct = True
+            else:
+                question_graded['grade'] -= (points / len(test_cases))
+        
+        except:
+            return_space['test_output'] = "Execution failed."
+            question_graded['grade'] -= (points / len(test_cases))
+            
+        
+        question_graded['test_cases'].append({'case' : tcase, 'output' : return_space['test_output'], 'correct_output' : correct})
+
+    if(question_graded['grade'] < 0):
+        question_graded['grade'] = 0
+
+    return question_graded
+
+
+
+
+
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(15), unique=True)
@@ -54,8 +102,11 @@ class tes_t(db.Model):
     section = db.Column(db.String(80))
     tes_t = db.Column(db.String(256))
 class submission(db.Model):
-    test_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    submission_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(15))
     submission = db.Column(db.String(256))
+    section = db.Column(db.String(80))
+    show = db.Column(db.String(10), nullable=True)
 
      
 
@@ -81,19 +132,19 @@ def index():
 
 @app.route('/login',methods=["GET"])
 def my_profile():
-    ls_dict = [{'question': 'question2', 'question_id': 2}, {'question': 'question3', 'question_id': 3}]
-    json_string = json.dumps(ls_dict)
-    con = sql.connect('database.db')
-    c =  con.cursor() 
-    c.execute("INSERT INTO tes_t (section,tes_t) VALUES ('6','" + json_string + "')")
-    con.commit()
+    #ls_dict = {"sections": ["008", "007", "006"]}
+    #json_string = json.dumps(ls_dict)
+    socks = User.query.filter_by(user_id=4).first()
+    y = json.loads(socks.section)
+    response ={"user":socks.username,"section":y, "user_id":socks.user_id, "status": 0}
+    return response
     response_body = {
         
         
         "about" :"Testing for this link"
     }
 
-    return response_body
+    
 
 
 @app.after_request
@@ -126,8 +177,9 @@ def create_token():
         response = {"status": -1 }
     else:
         if (socks1.role_id == 1):
+            y = json.loads(socks.section)
             access_token = create_access_token(identity=ausername)
-            response ={"access_token":access_token,"user":socks.username,"section":socks.section, "user_id":socks.user_id, "status": 1}
+            response ={"access_token":access_token,"user":socks.username,"section": y, "user_id":socks.user_id, "status": 1}
 
         if (socks1.role_id == 2):
             access_token = create_access_token(identity=ausername)
@@ -209,27 +261,76 @@ def show_test():
 @app.route('/submission',methods=['POST'])
 def sub():
     submission = request.json.get("submission", None)
-    test_id = request.json.get("test_id", None)
-    #resultJSON = json.dumps(question)
+    section = request.json.get("section", None)
+    u_name = request.json.get("username", None)
     con = sql.connect('database.db')
     c =  con.cursor() 
-    c.execute("INSERT OR IGNORE INTO submission (test_id, submission) VALUES ('" + str(test_id) + "','" + json.dumps(submission)+ "')")
+    c.execute("INSERT OR IGNORE INTO submission (username, submission, section) VALUES ('" + u_name + "','" + json.dumps(submission)+ "', '" + section + "')")
     con.commit()
-    response={"status":submission}
+    response ={"good":"good" }
     return response
-@app.route('/show_submission',methods=['POST'])
-def show_submission():
-    sec = request.json.get("section", None)
+@app.route("/autograde",methods=['POST'])
+def autograde():
+
+    submission = request.json.get('submission')
+    print(submission)
+    for question in submission[0]['submission'][0]['tes_t']['questions']:
+        question['question']['grade'] = grade_question(question)
+
+    return json.dumps(submission)
+
+
+@app.route('/submission_update',methods=['POST'])
+def submission_update():
+    content=request.json
+    sub_id = content["sub_id"]
+    submission = content["submission"]
     con = sql.connect('database.db')
-    cur = con.cursor()
-    query = cur.execute("SELECT test_id, submission FROM submission where section='"+str(sec)+"'")
-    socks = submission.query.filter_by(section=sec).all()
-    result_list = []
-    for sock in socks:
-        y = json.loads(sock.submission)
-        lst = {"test_id": sock.test_id, "submission": y } 
-        result_list.append(lst) 
-    cur.close()
-    cur.connection.close()
-    response ={"test":result_list }
+    c =  con.cursor() 
+    c.execute("update submission set show='asasa' where submission_id='" + str(sub_id) + "'")
+    c.execute("update submission set submission='" + json.dumps(submission) + "' where submission_id='" + str(sub_id) + "'")
+    con.commit()
+    response ={"good":"good" }
     return response
+
+
+@app.route('/show_submission_student',methods=['POST'])
+def show_submission_student():
+
+    sec = request.json.get("section", None)
+    u_name = request.json.get("username", None)
+    status = request.json.get("status", None)
+    
+    if (status == 2):
+        con = sql.connect('database.db')
+        cur = con.cursor()
+        #query = cur.execute("SELECT * FROM submission where user_id='"+str(user_id)+"'")
+        socks = submission.query.filter_by(username=u_name).all()
+        
+        result_list = []
+        for sock in socks:
+            if(sock.show != None):
+                y = json.loads(sock.submission)
+                lst = {'submission': y, "sub_id":sock.submission_id }
+                result_list.append(lst) 
+
+        cur.close()
+        cur.connection.close()
+        print(result_list)
+        response ={"submissions":result_list }
+        return response
+    if (status == 1):
+        con = sql.connect('database.db')
+        cur = con.cursor()
+        #query = cur.execute("SELECT * FROM submission where user_id='"+str(user_id)+"'")
+        socks = submission.query.filter_by(section=sec).all()
+        result_list = []
+        for sock in socks:
+            y = json.loads(sock.submission)
+            lst = {'submission': y, "sub_id":sock.submission_id }
+            result_list.append(lst) 
+        cur.close()
+        cur.connection.close()
+        response ={"submissions":result_list }
+        return response
+

@@ -21,7 +21,7 @@ function Questions() {
 
     const[fetchQuestion,setFetchQuestion]=useState("")
     const[submit,setSubmit]=useState(false)
-    const[question1,setQuestion]=useState("")
+    const[question,setQuestion]=useState("")
     const[newQuestion,setNewQuestion]=useState()
 
     const handleFunctionChange = (event) => {
@@ -89,17 +89,17 @@ function Questions() {
     function onSubmit(event) {
       event.preventDefault()
 console.log(newQuestion)
-let newa = newArray(question1,category,difficulty,matrix,functionName)
+let newa = newArray(question,category,difficulty,matrix,functionName)
 console.log(newa)
 change(newa)
   
       }
 
-      const  newArray =(question1,category,difficulty,matrix,functionName)=>{
+      const  newArray =(question,category,difficulty,matrix,functionName)=>{
 
 
         let x ={
-          question1:question1,
+          question:question,
             category:category,
             difficulty:difficulty,
             test_cases:matrix,
@@ -118,7 +118,7 @@ change(newa)
           method: "POST",
           url:"/add_question",
           data:{
-            question1: x,
+            question: x,
            }
         })
         .then((response) => {
@@ -132,7 +132,7 @@ change(newa)
         setAdded(" ")
        setNewQuestion({
 
-        question1:"",
+        question:"",
         difficulty:"",
         test_cases:[]    , 
            matrix:[],
@@ -167,7 +167,7 @@ change(newa)
               <h1 class="justify-self-center place-self-center  text-lg " > Question Box</h1>
     
               {/* Vertical tab for test questions and inside a form  */}
-              {/* able to delete queston tabs or add tes question1 tabs */}
+              {/* able to delete queston tabs or add tes question tabs */}
             
             </div> 
             
@@ -178,16 +178,17 @@ change(newa)
             <div className=" w-full  row-span-5  grid grid-cols-2   ">
            
                         <div class=" border-r-2 ">
-                        <form  className="h-full" onSubmit={onSubmit}>
+                        <form  className="h-full w-full " onSubmit={onSubmit}>
                                 {/* get test data and loop creating div of things below */}
-                                        <div class="grid w-full  p-4  h-full ">
+                                        <div class="grid  md:w-72  p-4  h-full ">
                                     
 
                                         <TextField
           id="outlined-password-input"
           label="Question"
-          type="question1"
-          value={question1}
+          type="question"
+          value={question}
+          className="w-full"
           onChange={handleChange}
           autoComplete="current-password"
           required
@@ -201,7 +202,7 @@ change(newa)
           onChange={handleFunctionChange}
           autoComplete="current-password"
         />
-        <Box sx={{ minWidth: 120 }}>
+        <Box sx={{ minWidth: 80 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
         <Select
@@ -235,12 +236,23 @@ change(newa)
         </Select>
       </FormControl>
     </Box>
-    <table className="border-2" >
-        <tbody className="border-2" >
+    <table  >
+    
+        <tbody className="" >
+        <tr>
+        <td>
+        <h1>Input Test Case</h1>
+
+        </td>
+        <td>
+        <h1>Output Test Case</h1>
+
+        </td>
+        </tr>
           {matrix.map((row, rowIndex) => (
-            <tr className="border-2" key={rowIndex}>
+            <tr className="fkex flex-row " key={rowIndex}>
               {row.map((column, columnIndex) => (
-                <td  className="border-2" key={columnIndex}>
+                <td  className="" key={columnIndex}>
                   <input
                   className="border-2"
                   required
@@ -250,9 +262,10 @@ change(newa)
                 </td>
               ))}
               {matrix.length !== 1 && <button
-                className="mr10"
+                className="mr10 grid place-items-center justify-center " 
                 onClick={() => handleRemoveClick(rowIndex)}>Remove</button>}
-              {matrix.length - 1 === rowIndex && <button onClick={handleAddClick}>Add</button>}
+                
+              {matrix.length - 1 === rowIndex && <div className='h-full grid place-content-center' ><button className='h-full' onClick={handleAddClick}>Add</button></div>}
             </tr>
           ))}
         </tbody>
@@ -272,7 +285,7 @@ change(newa)
                 {fetchQuestion?.question && fetchQuestion?.question.map((value)=>{
                     return (
                             <div className='border-2 rounded-xl h-12' > 
-                            <h1>  {value.question.question} </h1>
+                            <h1>  {value.question?.question} </h1>
                       </div>
                     )
 

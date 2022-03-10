@@ -114,7 +114,7 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         
         
              <NavLink
-            className={(navData) => (navData.isActive ?   inTest? 'btn btn-warning': 'border-b-2 border-gray-200 '
+            className={(navData) => (navData.isActive ?   inTest? 'btn btn-disabled	': 'border-b-2 border-gray-200 '
                 
              :
              
@@ -138,10 +138,10 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         
         
         <NavLink
-        className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : '')}
+        className={(navData) => (navData.isActive ?  inTest? 'btn btn-disabled':	'border-b-2 border-gray-200  ' : '')}
 
          
-         to="/submissions">Submissions</NavLink> </button> 
+         to="/results">Submissions</NavLink> </button> 
         </div>
 
         </div>

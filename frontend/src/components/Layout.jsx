@@ -33,13 +33,13 @@ function Layout() {
  
 
 
-<main>
+<main  className='h-full' >
 
   <div class="fixed w-32 ">
 <Navbar className="fixed w-full" />
 
 </div>  
-<div class="ml-32 ">
+<div class="ml-32 h-full">
       <Outlet/>
 
 </div>

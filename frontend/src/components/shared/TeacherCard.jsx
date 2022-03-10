@@ -1,13 +1,13 @@
 // import React from 'react'
 
-function TeacherCard({test_name,getButtonId,test_id}) {
+function TeacherCard({test_name,getButtonId,test_id,key}) {
   return (
     
-    <div className=" p-4 w-80 grid h-44  card shadow-xl  side bg-white ">
+    <div key={key} className=" p-4 w-64  grid h-44  card shadow-xl  side bg-white ">
            {test_name && (
 
-           <div  class="">
-           <h1 className="   "  >Test: <p>{test_name}</p></h1>
+           <div  class="grid place-items-center">
+           <h1><p>{test_name}</p></h1>
             <button  onClick={getButtonId} id={test_id} 
             className='  btn btn-sm bg-blue-500 border-0   w-20  h-4  justify-self-center '  >Enter</button>
 
