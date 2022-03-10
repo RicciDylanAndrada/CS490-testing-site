@@ -35,7 +35,7 @@ console.log(selectedTest)
       console.log(selectedTest)
       let studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
         return(
-          x?.submission?.map((y)=>{
+          x?.submission?.some((y)=>{
             return(y.test_id==selectedTest && y.tes_t.user_id ==studentID)
           })
         )
@@ -226,7 +226,19 @@ console.log(fetchSubmission?.submissions?.filter((x)=>{
 
 
 
+console.log(fetchSubmission?.submissions?.filter((x)=>{
+  return(
+    x?.submission?.some((v)=>{
+      return(  (v.tes_t.user_id == studentID && v.test_id == selectedTest &&
+      
+          v.tes_t.questions.some((e)=>{
+            return(
+              e => !e.question.grade
 
+            )
+          })
+      ))
+    }))}))
 
 
 
@@ -250,7 +262,15 @@ console.log(fetchSubmission?.submissions?.filter((x)=>{
 fetchSubmission?.submissions?.filter((x)=>{
       return(
         x?.submission?.some((v)=>{
-          return(  v.tes_t.user_id == studentID)
+          return(  (v.tes_t.user_id == studentID && v.test_id == selectedTest &&
+          
+              v.tes_t.questions.some((e)=>{
+                return(
+                  e => !e.question.grade
+
+                )
+              })
+          ))
         }))}).map((x)=>{
       return(
         x?.submission?.map((w)=>{

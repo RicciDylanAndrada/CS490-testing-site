@@ -63,6 +63,7 @@ function Teacher() {
 const [selectedTest,setSelectedTest]=useState(null)
 const [testWindow,setTestWindow]=useState(false)
 const [done,setDone]=useState(false)
+const [afterDone,setAfterDone]=useState(false)
 
 const[test,setTest]=useState({section:"",questions:[],test_name:""})
 const {token} = useContext(LoginContext)
@@ -72,9 +73,18 @@ let getButtonId = (e) => {
   setTestWindow(true)
 
 }
-const testWindowClick = ()=>{
+const doneTest=()=>{
+  setAfterDone(true)
+}
+
+const selectedTestWindow=()=>{
   setTestWindow(!testWindow)
+
+}
+const testWindowClick = ()=>{
   setSelectedTest(" ")
+  setAfterDone(!afterDone)
+
 if(pointTest){
   setPointTest(false)
   setLeft([])
@@ -303,7 +313,6 @@ const handleSubmitFinal=(e)=>{
     
       }))
 let finalTest=test
-
 setSubmit(true)
 }
 
@@ -311,7 +320,7 @@ setSubmit(true)
 
 
 const change=(x)=>{
-  console.log(x)
+  console.log(test)
   axios({
     method: "POST",
     url:"/make_test",
@@ -329,6 +338,11 @@ const change=(x)=>{
       console.log(error.response.headers)
       }
   })
+  setTest({section:"",questions:[],test_name:""})
+  setAfterDone(!afterDone)
+  setSubmit(false)
+
+
 }
 
 const newArray=(x,questionArray)=>{
@@ -558,7 +572,7 @@ if(fetchTest.test){
 {testQuestions.map( (x,index)=>{
   return(
 
-    <div className='border-2  grid rows-2   place-items-start rounded-xl  w-full'  > 
+    <div key={index} className='border-2  grid rows-2   place-items-start rounded-xl  w-full'  > 
     <div className='grid grid-cols-3 w-full'>
 
     <div class="">
@@ -575,6 +589,7 @@ if(fetchTest.test){
 
     <h1>{x.question.difficulty}</h1>
     </div>
+   
 
     </div>
     <input  type='number'  required placeholder='points' name={x.question_id}  onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200  w-full rounded-md" ></input>
@@ -595,7 +610,7 @@ if(fetchTest.test){
 
 </div>   
 <div class=" w-full  grid  place-items-center    p-5 ">
-  <button type='"submit'  class="place-self-center  w btn btn-active   " >Create Test </button>
+  <button type='"submit'   class="place-self-center  w btn btn-active   " >{!afterDone?"Create Test":" Test Created "} </button>
 
 </div> 
      </div>
@@ -617,7 +632,7 @@ if(fetchTest.test){
                   <div class="w-11/12  h-6/6   row-span-2 bg-white shadow-xl grid grid-rows-6 1 text-center ">
       
       <div class="border-b-2 w-full grid  grid-cols-3    place-items-center border-b-gray row-span-1  y p-4 ">
-        <button  onClick={testWindowClick} className="place-self-start btn btn-warning    text-lg "   > Exit </button>
+        <button  onClick={selectedTestWindow} className="place-self-start btn btn-warning    text-lg "   > Exit </button>
         <h1 class="  place-self-center text-lg " > Test {selectedTest}</h1>
 
 
@@ -638,7 +653,7 @@ if(fetchTest.test){
   .map((val)=>{
     return (val.tes_t.questions.map((value)=>{
       return(
-        <div className='border-2 grid grid-cols-3 rounded-xl h-24 ' > 
+        <div className='border-2 grid grid-cols-4 rounded-xl h-24 ' > 
 
         <div>
 
@@ -651,10 +666,14 @@ if(fetchTest.test){
 
           <h1 className="text-sm" >  Difficulty:</h1>
           <h1> {value.question.difficulty}</h1>
-
+          
           </div>
 
+          <div class="">
+    <h1 className="text-sm" >  Points :</h1>
 
+    <h1>{value.points}</h1>
+    </div>
 
       </div>)
     }))
@@ -699,7 +718,7 @@ if(fetchTest.test){
 
                 <div  key={i} >
                 
-       <button className='btn btn-square w-32  ' onClick={handleSectionChange} value={x}>Section{x}</button>
+       <button className='btn btn-square w-32  ' onClick={handleSectionChange} value={x}>Section {x}</button>
 
 
                 </div>

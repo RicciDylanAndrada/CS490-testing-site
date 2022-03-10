@@ -99,8 +99,15 @@ console.log(selectedTest)
         }))}).map((x)=>{
       return(
         x?.submission?.map((w)=>{
-          return(
+          var sum = 0
+              w.tes_t.questions.map((x)=>{
+              sum+=(x?.question?.grade?.grade )
+            })
             
+          return(
+            <div>
+            <h1>TOTAL GRADE : {sum}</h1>
+
            <h1>{w.tes_t?.questions.map((value,index)=>{
              return(
 
@@ -169,7 +176,8 @@ return(
              )
            })}</h1>
             
-            )}))})
+           </div> )
+            }))})
       
       }
          {/*  */}

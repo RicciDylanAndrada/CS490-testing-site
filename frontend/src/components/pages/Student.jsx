@@ -16,6 +16,8 @@ function Student() {
   const [testWindow,setTestWindow]=useState(false)
 const{token,} =useContext(LoginContext)
 const{fetchTest,setSelectedTest,selectedTest,inTest,togglePopup} =useContext(TestContext)
+const [fetchSubmission,setfetchSubmission]=useState("")
+const [taken,setTakenAlready]=useState("")
 
 const [test,setTest]=useState("")
 
@@ -24,14 +26,68 @@ const [test,setTest]=useState("")
   let getButtonId = (e) => {
     setSelectedTest(e.currentTarget.id)
     togglePopup()
-  
+    const sub =fetchSubmission
+
+    handleTestEnter(e.currentTarget.id,sub)
   }
   
 
 
 
+  useEffect(()=>{
+
+    
+    axios({
+      method: "POST",
+      url:"/show_submission_student",
+      data:{
+        section: token?.section,
+        username:token?.username,
+        status:2,
+
+        
+       }
+    })
+    .then((response) => {
+      console.log("this is the test")
+      console.log(response.data)
+      setfetchSubmission(response.data)
+      
 
 
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response)
+        console.log(error.response.status)
+        console.log(error.response.headers)
+        }
+    })
+
+
+},[])
+
+
+
+    const handleTestEnter=(x,sub)=>{
+      console.log(x)
+      const test = x
+      console.log(sub)
+     const isTaken = (sub.submissions.filter((x)=>{
+        return(x.submission.some((x)=>{
+          return(x.test_id ==test && x.tes_t.user_id == token?.user_id)
+        }))
+      }))
+      
+      if(isTaken.length!==0){
+        alert("Test Already Taken")
+        console.log(isTaken)
+      }
+      else{
+        console.log("redirect")
+        navigate("/test")
+      }
+  
+    }
   return (
 
 
@@ -93,8 +149,7 @@ const [test,setTest]=useState("")
 
 
             <button  onClick={getButtonId} id={value.test_id} 
-            className='  btn btn-sm bg-blue-500 border-0    w-20  h-4  justify-self-center '  ><Link to="/test" >Enter</Link>
-</button>
+            className='  btn btn-sm bg-blue-500 border-0    w-20  h-4  justify-self-center '  >Take Test</button>
 
            </div>
 

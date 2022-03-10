@@ -248,7 +248,11 @@ fetchTest?.test.map((value,i)=>{
 
 
 <div class="  w-full grid grid-cols-3 place-items-center">
-{fetchSubmission?.submissions?.map((x)=>{
+{fetchSubmission?.submissions?.filter((x)=>{
+      return(
+        x?.submission?.some((v)=>{
+          return(   v.test_id == selectedTest)
+        }))}).map((x)=>{
     return(
       x?.submission?.map((y)=>{
         return(
