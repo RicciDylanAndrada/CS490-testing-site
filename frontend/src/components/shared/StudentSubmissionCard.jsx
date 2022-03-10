@@ -1,6 +1,7 @@
 import React from 'react'
 
 function StudentSubmissionCard({test_name,getButtonId1,test_id}) {
+    console.log(test_id)
     return (
     
         <div className=" p-4 w-80 grid h-44  card shadow-xl  side bg-white ">

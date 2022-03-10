@@ -36,7 +36,7 @@ const [test,setTest]=useState("")
 
 
     
-    <div className='h-full text-black bg-gray-100  place-items-center   '>
+    <div className='h-screen text-black bg-gray-100  place-items-center   '>
        
       
     <div className='w-full h-full text-black  bg-gradient-to-r from-red-700 to-blue-300  place-items-center    '>

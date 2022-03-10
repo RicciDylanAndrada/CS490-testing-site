@@ -77,57 +77,37 @@ function StudentSubmission() {
 
 
 console.log(selectedTest)
-  console.log(fetchSubmission.submissions?.map((x)=>{
+  console.log(fetchSubmission?.submissions?.filter((x)=>{
     return(
-      x.submission.map((x)=>{
+      x.submission.some((x)=>{
         return (
-          x.test_id === selectedTest
+          x.test_id == selectedTest
         )})
     )
   }))
   
   
     return (
-  
-  
-      
       <div className='h-screen text-black bg-gray-100  place-items-center   grid grid-rows-10 '>
-         
        {testWindow&& fetchSubmission?( <div class="">
-
-
-
-
        {fetchSubmission&& (
-         
-         
-         
-         
-         
-         
-         
-         
          <div> 
-         <h1>hi</h1>
-         {fetchSubmission.submissions[0].submission.filter((x)=>{
-           return(
-            x.test_id ==selectedTest
-
-           )
-         }).map((x)=>{
+    {  fetchSubmission?.submissions?.filter((x)=>{
+      return(
+        x?.submission?.some((v)=>{
+          return(  v.test_id == selectedTest)
+        }))}).map((x)=>{
+      return(
+        x?.submission?.map((w)=>{
+          return(
+            
+           <h1>{w.tes_t?.questions.map((value,index)=>{
              return(
 
-               <div>
-                {x.tes_t.questions.map((value,index)=>{
-
-
-                  return(
-
-<div key={value.question_id} className='border-2 w-full h-96   p-4  grid ' > 
-
-<div class=" grid grid-cols-4 place-items-center ">
-
-<div className='grid place-items-center' >
+              <div key={value.question_id} className='border-2 w-full h-80  p-4  grid ' > 
+              <div class=" grid grid-cols-4 place-items-center ">
+             
+              <div className='grid place-items-center' >
 
 <h1 className="text-sm" >  Category:</h1>
 <h1>{value.question.category}</h1>
@@ -137,69 +117,62 @@ console.log(selectedTest)
 <h1>{value.question.question}</h1>
 <div className='grid place-items-center grid-cols-1'  >
 
-<h1 className="text-sm" >  Difficulty:</h1>
-<h1> {value.question.difficulty}</h1>
+         <h1 className="text-sm" >  Difficulty:</h1>
+         <h1> {value.question.difficulty}</h1>
 
 
-</div>
+         </div>
 
 
-<div className='grid gri-cols-1 place-items-center' >
-<label>Auto Graded Points:  </label>
-<input   type='number'   placeholder='points'  defaultValue={value?.question?.grade?.grade} name='grade'   className= "border-2 border-gray-200" ></input>
-<label>Function Name?:  </label>
-<input       defaultValue={value?.question.grade.name_correct?'true':'false'} name='name_correct'   className= "border-2 border-gray-200" ></input>
-
-
-
-</div>
-
-
-</div>
+        <div >
+        <label> Points:  </label>
+         <p   type='number'   placeholder='points'   name='grade'   className= "border-2 border-gray-200">{value?.question.grade.grade}</p>
+        
 
 
 
+        </div>
+        
+        
+              </div>
+       
+         
 
-<div className="row-span-4 text-center border-2 overflow-auto grid ">
-<h1> Student Answer: {value.answer}</h1>
-<div>
-{value.question.grade.test_cases.map((val)=>{
+
+         <div className="row-span-4 text-center border-2 overflow-auto grid ">
+         <h1> Your Answer: {value.answer}</h1>
+          {value.question.grade.test_cases.map((val)=>{
 
 return(
-<div className='grid grid-cols-3 overflow-auto'>
-<h1> Case  {val.case.map((x,i)=>{
-if(i===0){
-return "["+x +', '
-}
-else{
-return x +"]"
-}
+     <div className='grid grid-cols-3 overflow-auto'>
+          <h1> Case  {val.case.map((x,i)=>{
+            if(i===0){
+              return "["+x +', '
+            }
+            else{
+              return x +"]"
+            }
+            
+            })}  </h1>
+       <h1>Correct Output: { typeof val.correct_output == 'boolean'? val.correct_output.toString():val.correct_output}</h1>
+       <h1> Student Output: {val.output}</h1>
 
-})}  </h1>
-<h1>Correct Output: { typeof val.correct_output == 'boolean'? val.correct_output.toString():val.correct_output}</h1>
-<h1> Student Output: {val.output}</h1>
+     </div>
+
+         )})}
+         <h1> Teacher Comment: {value.question.grade.comment}</h1>
+
+
 
 </div>
-
-)})}
-</div>
-
-<textarea   placeholder='Enter Comment' name='comment'  className= "p-5 bg-gray-200 w-full h-3/5 place-self-end rounded-md" ></textarea>
-
-</div>
-</div>
-)
-
-
-
-
-
-
-                })}
-               </div>
+     </div>
              )
-           })
-         }
+           })}</h1>
+            
+            )}))})
+      
+      }
+         {/*  */}
          
          
          
@@ -221,48 +194,25 @@ return x +"]"
 
 
 
-        <div class="w-11/12  h-4/6 relative  row-span-5 bg-white shadow-xl grid grid-rows-6 1 text-center rounded-md ">
-  
-  <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
-    <h2 class="justify-self-start" >Completed Tests</h2>
-  </div> 
-  <div class="border-b-2 w-full   border-b-gray row-span-4  y  ">
-  <div class="grid w-full grid-cols-10 border-b-2 ">
-    <h1 className='col-span-9  border-r-2 '>Loop over Tests</h1>
-    <h1 className='col-span-1 '>loopp over Result</h1>
 
+        <div class="w-11/12  h-4/6 relative  row-span-5 bg-white shadow-xl grid grid-cols-1 place-items-center 1 text-center rounded-md ">
+
+  
+  <h1>Select a Test to see Submission</h1>
+  
+          
   </div>
-
-  
-  </div> 
-  <div class="border-b-2 w-full  grid  border-b-gray row-span-1  y p-2 ">
-    <h2 class="justify-self-start" >Pagnation</h2>
-  </div> 
-
-  
-  </div>
-
-       )} 
+       )}               
       <div className='w-full h-full text-black   place-items-center   grid grid-rows-10 '>
   
       <div class=" row-span-1   grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
-  
-       
-      
-     
-    
-  
-  
   <div class="grid grid-cols-3 gap-5 row-span-7 h-full w-full place-items-center content-start ">
   
   {fetchSubmission?.submissions?.map((x)=>{
     return(
       x?.submission?.map((y)=>{
         return(
-
-
-
-          <StudentSubmissionCard test_name={y.tes_t.username} test_id = {y.test_id} getButtonId1={getButtonId1}/>
+          <StudentSubmissionCard test_name={y.tes_t.test_name} test_id = {y.test_id} getButtonId1={getButtonId1}/>
         )
       })
     )

@@ -14,7 +14,10 @@ const{token}=useContext(LoginContext)
 const[studentSub,setStudentSub]=useState({
   answers:[]
 })
-
+useEffect(()=>{
+  const textarea = document.querySelector('textarea');
+indentation.watch(textarea);
+})
 
 
 let studentTest=fetchTest?.test.filter((value)=>{return(value.test_id == selectedTest)})
@@ -209,7 +212,7 @@ return (studentTest)
        </div>
        <div className="grid p-4 bg-white h-full w-full place-items-center ">
 
-<button  className="btn btn-success"  type="submit">Submit</button>
+<button  className="btn btn-success" onClick={togglePopup} type="submit">Submit</button>
 
 
    </div>

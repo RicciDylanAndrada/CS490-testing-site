@@ -197,7 +197,7 @@ return (
  
 
 
-<div class="row-span-1 grid w-full grid-cols-3 h-fit  place-items-center">
+<div class="row-span-1 grid w-full grid-cols-3 h-fit  bg-gradient-to-r from-red-700 to-blue-300 place-items-center">
 
 { token?.section.sections.map((x,i)=>{
             return(
@@ -216,33 +216,38 @@ return (
 {fetchTest?.test&& 
 
 
-<div className='grid grid-cols-3 grid-rows-2 ' >
+<div className='grid grid-cols-1 grid-rows-2 gap-40 bg-gradient-to-r from-red-700 to-blue-300 ' >
+<div class="w-full row-span-1  h-full grid grid-cols-3 place-items-center">
 
 {
 
-  fetchTest?.test.map((value,i)=>{
-         
-         return(
-           <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+fetchTest?.test.map((value,i)=>{
+       
+       return(
+         <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
 
-        
-
-
+      
 
 
-         
-         )
-       })
+
+
+       
+       )
+     })
 }  
+</div>
 
 
 
 
-<div class="">
-{filterSubmissionTest &&
 
-(
-<div class="">
+<div class="w-full grid-rows-2 gap-6 h-full ">
+
+<div class="w-full grid place-items.center text-center">
+</div>
+
+
+<div class="  w-full grid grid-cols-3 place-items-center">
 {fetchSubmission?.submissions?.map((x)=>{
     return(
       x?.submission?.map((y)=>{
@@ -254,10 +259,13 @@ return (
         )
       })
     )
-  })}</div>
-)
+  })}
+</div>
   
-}
+  
+
+  
+
 
 </div>
 </div>
@@ -266,42 +274,6 @@ return (
 
 
 
-
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     
-           
-           
-           
-           
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     </div>
       )
 }
