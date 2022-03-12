@@ -101,7 +101,8 @@ console.log(selectedTest)
         x?.submission?.map((w)=>{
           var sum = 0
               w.tes_t.questions.map((x)=>{
-              sum+=(x?.question?.grade?.grade )
+              sum+=Number(x?.question?.grade?.grade )
+              
             })
             
           return(

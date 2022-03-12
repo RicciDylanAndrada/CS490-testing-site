@@ -88,7 +88,7 @@ console.log(selectedTest)
           return(
             x.tes_t?.questions.map((y,idex)=>{
 
-                 if(index === id){
+                 if(idex === id){
                    y.question.grade[evt.target.name] = evt.target.value
                    return y
                  }
@@ -108,14 +108,14 @@ console.log(selectedTest)
 
       setTemp(result);
       
+      console.log(result)
 
     };
     const handleSubmit=(e)=>{
     
       console.log(temp)
       e.preventDefault()
-      console.log(fetchSubmission?.sub_id)
-      console.log(fetchSubmission.submissions[0].sub_id)
+      
 console.log(temp)
       if(temp){
         autoGraded.map((x)=>{
@@ -125,6 +125,7 @@ console.log(temp)
             })
           )
         })
+        console.log(temp)
         axios({
           method: "POST",
           url:"/submission_update",
@@ -204,41 +205,41 @@ console.log(temp)
     
       )
     })
-    console.log(studenttest1)
+    //console.log(studenttest1)
     return (studenttest1)
     }
     
  
-console.log(fetchSubmission?.submissions?.filter((x)=>{
-  return(
-    x.submission.some((v)=>{
-      return(
-        v.tes_t.user_id == studentID
+// console.log(fetchSubmission?.submissions?.filter((x)=>{
+//   return(
+//     x.submission.some((v)=>{
+//       return(
+//         v.tes_t.user_id == studentID
   
-      )
-    })
-  )
-}
-)
-)
+//       )
+//     })
+//   )
+// }
+// )
+// )
 
 
 
 
 
-console.log(fetchSubmission?.submissions?.filter((x)=>{
-  return(
-    x?.submission?.some((v)=>{
-      return(  (v.tes_t.user_id == studentID && v.test_id == selectedTest &&
+// console.log(fetchSubmission?.submissions?.filter((x)=>{
+//   return(
+//     x?.submission?.some((v)=>{
+//       return(  (v.tes_t.user_id == studentID && v.test_id == selectedTest &&
       
-          v.tes_t.questions.some((e)=>{
-            return(
-              e => !e.question.grade
+//           v.tes_t.questions.some((e)=>{
+//             return(
+//               e => !e.question.grade
 
-            )
-          })
-      ))
-    }))}))
+//             )
+//           })
+//       ))
+//     }))}))
 
 
 

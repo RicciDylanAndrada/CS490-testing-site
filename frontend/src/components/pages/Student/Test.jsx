@@ -17,7 +17,7 @@ const[studentSub,setStudentSub]=useState({
 useEffect(()=>{
   const textarea = document.querySelector('textarea');
 indentation.watch(textarea);
-})
+},)
 
 
 let studentTest=fetchTest?.test.filter((value)=>{return(value.test_id == selectedTest)})
@@ -175,8 +175,8 @@ return (studentTest)
 
 <div>
 
-<h1 className="text-sm" >  Difficulty:</h1>
-<h1> {value.question.difficulty}</h1>
+<h1 className="text-sm" >  Points::</h1>
+<h1> {value.points}</h1>
 
 </div>
 </div>
