@@ -15,31 +15,8 @@ import Submissions from './components/pages/Teacher/Submissions';
 import GradeTest from './components/pages/Teacher/GradeTest';
 import StudentSubmission from './components/pages/Student/StudentSubmission';
 function App() {
-  const {user,token,setToken}=useContext(LoginContext)
+  const {token,setToken}=useContext(LoginContext)
 
-  const [profileData, setProfileData] = useState(null)
-
-
-
-  // useEffect(() => {
-  //     axios({
-  //       method: "GET",
-  //       url:"/profile",
-  //     })
-  //     .then((response) => {
-  //       const res =response.data
-  //       setProfileData(({
-  //         profile_name: res.name,
-  //         about_me: res.about}))
-  //     }).catch((error) => {
-  //       if (error.response) {
-  //         console.log(error.response)
-  //         console.log(error.response.status)
-  //         console.log(error.response.headers)
-  //         }
-  //     })
-  // },[])
-  
 
   return (
 <div className=' bg-gray-100  h-screen font-semibold   ' >
@@ -48,10 +25,7 @@ function App() {
 {!token.token && token.setToken!=="" &&token.token!== undefined?  
 <div class="h-full w-full">
 <LoginForm/>
-{/* <Routes>
-<Route path="/" element={<LoginForm/>}/>
 
-</Routes> */}
 
 </div>
         :( 
@@ -75,14 +49,7 @@ function App() {
         <Route path="/results" element={<StudentSubmission/>}/>
 
 
-       {/* </Route> */}
-     
-
-     {/* <Route element={<ProtectedRoutes allowedRoles={['teacher']}/>}>
-
-            <Route path="teacher" element={<Teacher/>}/>
-
-      */}
+  
 
      </Route>
 
@@ -118,7 +85,6 @@ function App() {
         <Route path="/submit" element={<LoginForm/>}/>
 
 
-       {/* </Route> */}
      
 
    
@@ -143,49 +109,3 @@ function App() {
   )};
 
 export default App;
-//       <div className=" h-screen">
-
-//       <Navbar/>
-
-// <main>
-// <Routes>
-// {/** Check for user exists   */}
-
-// { !token &&  !user &&token!="" && token !==undefined?(
-  
-// <Route path="/" element={<LoginForm setToken={setToken} />}> </Route>
-// )
-//  :
-//    user==='teacher'?  <>
-
-//         <Route element ={<ProtectedRoutes/>}/>
-//      <Route path="/teacher" element={<Teacher/>}/> )
-//      </>
-
-
-//        : 
-
-//        <>
-//        <Route element ={<ProtectedRoutes/>}/>
-
-//       <Route path="/student" element={<Student/>}/> 
-//       </>
-// }
-
-// </Routes>
-// </main>
-
-        
-//         {/* {profileData?.profile_name &&
-//          <div className="App bg-slate-500 h-screen w-full" >
-
-//               <LoginForm date={profileData}  />
-//             </div>
-//         } */}
-//     </div>
-
-
-     
-   
-//   );
-// }
