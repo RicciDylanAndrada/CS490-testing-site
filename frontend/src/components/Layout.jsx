@@ -35,11 +35,11 @@ function Layout() {
 
 <main  className='h-full' >
 
-  <div class="fixed w-32 ">
+  <div class="fixed w-36  ">
 <Navbar className="fixed w-full" />
 
 </div>  
-<div class="ml-32 h-full">
+<div class="ml-36 h-full">
       <Outlet/>
 
 </div>

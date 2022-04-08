@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import LoginContext from '../../../content/LoginContext';
 import { AutoTabProvider } from 'react-auto-tab'
 import * as indentation from 'indent-textarea';
-
+import TestQuestions from '../Student/TestQuestions'
+import TestPagnate from './TestPagnate';
 function Test() {
 
 const {selectedTest,fetchTest,setTest,setTestWindow,testWindow,togglePopup,inTest}=useContext(TestContext)
@@ -14,10 +15,10 @@ const{token}=useContext(LoginContext)
 const[studentSub,setStudentSub]=useState({
   answers:[]
 })
-useEffect(()=>{
-  const textarea = document.querySelector('textarea');
-indentation.watch(textarea);
-},)
+// useEffect(()=>{
+//   const textarea = document.querySelector('textarea');
+// indentation.watch(textarea);
+// },)
 
 
 let studentTest=fetchTest?.test.filter((value)=>{return(value.test_id == selectedTest)})
@@ -58,7 +59,7 @@ const handleInputChange = (evt, id) => {
 
 };
 
-
+console.log(studentSub)
 const handleSubmit=(e)=>{
   e.preventDefault()
   console.log(studentSub)
@@ -137,87 +138,34 @@ return (studentTest)
 
   return (
 
-    <div className='h-full text-black bg-gradient-to-r from-red-700 to-blue-300  place-items-center p-10  flex flex-grow '>
-   
+    <div className='h-screen text-black bg-white  place-items-center p-2   '>
+{/* <div class="row-span-1 ">
+<button  className='btn  w-full btn-info'><Link onClick={togglePopup} to="/student" >Back to Dashboard</Link></button>
+
+</div> */}
   
 { studentTest && (
  
- <div className="h-screen w-full">
+ <div className="  h-screen w-full">
 
- <form classNamew="h-fit w-full" onSubmit={handleSubmit} >
- <div className="  overflow-auto  grid place-items-start rounded bg-white p-4   w-full h-full">
-<div className="w-full h-full grid gap-24 ">
-
-
-
-
-
-{fetchTest?.test&& 
-       fetchTest?.test.filter((x)=>{
-   return(
-     x.test_id == selectedTest
-   )
- })
-     
- .map((val)=>{
-   return (val.tes_t.questions.map((value,index)=>{
-     return(
-      <div key={value.question_id} className='border-2 w-full h-80 grid-rows-2  p-4  grid ' > 
-      <div class="w-full grid-rows-2  place-items-center grid">
-         
-<div className='w-full grid grid-cols-2 place-items-center' >
-<div>
-
-<h1 className="text-sm" >  Category:</h1>
-<h1>{value.question.category}</h1>
-
-</div>
-
-<div>
-
-<h1 className="text-sm" >  Points::</h1>
-<h1> {value.points}</h1>
-
-</div>
-</div>
-<div class="w-full grid text-center">
-<h1>{value.question.question}</h1>
-
-</div>       
-      </div>
-      
-         
-
-
-         <div className="row-span-4 text-center border-2 overflow-auto ">
-         <AutoTabProvider>
-
-<textarea  onKeyDown={(e)=>keyHandler(e)} required placeholder='Enter Answer' name={value.question_id} onChange={(e)=>handleInputChange(e,index)} className= "p-5 bg-gray-200 w-full h-full rounded-md" ></textarea>
-</AutoTabProvider>
-</div>
-     </div>)
-   }))
- })
-     
-     
-     
-     }
+ <form className="h-full  grid grid-rows-6  " onSubmit={handleSubmit} >
+ <div className="  row-span-5 ">
+<TestPagnate fetchTest={fetchTest} selectedTest={selectedTest} studentSub={studentSub} itemsPerPage={1}  keyHandler={keyHandler} handleInputChange={handleInputChange} />
 
 
 
 
-</div>
+
  
        
        </div>
-       <div className="grid p-4 bg-white h-full w-full place-items-center ">
+       <div className="row-span-1 grid place-items-center w-full ">
 
-<button  className="btn btn-success" onClick={togglePopup} type="submit">Submit</button>
+<button  className="btn btn-success w-52 "  onClick={togglePopup} type="submit">Submit</button>
 
 
    </div>
        </form>
-       <button  className='btn  w-full btn-info'><Link onClick={togglePopup} to="/student" >Back to Dashboard</Link></button>
 </div>
 
 

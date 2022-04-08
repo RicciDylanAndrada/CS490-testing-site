@@ -15,7 +15,7 @@ function Questions() {
   const [functionName, setFunctionName] = React.useState('');
 
   const [matrix, setMatrix] = useState(
-    Array.from({ length: 1 }, () => Array.from({ length: 2 }, () => null))
+    Array.from({ length: 2 }, () => Array.from({ length: 2 }, () => null))
   );
     const[added,setAdded]=useState("")
 
@@ -34,7 +34,6 @@ function Questions() {
     };
     function handleChange(e) { 
         setQuestion(e.target.value) 
-       // console.log(e.target.value)
     }
     const handleRemoveClick = index => {
     const list = [...matrix];
@@ -53,14 +52,7 @@ function Questions() {
     setMatrix(copy);
 
   };
-    const [inputList, setInputList] = useState([{ firstName: "", lastName: "" }]);
-
-    const handleInputChange = (e, index) => {
-      const { name, value } = e.target;
-      const list = [...inputList];
-      list[index][name] = value;
-      setInputList(list);
-    };
+  
    
     useEffect(()=>{
 
@@ -84,14 +76,13 @@ function Questions() {
           })
       
 
-    },[added])
+    },[submit])
 
     function onSubmit(event) {
       event.preventDefault()
-console.log(newQuestion)
 let newa = newArray(question,category,difficulty,matrix,functionName)
-console.log(newa)
 change(newa)
+
   
       }
 
@@ -106,10 +97,6 @@ change(newa)
             function_name:functionName,
         }
         setNewQuestion(x)
-
-        
-          
-
           return x
         }
       const change = (x)=>{
@@ -122,6 +109,8 @@ change(newa)
            }
         })
         .then((response) => {
+          setSubmit(" ")
+
         }).catch((error) => {
           if (error.response) {
             console.log(error.response)
@@ -129,7 +118,6 @@ change(newa)
             console.log(error.response.headers)
             }
         })
-        setAdded(" ")
        setNewQuestion({
 
         question:"",
@@ -141,13 +129,9 @@ change(newa)
         category:""
  
        })
-       setSubmit(false)
       }
-      // console.log(fetchQuestion.question.map((x)=>{
-      //   return(x.question)
-      // }))
+     
       
-         console.log(fetchQuestion)  
     return (
 
 
@@ -158,7 +142,7 @@ change(newa)
             <button onClick={() => navigate("test")}>Go forward</button>
           <button onClick={() => navigate(-1)}>Go back</button> */}
           
-        <div class=" row-span-1 grid place-items-center bg-gradient-to-r from-red-700 to-blue-300   w-full h-full">
+        <div class=" row-span-1 grid place-items-center bg-base-200   w-full h-full">
             
         </div>
         <div class="w-11/12  h-full relative  md:bottom-12 lg:bottom-20 row-span-5 bg-white shadow-xl grid grid-rows-6 1 text-center ">
@@ -230,9 +214,11 @@ change(newa)
           label="Category"
           onChange={handleCategoryChange}
         >
-          <MenuItem value={'Chapter 4'}>Chapter 1</MenuItem>
-          <MenuItem value={'Chapter 3' }>Chapter2</MenuItem>
-          <MenuItem value={'Chapter 5'}>Chapter 3 </MenuItem>
+           <MenuItem value={"Function"}>Function</MenuItem>
+          <MenuItem value={"While"}>While</MenuItem>
+          <MenuItem value={"For"}>For</MenuItem>
+          <MenuItem value={"Recursion"}>Recursion</MenuItem>
+          <MenuItem value={"Fail"}>Fail</MenuItem>
         </Select>
       </FormControl>
     </Box>
@@ -261,11 +247,11 @@ change(newa)
                   />
                 </td>
               ))}
-              {matrix.length !== 1 && <button
+              {matrix.length !== 2 && <button
                 className="mr10 grid place-items-center justify-center " 
                 onClick={() => handleRemoveClick(rowIndex)}>Remove</button>}
                 
-              {matrix.length - 1 === rowIndex && <div className='h-full grid place-content-center' ><button className='h-full' onClick={handleAddClick}>Add</button></div>}
+              {matrix.length - 1 === rowIndex && matrix.length <=4 && <div className='h-full grid place-content-center' ><button className='h-full' onClick={handleAddClick}>Add</button></div>}
             </tr>
           ))}
         </tbody>

@@ -181,7 +181,6 @@ console.log(temp)
         category:element.question.category,
         difficulty:element.question.difficulty,
         function_name:element.question.function_name,
-
         grade:{
           grade:x.find(e=>e.id==element.question_id)?.grade
 
@@ -210,37 +209,6 @@ console.log(temp)
     }
     
  
-// console.log(fetchSubmission?.submissions?.filter((x)=>{
-//   return(
-//     x.submission.some((v)=>{
-//       return(
-//         v.tes_t.user_id == studentID
-  
-//       )
-//     })
-//   )
-// }
-// )
-// )
-
-
-
-
-
-// console.log(fetchSubmission?.submissions?.filter((x)=>{
-//   return(
-//     x?.submission?.some((v)=>{
-//       return(  (v.tes_t.user_id == studentID && v.test_id == selectedTest &&
-      
-//           v.tes_t.questions.some((e)=>{
-//             return(
-//               e => !e.question.grade
-
-//             )
-//           })
-//       ))
-//     }))}))
-
 
 
 

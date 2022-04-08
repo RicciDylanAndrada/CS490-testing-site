@@ -333,4 +333,3 @@ def show_submission_student():
         cur.connection.close()
         response ={"submissions":result_list }
         return response
-

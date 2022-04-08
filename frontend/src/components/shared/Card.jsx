@@ -10,7 +10,7 @@ function Card({test_name,getButtonId,test_id}) {
            <div class="">
            <h1 className="   "  >Test: <p>{test_name}</p></h1>
             <button  onClick={getButtonId} id={test_id} 
-            className='  btn btn-sm bg-blue-500 border-0   w-20  h-4  justify-self-center '  ><Link to="/student" >Enter</Link>
+            className='  btn btn-sm bg-info-content border-0   w-20  h-4  justify-self-center '  ><Link to="/student" >Enter</Link>
 </button>
 
            </div>

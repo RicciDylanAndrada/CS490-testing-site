@@ -29,12 +29,12 @@ export default function Navbar() {
       }   
     return (
         
-        <div className=" h-screen  w-full  p-4    text-black	 bg-white   place-content-start place-items-center	">
+        <div className=" h-screen  w-full  p-4    text-white bg-base-200   place-content-start place-items-center	">
     
            
         <div class=" grid place-items-center  gap-6  w-full ">
 <div className=" ">
-            <h1 >Test Taker</h1>
+            <h1 className='font-extrabold text-md '  >Test Taker</h1>
 
 </div>
         <div class="w-full grid  gap-12 place-content-center  place-items-center border-b-2">
@@ -114,7 +114,7 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         
         
              <NavLink
-            className={(navData) => (navData.isActive ?   inTest? 'btn btn-disabled	': 'border-b-2 border-gray-200 '
+            className={(navData) => (navData.isActive ?   'border-b-2 border-gray-200 '
                 
              :
              
@@ -138,7 +138,7 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
         
         
         <NavLink
-        className={(navData) => (navData.isActive ?  inTest? 'btn btn-disabled':	'border-b-2 border-gray-200  ' : '')}
+        className={(navData) => (navData.isActive ?  	'border-b-2 border-gray-200  ' : '')}
 
          
          to="/results">Submissions</NavLink> </button> 
@@ -161,7 +161,8 @@ className={(navData) => (navData.isActive ? ' border-b-2 border-gray-200  ' : ''
 
 
 
-        <NavLink to="/"  onClick ={handleLogout} className="btn  text-md btn-error     btn-sm rounded-btn">
+        <NavLink to="/"  onClick ={handleLogout} className="btn  text-md bg-base-content text-black
+     btn-sm rounded-btn">
             Logout
         </NavLink>
           

@@ -17,31 +17,34 @@ export const TestProvider=({children})=>{
     const [testWindow,setTestWindow]=useState(false)
     const[toggle,setToggle]=useState()
 
-const sec = token.section
+const sec = token?.section
+console.log(sec)
     useEffect(()=>{
 
-
-        axios({
-          method: "POST",
-          url:"/show_test",
-          data:{
-            section: sec,
-           }
-        })
-        .then((response) => {
-          console.log("this is the test")
-          console.log(response.data)
-          setFetchTest(response.data)
-          
-    
-    
-        }).catch((error) => {
-          if (error.response) {
-            console.log(error.response)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-            }
-        })
+        if(token.status==0){
+          axios({
+            method: "POST",
+            url:"/show_test",
+            data:{
+              section: sec,
+             }
+          })
+          .then((response) => {
+            console.log("this is the test")
+            console.log(response.data)
+            setFetchTest(response.data)
+            
+      
+      
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+              }
+          })
+        }
+        
     
   
   },[token])
