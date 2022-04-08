@@ -237,12 +237,18 @@ const customListRight = (items) => (
     
       {
         items.filter((x)=>{
-          let difficulty =
-  filterdDifficulty? x?.question.difficulty == filterdDifficulty
+
+
+        if (filterdCategory && !filterdDifficulty){
+          return true;
+        }
+        else if( !filterdCategory && filterdDifficulty){
+          return true;
+        }
+        let difficulty =
+  filterdCategory && filterdDifficulty ? x?.question.difficulty == filterdDifficulty && x?.question.category == filterdCategory
     : true;
-    let category =
-  filterdCategory? x?.question.category == filterdCategory
-    : true;
+   
   let filterWord =
   filterdKeyword? x?.question.question.includes(filterdKeyword)
     : true;
@@ -250,7 +256,7 @@ const customListRight = (items) => (
 
 
 
-return difficulty && category && filterWord
+return difficulty  && filterWord
         }).map((value) => {
         const labelId = `transfer-list-item-${value.question_id}-label`;
 
@@ -481,7 +487,7 @@ if(fetchTest.test){
 
 
 console.log(filterdCategory,filterdDifficulty)
-console.log(filterdCategory)
+console.log(filterdCategory==" " || filterdCategory==null || filterdCategory==undefined?"true":"false")
 console.log(right?.filter((x)=>{
   let difficulty =
   filterdDifficulty? x?.question.difficulty == filterdDifficulty
@@ -605,7 +611,7 @@ console.log(left)
         </Select>
       </FormControl>
     </Box>
-    <TextField  value={filterdKeyword} onChange={e=> setFilteredKeyword(e.target.value)} id="outlined-basic" label="Outlined" variant="outlined" />
+    <TextField  value={filterdKeyword} onChange={e=> setFilteredKeyword(e.target.value)} id="outlined-basic" label="Key Work" variant="outlined" />
 
 
     </div>

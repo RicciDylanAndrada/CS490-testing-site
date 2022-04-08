@@ -74,11 +74,46 @@ console.log(selectedTest)
     
     
     
+    const handleRestraintChange = (evt, id) => {
+      console.log(studentTest)
+
+      console.log(temp)
+      var result = [...studentTest];
+   
+        
+
+
+        result =  result?.[0].submission?.map((x,index)=>{
+          return(
+            x.tes_t?.questions.map((y,idex)=>{
+
+                 if(idex === id){
+                   y.question.grade[evt.target.name] = evt.target.value
+                   return y
+                 }
+                 else{
+                   return y
+                 }
+                     
+                  
+              
+             
+            })
+
+      )
+            
+           
+          })
+
+      setTemp(result);
+      
+      console.log(result)
+
+    };
     const handleInputChange = (evt, id) => {
       console.log(studentTest)
 
       console.log(temp)
-     
       var result = [...studentTest];
    
         
@@ -169,44 +204,44 @@ console.log(temp)
 
 
     
-    const newArray=(x,questionArray)=>{
-      let arrayC = [];
-      console.log(x)
-      let flatArray = (questionArray.flat())
+    // const newArray=(x,questionArray)=>{
+    //   let arrayC = [];
+    //   console.log(x)
+    //   let flatArray = (questionArray.flat())
     
-      flatArray.forEach(function(element){
-      arrayC.push({
-      question:element.question,
-      question:{
-        category:element.question.category,
-        difficulty:element.question.difficulty,
-        function_name:element.question.function_name,
-        grade:{
-          grade:x.find(e=>e.id==element.question_id)?.grade
+    //   flatArray.forEach(function(element){
+    //   arrayC.push({
+    //   question:element.question,
+    //   question:{
+    //     category:element.question.category,
+    //     difficulty:element.question.difficulty,
+    //     function_name:element.question.function_name,
+    //     grade:{
+    //       grade:x.find(e=>e.id==element.question_id)?.grade
 
-        }
-      },
+    //     }
+    //   },
 
-      question_id:element.question_id,
-      points:element.points,
+    //   question_id:element.question_id,
+    //   points:element.points,
     
-      answer:x.find(e=>e.id==element.question_id)?.answer
-      });  
-    });
-    
-    
+    //   answer:x.find(e=>e.id==element.question_id)?.answer
+    //   });  
+    // });
     
     
-    studenttest1.map((x)=>{
-      return(
-        x.tes_t.questions=arrayC
     
     
-      )
-    })
-    //console.log(studenttest1)
-    return (studenttest1)
-    }
+    // studenttest1.map((x)=>{
+    //   return(
+    //     x.tes_t.questions=arrayC
+    
+    
+    //   )
+    // })
+    // //console.log(studenttest1)
+    // return (studenttest1)
+    // }
     
  
 
