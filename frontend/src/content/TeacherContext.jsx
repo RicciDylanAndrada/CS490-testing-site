@@ -22,6 +22,7 @@ export const TeacherProvider=({children})=>{
     const [studentID,setStudentID]=useState("");
     const[toGrade,setToGrade]=useState();
     const[autoGraded,setAutograded]=useState([])
+    const[temp,setTemp]=useState(studentTest)
 
 
 
@@ -89,18 +90,18 @@ useEffect(()=>{
         const data = await res
         console.log(data.data)
 
-        const nextRes =  axios({
-          method: "POST",
-          url:"/autograde",
-          data:{
-            submission:data.data.submissions[0]?.submission
+        // const nextRes =  axios({
+        //   method: "POST",
+        //   url:"/autograde",
+        //   data:{
+        //     submission:data.data.submissions[0]?.submission
       
-           }
-        })
-        const nextData = await nextRes;
+        //    }
+        // })
+        // const nextData = await nextRes;
 
 
-        setAutograded(nextData.data)
+        // setAutograded(nextData.data)
 
 
       }
@@ -136,7 +137,10 @@ useEffect(()=>{
        setFilterSubmissionTest,
        setFilter,
        studentID,
-       autoGraded
+       autoGraded,
+       setAutograded,
+       temp,
+       setTemp
     
 
 

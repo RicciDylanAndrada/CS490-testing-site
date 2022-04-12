@@ -6,25 +6,14 @@ import LoginContext from '../../../content/LoginContext'
 import { useNavigate } from 'react-router-dom';
 import TeacherCard from '../../shared/TeacherCard'
 
-import { Link } from 'react-router-dom'
-import Grid from '@mui/material/Grid';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
 import TeacherContext from '../../../content/TeacherContext'
 function Submissions() {
-const[pointTest,setPointTest]=useState(false);
-
+const navigate= useNavigate()
 const[submit,setSubmit]=useState(false)
-const {setFilterSubmissionTest,
-  fetchSubmission,setSelectedTest,fetchTest,setFetchTest,setsection,section,setFilter,filterSubmissionTest,setStudentID,selectedTest}=useContext(TeacherContext)
+const {
+  setAutograded,
+  fetchSubmission,autoGraded,studentID,setTemp,setSelectedTest,fetchTest,setsection,section,setFilter,filterSubmissionTest,setStudentID,selectedTest}=useContext(TeacherContext)
 const handleSectionChange = (event) => {
     setsection(event.target.value);
   };
@@ -37,18 +26,19 @@ const {token} = useContext(LoginContext)
 
 
 let getButtonId = (e) => {
-console.log(e.currentTarget.id);
+//console.log("getButtonId, selectedTest->",e.currentTarget.id);
 setSelectedTest(e.currentTarget.id)
-testWindowClick(true)
+testWindowClick(!testWindow)
 
 filterTest(e.currentTarget.id)
 
 }
 let getButtonId1 = (e) => {
-  console.log(e.currentTarget.id)
+  //console.log("getButtonID1, studentID-> ",e.currentTarget.id)
   setStudentID(e.currentTarget.id)
-  testWindowClick(true)
-  
+  testWindowClick(!testWindow)
+  callAutoGrade(e.currentTarget.id)
+
   
   
   }
@@ -63,7 +53,7 @@ let filterTest=(id)=>{
     )
   })
   setFilter(filtersubmissionTest)
-    console.log(filterSubmissionTest)
+    //console.log(filterSubmissionTest)
 
 }
 const testWindowClick = ()=>{
@@ -71,7 +61,7 @@ setTestWindow(!testWindow)
 }
 useEffect(()=>{
 if(submit){
-  console.log(test)
+  // console.log(test)
 
   change()
 }
@@ -82,7 +72,52 @@ else{
 }
 },[submit])
 
+const callAutoGrade=(x)=>{
+  // console.log("callAutoGrade, studentID->",x)
 
+  // console.log("callAutoGrade, test_Id->",selectedTest)
+  // console.log("callAutoGrade, fetchSubmision->",fetchSubmission)
+  const testid=selectedTest
+  const studentid=x
+  const studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
+    return(
+      x?.submission?.some((y)=>{
+        return(y.test_id==testid && y.tes_t.user_id ==studentid)
+      })
+    )
+  }))
+  
+  console.log(studenttest1)
+
+
+axios({
+    method: "POST",
+    url:"/autograde",
+    data:{
+      submission:studenttest1
+
+     }
+  })
+  .then((response) => {
+    console.log("autograde response",response.data)
+    setAutograded(response.data)
+    setTemp(response.data)
+    navigate("/grade")
+
+
+  }).catch((error) => {
+    if (error.response) {
+      console.log(error.response)
+      console.log(error.response.status)
+      console.log(error.response.headers)
+      }
+  })
+  setTemp(autoGraded)
+  setSelectedTest("")
+  setStudentID("")
+  
+ 
+}
 
 
 
@@ -113,23 +148,21 @@ setStudentSub({
 
 
 
-const handleSubmitFinal=(e)=>{
-console.log(test)
+// const handleSubmitFinal=(e)=>{
+// console.log(test)
 
-e.preventDefault()
-const result = Object.entries(studentSub.answers).map(([id, answer]) => ({id:id,answer}));
-console.log(result)
-let finalArray = newArray(result,fetchSubmission)
-console.log(finalArray)
+// e.preventDefault()
+// const result = Object.entries(studentSub.answers).map(([id, answer]) => ({id:id,answer}));
+// console.log(result)
+// let finalArray = newArray(result,fetchSubmission)
+// console.log(finalArray)
 
-setTest(prev=>({
-  ...prev,   questions:finalArray
+// setTest(prev=>({
+//   ...prev,   questions:finalArray
   
-    }))
-let finalTest=test
+//     }))
 
-console.log(test)
-}
+// }
 
 
 
@@ -154,34 +187,31 @@ axios({
 })
 }
 
-const newArray=(x,questionArray)=>{
-let arrayC = [];
-console.log(x)
-let flatArray = (questionArray.flat())
+// const newArray=(x,questionArray)=>{
+// let arrayC = [];
+// console.log(x)
+// let flatArray = (questionArray.flat())
 
-flatArray.forEach(function(element){
-arrayC.push({
-question:element.question,
-question_id:element.question_id,
-points:x.find(e=>e.id==element.question_id)?.answer
-});
+// flatArray.forEach(function(element){
+// arrayC.push({
+// question:element.question,
+// question_id:element.question_id,
+// points:x.find(e=>e.id==element.question_id)?.answer
+// });
 
-});
+// });
 
-setTest(prev=>({
-...prev,   questions:arrayC
+// setTest(prev=>({
+// ...prev,   questions:arrayC
 
-  }))
-setSubmit(" ")
-
-
-return (arrayC)
+//   }))
+// setSubmit(" ")
 
 
-}
+// return (arrayC)
 
 
-console.log(section)
+// }
 
 
 
@@ -189,20 +219,21 @@ console.log(section)
 
 
 
-console.log(selectedTest)
+
+
 
 return (
-    <div className='h-screen text-black bg-gradient-to-r from-red-700 to-blue-300 p-4 '>
+    <div className='h-screen text-black bg-white to-blue-300 p-4 '>
     
  
 
 
-<div class="row-span-1 grid w-full grid-cols-3 h-fit  bg-gradient-to-r from-red-700 to-blue-300 place-items-center">
+<div class="row-span-1 grid w-full grid-cols-3 h-fit  bg-white  place-items-center">
 
 { token?.section.sections.map((x,i)=>{
             return(
 
-                <div  key={i} >
+                <div key={i}  >
                 
        <button className='btn btn-square w-32  ' onClick={handleSectionChange} value={x}>Section{x}</button>
 
@@ -216,7 +247,7 @@ return (
 {fetchTest?.test&& 
 
 
-<div className='grid grid-cols-1 grid-rows-2 gap-40 bg-gradient-to-r from-red-700 to-blue-300 ' >
+<div className='grid grid-cols-1 grid-rows-2 gap-40 bg-white to-blue-300 ' >
 <div class="w-full row-span-1  h-full grid grid-cols-3 place-items-center">
 
 {
@@ -224,7 +255,7 @@ return (
 fetchTest?.test.map((value,i)=>{
        
        return(
-         <TeacherCard key={i} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
+         <TeacherCard key={value.test_id} test_name ={value.tes_t.test_name}  test_id = {value.test_id} getButtonId={getButtonId} />
 
       
 
@@ -254,12 +285,12 @@ fetchTest?.test.map((value,i)=>{
           return(   v.test_id == selectedTest)
         }))}).map((x)=>{
     return(
-      x?.submission?.map((y)=>{
+      x?.submission?.map((y,i)=>{
         return(
 
               
 
-          y.test_id == selectedTest &&    <SubmissionCard test_name={y.tes_t.usesrname} student_id = {y.tes_t.user_id} getButtonId1={getButtonId1}/>
+          y.test_id == selectedTest &&    <SubmissionCard  key={i} test_name={y.tes_t.usesrname} student_id = {y.tes_t.user_id} getButtonId1={getButtonId1}/>
         )
       })
     )

@@ -252,11 +252,14 @@ const customListRight = (items) => (
   let filterWord =
   filterdKeyword? x?.question.question.includes(filterdKeyword)
     : true;
+    let both =
+  filterdKeyword&& filterdCategory && filterdDifficulty? x?.question.question.includes(filterdKeyword) && x?.question.difficulty == filterdDifficulty && x?.question.category == filterdCategory
+    : true;
 
 
 
 
-return difficulty  && filterWord
+return difficulty  && filterWord && both
         }).map((value) => {
         const labelId = `transfer-list-item-${value.question_id}-label`;
 
@@ -514,13 +517,13 @@ console.log(left)
 
 
     
-    <div className='h-fit  text-black p-4  place-items-center bg-white  grid   '>
+    <div className='h-fit  text-black p-4  place-items-center bg-stone-50	  grid   '>
        
     {!testWindow?( 
       <>
 
          {!pointTest? (
-          <div className="     bg-white drop-shadow-2xl  w-full flex  flex-col  h-screen   text-center ">
+          <div className="     bg-stone-50	 drop-shadow-2xl  w-full flex  flex-col  h-screen   text-center ">
 
          
         <div className="border-b-2 w-full grid  border-b-gray row-span-1 h-24   y p-2 ">
@@ -597,15 +600,15 @@ console.log(left)
           name="Category"
           onChange={e => setFilteredCategory(e.target.value)}
         >
-          {/* <MenuItem value={"Function"}>Function</MenuItem>
+          <MenuItem value={"Function"}>Function</MenuItem>
           <MenuItem value={"While"}>While</MenuItem>
           <MenuItem value={"For"}>For</MenuItem>
           <MenuItem value={"Recursion"}>Recursion</MenuItem>
-          <MenuItem value={"Fail"}>Fail</MenuItem> */}
+          <MenuItem value={"Fail"}>Fail</MenuItem>
           <MenuItem value={""}>None</MenuItem>
 
-          <MenuItem value={"Chapter 4"}>Chapter 4</MenuItem>
-          <MenuItem value={"Chapter 3"}>Chapter 3</MenuItem>
+          {/* <MenuItem value={"Chapter 4"}>Chapter 4</MenuItem>
+          <MenuItem value={"Chapter 3"}>Chapter 3</MenuItem> */}
          
 
         </Select>
@@ -815,29 +818,33 @@ console.log(left)
   .map((val)=>{
     return (val.tes_t.questions.map((value)=>{
       return(
-        <div key={value.question_id} className='border-2 grid grid-cols-4 rounded-xl h-24 ' > 
+        <div className='border-2 rounded-xl h-24   grid place-items-center grid-rows-2' >
+                            <div className="grid grid-cols-4 w-full gap-2 place-items-center">
+                            <div >                      
+                            <p>Difficulty</p>
+<h1 className="font-light     " >
+{value.question.difficulty}
+</h1></div>
+<div >
+<p>Category</p>
 
-        <div>
-
-<h1 className="text-sm" >  Category:</h1>
-<h1>{value.question.category}</h1>
+<h1 className="font-light     ">{value.question.category}</h1>
 
 </div>
-        <h1>{value.question.question}</h1>
-          <div>
 
-          <h1 className="text-sm" >  Difficulty:</h1>
-          <h1> {value.question.difficulty}</h1>
-          
-          </div>
 
-          <div className="">
-    <h1 className="text-sm" >  Points :</h1>
-
-    <h1>{value.points}</h1>
-    </div>
-
-      </div>)
+<h1>                            <div class="">
+<p>Restraint</p>
+<h1 className="font-light     " > {value.question.restraint}</h1>
+</div>
+</h1>
+<div class="">
+<p>Points</p>
+<h1 className="font-light     " > {value.points}</h1>
+</div>
+                            </div> 
+                            <h1  >   {value.question?.question} </h1>
+                      </div>)
     }))
   })
       

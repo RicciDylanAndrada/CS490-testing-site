@@ -12,12 +12,13 @@ import { useEffect,useState } from 'react';
 function Questions() {
   const [difficulty, setDifficulty] = React.useState('');
   const [category, setCategory] = React.useState('');
+  const [restraint, setRestraint] = React.useState('');
+
   const [functionName, setFunctionName] = React.useState('');
 
   const [matrix, setMatrix] = useState(
     Array.from({ length: 2 }, () => Array.from({ length: 2 }, () => null))
   );
-    const[added,setAdded]=useState("")
 
     const[fetchQuestion,setFetchQuestion]=useState("")
     const[submit,setSubmit]=useState(false)
@@ -80,13 +81,13 @@ function Questions() {
 
     function onSubmit(event) {
       event.preventDefault()
-let newa = newArray(question,category,difficulty,matrix,functionName)
+let newa = newArray(question,category,difficulty,matrix,functionName,restraint)
 change(newa)
 
   
       }
 
-      const  newArray =(question,category,difficulty,matrix,functionName)=>{
+      const  newArray =(question,category,difficulty,matrix,functionName,restraint)=>{
 
 
         let x ={
@@ -95,6 +96,7 @@ change(newa)
             difficulty:difficulty,
             test_cases:matrix,
             function_name:functionName,
+            restraint:restraint
         }
         setNewQuestion(x)
           return x
@@ -109,7 +111,7 @@ change(newa)
            }
         })
         .then((response) => {
-          setSubmit(" ")
+          setSubmit(!submit)
 
         }).catch((error) => {
           if (error.response) {
@@ -126,7 +128,8 @@ change(newa)
            matrix:[],
 
   
-        category:""
+        category:"",
+        restraint:""
  
        })
       }
@@ -136,19 +139,19 @@ change(newa)
 
 
     
-        <div className='h-screen text-black bg-gray-100  place-items-center   grid grid-rows-6   '>
+        <div className='h-screen text-black bg-stone-50	 place-items-center   grid grid-rows-6   '>
             {/* {test?<h1>hello</h1>:<h1>no</h1>} */}
             {/* <Link to="test">Favorite hobby link</Link>
             <button onClick={() => navigate("test")}>Go forward</button>
           <button onClick={() => navigate(-1)}>Go back</button> */}
           
-        <div class=" row-span-1 grid place-items-center bg-base-200   w-full h-full">
+        <div className=" row-span-1 grid place-items-center bg-base-200   w-full h-full">
             
         </div>
-        <div class="w-11/12  h-full relative  md:bottom-12 lg:bottom-20 row-span-5 bg-white shadow-xl grid grid-rows-6 1 text-center ">
+        <div className="w-11/12  h-full relative  md:bottom-12 lg:bottom-20 row-span-5 bg-stone-50	 shadow-xl grid grid-rows-6 1 text-center ">
     
-            <div class="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
-              <h1 class="justify-self-center place-self-center  text-lg " > Question Box</h1>
+            <div className="border-b-2 w-full grid  border-b-gray row-span-1  y p-2 ">
+              <h1 className="justify-self-center place-self-center  text-lg " > Question Box</h1>
     
               {/* Vertical tab for test questions and inside a form  */}
               {/* able to delete queston tabs or add tes question tabs */}
@@ -161,10 +164,10 @@ change(newa)
             
             <div className=" w-full  row-span-5  grid grid-cols-2   ">
            
-                        <div class=" border-r-2 ">
+                        <div className=" border-r-2 ">
                         <form  className="h-full w-full " onSubmit={onSubmit}>
                                 {/* get test data and loop creating div of things below */}
-                                        <div class="grid  md:w-72  p-4  h-full ">
+                                        <div className="grid  md:w-72  p-4  h-full ">
                                     
 
                                         <TextField
@@ -221,6 +224,23 @@ change(newa)
           <MenuItem value={"Fail"}>Fail</MenuItem>
         </Select>
       </FormControl>
+
+
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Restraint</InputLabel>
+        <Select
+        required
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={restraint}
+          label="Restraint"
+          onChange={e=>setRestraint(e.target.value)}
+        >
+           <MenuItem value={"Recursive"}>Recursive</MenuItem>
+          <MenuItem value={"While"}>While</MenuItem>
+          <MenuItem value={"For"}>For</MenuItem>
+        </Select>
+      </FormControl>
     </Box>
     <table  >
     
@@ -257,7 +277,7 @@ change(newa)
         </tbody>
       </table>   
 
-                                        <button type="submit" class="place-self-center w btn btn-active   " >Add Question </button>
+                                        <button type="submit" className="place-self-center w btn btn-active   " >Add Question </button>
 
                                     
                                 
@@ -266,12 +286,34 @@ change(newa)
                                         </form>
                         </div>
 
-                        <div class="p-4 flex  flex-col  overflow-auto space-y-4  ">
+                        <div className="p-4 flex  flex-col  overflow-auto space-y-4  ">
 
                 {fetchQuestion?.question && fetchQuestion?.question.map((value)=>{
                     return (
-                            <div className='border-2 rounded-xl h-12' > 
-                            <h1>  {value.question?.question} </h1>
+                            <div className='border-2 rounded-xl h-24   grid place-items-center grid-rows-2' >
+                            <div className="grid grid-cols-3 w-full gap-2 place-items-center">
+                            <div >                      
+                            <p>Difficulty</p>
+<h1 className="font-light     " >
+{value.question.difficulty}
+</h1></div>
+<div >
+<p>Category</p>
+
+<h1 className="font-light     ">{value.question.category}</h1>
+
+</div>
+
+
+<h1>                            <div class="">
+<p>Restraint</p>
+<h1 className="font-light     " > {value.question.restraint}</h1>
+</div>
+</h1>
+
+
+                            </div> 
+                            <h1  >   {value.question?.question} </h1>
                       </div>
                     )
 

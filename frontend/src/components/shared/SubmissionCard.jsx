@@ -13,7 +13,9 @@ function SubmissionCard({test_name,getButtonId1,student_id}) {
                <p>{student_id}</p>
 
                 <button  onClick={getButtonId1} id={student_id} 
-                className='  btn btn-sm bg-info-content0 border-0   w-20  h-4  justify-self-center '  ><Link to="/grade" >AutoGrade</Link></button>
+                // className='  btn btn-sm bg-info-content0 border-0   w-20  h-4  justify-self-center '  ><Link to="/grade" >AutoGrade</Link></button>
+                className='  btn btn-sm bg-info-content0 border-0   w-20  h-4  justify-self-center '  >AutoGrade</button>
+
     
                </div>
     

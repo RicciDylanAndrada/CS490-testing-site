@@ -6,12 +6,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TestQuestionBox from "../Teacher/TestQuestionBox"
-function StudentSubTable({w,sum}) {
-  console.log(w)
-  return (
+import TestQuestionBox from './TestQuestionBox';
+function SubQuestions({w,sum,handleInputChange,handleRestraintChange,itemOffset}) {
+  return   (
    
-    <div className="w-full h-fit grid grid-cols-2 gap-2  shadow-xl">
+    <div className="w-full h-full grid grid-cols-2 gap-2 ">
     <TestQuestionBox val={w} />
 
 
@@ -69,7 +68,7 @@ function StudentSubTable({w,sum}) {
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"></TableCell>
 
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{typeof value.question.grade.show_name_correct== 'boolean' ?value.question.grade.show_name_correct.toString() : value.question.grade.show_name_correct}</TableCell>
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {value.question.grade.name_correct}
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> <input onBlur={(e) => e.target.value = ''}    onFocus={(e) => e.target.value = value.question.grade.name_correct } onChange={e=>{handleRestraintChange(e,itemOffset) }}  type='number'       value={value.question.grade.name_correct} name='name_correct'   className= "border-2 border-gray-200" ></input>
 </TableCell>
 
 
@@ -80,7 +79,7 @@ function StudentSubTable({w,sum}) {
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"></TableCell>
 
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{typeof value.question.grade.show_restraint== 'boolean' ?value.question.grade.show_restraint.toString() : value.question.grade.show_restraint}</TableCell>
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {value.question.grade.restraint}
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> <input onBlur={(e) => e.target.value = ''}   onFocus={(e) => e.target.value = value.question.grade.restraint }   onChange={e=>{handleRestraintChange(e,itemOffset) }}  type='number'    value={ value.question.grade.restraint}  name='restraint'   className= "border-2 border-gray-200" ></input>
 </TableCell>
 
 
@@ -109,7 +108,8 @@ return(
             <TableCell sx={{ fontWeight: 'light' }} colSpan={20}  align="center">{typeof val.correct_output == 'boolean'? val.correct_output.toString():val.correct_output}</TableCell>
                   <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{val.output}</TableCell>
                   <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{val.show_points}</TableCell>
-                  <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {val.points}</TableCell>
+                  <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> <input onBlur={(e) => e.target.value = ''}    onFocus={(e) => e.target.value = val.points }  onChange={e=>{handleInputChange(e,itemOffset, idex) }}  type='number'   placeholder='points'  value={val.points} name='points'   className= "border-2 border-gray-200" ></input>
+</TableCell>
 
 
      </TableRow>
@@ -126,19 +126,14 @@ return(
 </TableCell>
           </TableRow>
           <TableRow>
-          <TableCell sx={{ fontWeight: 'bold' }} colSpan={100} align="center">
+         <TableCell sx={{ fontWeight: 'light' }} colSpan={100} align="center">
 
-       Teacher Comment:
+         <textarea onBlur={(e) => e.target.value = ''}    onFocus={(e) => e.target.value = value?.question?.grade.comment?   value?.question?.grade.comment:""}   placeholder='Enter Comment' name='comment' onChange={(e)=>handleRestraintChange(e,itemOffset)} className= "p-5 bg-gray-200 w-full h-3/5 place-self-end rounded-md" ></textarea>
+
          </TableCell>
-        
 
           </TableRow>
-            <TableRow>
-            <TableCell sx={{ fontWeight: 'light' }} colSpan={100} align="center">
-
-{value.question.grade.comment}
- </TableCell>
-            </TableRow>
+            
         
         </TableBody>
           
@@ -154,4 +149,4 @@ return(
   )
 }
 
-export default StudentSubTable
+export default SubQuestions

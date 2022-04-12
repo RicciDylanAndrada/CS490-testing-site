@@ -94,10 +94,10 @@ const [test,setTest]=useState("")
 
 
     
-    <div className='h-fit text-black bg-gray-100  place-items-center   '>
+    <div className='h-screen text-black bg-stone-50	 place-items-center   '>
        
       
-    <div className='w-full h-full text-black bg-white place-items-center    '>
+    <div className='w-full h-full text-black bg-stone-50	place-items-center    '>
 
     <div class=" row-span-1   grid place-items-center  p-4  w-full h-full">
 
@@ -107,7 +107,7 @@ const [test,setTest]=useState("")
 
 
 
-<div class="grid lg:grid-cols-3 md:grid-cols-2 p-4 gap-5 row-span-7 h-full w-full place-items-center content-start ">
+<div class="grid lg:grid-cols-3 md:grid-cols-2 p-4 gap-5 row-span-7 bg-stone-50	 h-full w-full place-items-center content-start ">
 
 {fetchTest?.test&&
 

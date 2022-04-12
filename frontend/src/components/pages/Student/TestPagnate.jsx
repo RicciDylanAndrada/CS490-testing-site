@@ -57,25 +57,25 @@ items.map((x)=>{
         }
         <div class="w-full grid place-items-center">
         <ReactPaginate
-          nextLabel="Next Question >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="< Previous Question"
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination w-full!important"
-          activeClassName="active"
-          renderOnZeroPageCount={null}
-        />
+        nextLabel="Next Question >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={2}
+        pageCount={pageCount}
+        previousLabel="< Previous Question"
+        pageClassName="page-item  text-secondary "
+        pageLinkClassName="page-link   text-secondary"
+        previousClassName="page-item  text-secondary"
+        previousLinkClassName="page-link   text-secondary"
+        nextClassName="page-item text-secondary"
+        nextLinkClassName="page-link text-secondary"
+        breakLabel="..."
+        breakClassName="page-item"
+        breakLinkClassName="page-link"
+        containerClassName="pagination "
+        activeClassName="active"
+        renderOnZeroPageCount={null}
+      />
       </div>
         </div>
         

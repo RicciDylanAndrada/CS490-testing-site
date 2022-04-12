@@ -67,7 +67,7 @@ function StudentSubmission() {
 
   
     return (
-      <div className='h-screen text-black bg-gray-100  place-items-center   grid grid-rows-10 '>
+      <div className='h-screen text-black bg-stone-50		 place-items-center   grid grid-rows-10 '>
        {testWindow&& fetchSubmission?(
          
           <div class="w-full p-4 h-full">
@@ -98,7 +98,7 @@ function StudentSubmission() {
        {!testWindow &&
        (
 
-         <div>
+         <div className='grid w-11/12 grid-cols-3 p-3' >
          {!testWindow && fetchSubmission?.submissions?.map((x)=>{
     return(
       x?.submission?.map((y)=>{

@@ -40,41 +40,55 @@ def grade_question(subq):
     code = subq['answer']
     question = subq['question']
     test_cases = question['test_cases']
+    restraint = question['restraint']
+    question_graded = {'test_cases' : []}
     points = int(subq['points'])
-    question_graded = {'grade' : points, 'test_cases' : []}
+
 
     correct_name = re.search(f"def\s{question['function_name']}\(", code)
+    recursed = re.findall(f"def\s{question['function_name']}\(", code)
+    
+    question_graded['restraint'] = points * 0.2
+    question_graded['show_restraint'] = points * 0.2
 
-    question_graded['name_correct'] = True
+    question_graded['name_correct'] = points * 0.2
+    question_graded['show_name_correct'] = points * 0.2
+
+    
+    if(restraint != "none" and (restraint not in code)):
+        question_graded['restraint'] = 0.0
+
+        question_graded['show_restraint'] = 0.0
+
+
+    elif(restraint != "none" and restraint.lower() == 'recursive' and len(recursed) < 2):
+        question_graded['restraint'] =0.0
+        question_graded['show_restraint'] = 0.0
+
+
     if(correct_name == None):
-        question_graded['grade'] -= points * 0.2
-        question_graded['name_correct'] = False
+        question_graded['name_correct'] = 0.0
+        question_graded['show_name_correct'] = 0.0
 
-    print(f"grade after namecheck is {question_graded['grade']}")
 
     code = re.sub("def\s[a-zA-Z0-9]+", f"def {question['function_name']}", code)
 
     for tcase in test_cases:
-        return_space = {}
-
-        correct = False
-
         try:
+            return_space = {}
             exec(f"{code}\n\ntest_output = {question['function_name']}({tcase[0]})", {}, return_space)
+            grade = 0
+            correct = False
             if(return_space['test_output'] == eval(str(tcase[1]))):
                 correct = True
-            else:
-                question_graded['grade'] -= (points / len(test_cases))
+                grade = ((points * 0.6) / len(test_cases))
         
-        except:
-            return_space['test_output'] = "Execution failed."
-            question_graded['grade'] -= (points / len(test_cases))
-            
-        
-        question_graded['test_cases'].append({'case' : tcase, 'output' : return_space['test_output'], 'correct_output' : correct})
+            question_graded['test_cases'].append({'case' : tcase, 'output' : return_space['test_output'], 'correct_output' : correct, 'points' : grade,'show_points':grade})
 
-    if(question_graded['grade'] < 0):
-        question_graded['grade'] = 0
+        except:
+            question_graded['test_cases'].append({'case' : tcase, 'output' : 'INVALID PYTHON', 'correct_output' : correct, 'points' : 0})
+
+   
 
     return question_graded
 

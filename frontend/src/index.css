@@ -12,3 +12,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.active{
+  background-color: red !important ; 
+
+}
+.pagination>li.active>a {
+  background-color: gainsboro  !important;
+}
