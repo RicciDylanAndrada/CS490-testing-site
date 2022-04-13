@@ -8,12 +8,17 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+
+
+
 import { useEffect,useState } from 'react';
 function Questions() {
   const [difficulty, setDifficulty] = React.useState('');
   const [category, setCategory] = React.useState('');
   const [restraint, setRestraint] = React.useState('');
-
+  const[filterdCategory,setFilteredCategory]=useState("")
+  const[filterdKeyword,setFilteredKeyword]=useState("")
+  const[filterdDifficulty,setFilteredDifficulty]=useState("")
   const [functionName, setFunctionName] = React.useState('');
 
   const [matrix, setMatrix] = useState(
@@ -162,12 +167,12 @@ change(newa)
             
             
             
-            <div className=" w-full  row-span-5  grid grid-cols-2   ">
+            <div className=" w-full  row-span-5  grid grid-cols-2    ">
            
                         <div className=" border-r-2 ">
                         <form  className="h-full w-full " onSubmit={onSubmit}>
                                 {/* get test data and loop creating div of things below */}
-                                        <div className="grid  md:w-72  p-4  h-full ">
+                                        <div className="grid  w-full p-4 w-full  place-items-center  h-full ">
                                     
 
                                         <TextField
@@ -185,11 +190,13 @@ change(newa)
           id="outlined-password-input"
           label="Function Name"
           type="Function Name"
+          className="w-full"
+
           value={functionName}
           onChange={handleFunctionChange}
           autoComplete="current-password"
         />
-        <Box sx={{ minWidth: 80 }}>
+        <Box sx={{ minWidth: '100%' }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
         <Select
@@ -198,6 +205,8 @@ change(newa)
           id="demo-simple-select"
           value={difficulty}
           label="Difficulty"
+          className="w-full"
+
           onChange={handleDifficultyChange}
         >
           <MenuItem value={'Easy'}>Easy</MenuItem>
@@ -214,6 +223,8 @@ change(newa)
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={category}
+          className="w-full"
+
           label="Category"
           onChange={handleCategoryChange}
         >
@@ -234,6 +245,8 @@ change(newa)
           id="demo-simple-select"
           value={restraint}
           label="Restraint"
+          className="w-full"
+
           onChange={e=>setRestraint(e.target.value)}
         >
            <MenuItem value={"Recursive"}>Recursive</MenuItem>
@@ -285,15 +298,86 @@ change(newa)
                                     
                                         </form>
                         </div>
+        <div className="grid grid-rows-6  h-full border-b-2 place-items-center w-full border-r-2 ">
+        <h1 className='m-2 row-span-1' >Question Bank </h1>
 
-                        <div className="p-4 flex  flex-col  overflow-auto space-y-4  ">
+    <div class="grid grid-cols-3 w-full gap-2 pl-2 pr-2  row-span-1">
+      <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={filterdDifficulty}
+          label="Difficulty"
+          onChange={e=> setFilteredDifficulty(e.target.value)}
+          name="Difficulty"
+        >
+                  <MenuItem value={""}>None</MenuItem>
 
-                {fetchQuestion?.question && fetchQuestion?.question.map((value)=>{
-                    return (
-                            <div className='border-2 rounded-xl h-24   grid place-items-center grid-rows-2' >
-                            <div className="grid grid-cols-3 w-full gap-2 place-items-center">
-                            <div >                      
-                            <p>Difficulty</p>
+          <MenuItem value={"Easy"}>Easy</MenuItem>
+          <MenuItem value={"Medium"}>Medium</MenuItem>
+          <MenuItem value={"Hard"}>Hard</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Category</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={filterdCategory}
+          label="Category"
+          name="Category"
+          onChange={e => setFilteredCategory(e.target.value)}
+        >
+          <MenuItem value={"Function"}>Function</MenuItem>
+          <MenuItem value={"While"}>While</MenuItem>
+          <MenuItem value={"For"}>For</MenuItem>
+          <MenuItem value={"Recursion"}>Recursion</MenuItem>
+          <MenuItem value={"Fail"}>Fail</MenuItem>
+          <MenuItem value={""}>None</MenuItem>
+
+          {/* <MenuItem value={"Chapter 4"}>Chapter 4</MenuItem>
+          <MenuItem value={"Chapter 3"}>Chapter 3</MenuItem> */}
+         
+
+        </Select>
+      </FormControl>
+    </Box>
+    <TextField  value={filterdKeyword} onChange={e=> setFilteredKeyword(e.target.value)} id="outlined-basic" label="Keyword" variant="outlined" />
+
+
+    </div>
+
+    <div className="p-4 flex  row-span-4 flex-col  w-full h-full overflow-auto space-y-4  ">
+
+{fetchQuestion?.question && fetchQuestion?.question.filter((x)=>{
+  if (filterdCategory && !filterdDifficulty){
+          return true;
+        }
+        else if( !filterdCategory && filterdDifficulty){
+          return true;
+        }
+        let difficulty =
+  filterdCategory && filterdDifficulty ? x?.question.difficulty == filterdDifficulty && x?.question.category == filterdCategory
+    : true;
+   
+  let filterWord =
+  filterdKeyword? x?.question.question.includes(filterdKeyword)
+    : true;
+    let both =
+  filterdKeyword&& filterdCategory && filterdDifficulty? x?.question.question.includes(filterdKeyword) && x?.question.difficulty == filterdDifficulty && x?.question.category == filterdCategory
+    : true;
+return difficulty  && filterWord && both
+})
+.map((value)=>{
+    return (
+            <div className='border-2 rounded-md h-24 shadow-md   grid place-items-center grid-rows-2' >
+            <div className="grid grid-cols-3 w-full gap-2 place-items-center">
+            <div >                      
+            <p>Difficulty</p>
 <h1 className="font-light     " >
 {value.question.difficulty}
 </h1></div>
@@ -312,16 +396,20 @@ change(newa)
 </h1>
 
 
-                            </div> 
-                            <h1  >   {value.question?.question} </h1>
-                      </div>
-                    )
+            </div> 
+            <h1  >   {value.question?.question} </h1>
+      </div>
+    )
 
-                } )}
-                
+} )}
 
 
-                        </div>
+
+        </div>
+
+
+    </div>
+                        
     
             
             </div> 

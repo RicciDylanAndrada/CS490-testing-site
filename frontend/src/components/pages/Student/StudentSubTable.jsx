@@ -119,9 +119,9 @@ return(
          <TableCell sx={{ fontWeight: 'bold' }} colSpan={60} align="center">Total</TableCell>
 
 
-<TableCell sx={{ fontWeight: 'bold' }} colSpan={20} align="center">{show_sum}</TableCell>
+<TableCell sx={{ fontWeight: 'bold' }} colSpan={20} align="center">{show_sum}/{value.points}</TableCell>
 <TableCell sx={{ fontWeight: 'bold' }} colSpan={20} align="center"> 
-{sum}
+{sum}/{value.points}
 
 </TableCell>
           </TableRow>

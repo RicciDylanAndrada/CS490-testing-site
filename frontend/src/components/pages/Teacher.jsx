@@ -27,22 +27,7 @@ function Teacher() {
 
   
 
-  const handleFilterChange=(e)=>{
-    const name=e.target.name;
-    const value =e.target.value;
-
-    if (name =='category'){
-      setFilteredCategory(value)
-    }
-    else if(name == 'difficulty'){
-      setFilteredDifficulty(value)
-    }
-    else if(name =='keyword'){
-      setFilteredKeyword(value)
-    }
-
-
-  }
+  
 
 
   const handleSectionChange = (event) => {
@@ -289,16 +274,29 @@ return difficulty  && filterWord && both
             </ListItemIcon>
 
             
-      <div className=' grid grid-rows-3 rounded-xl h-24 ' > 
-            
+      <div className=' grid grid-rows-2 w-full rounded-xl h-24 ' > 
+      <div class="grid grid-cols-3 h-full  place-items-center">
+         <div class="flex flex-col place-items-center  ">
+         <h1 className="text-sm font-normal " >Category</h1>
+         <ListItemText id={labelId} secondary={value?.question?.category} />
+         </div>
+         <div class="flex flex-col place-items-center  ">
+         <h1 className="text-sm font-normal " >Difficulty</h1>
+         <ListItemText id={labelId} secondary={value?.question?.difficulty} />
 
-            <ListItemText 
+         </div>
+         <div class="flex flex-col place-items-center   ">
+         <h1 className="font-normal text-sm " >Restraint</h1>
 
-             id={labelId} secondary={value?.question?.category} />
-            <ListItemText
- id={labelId} primary={value?.question?.question} />
-            <ListItemText id={labelId} secondary={value?.question?.difficulty} />
+<ListItemText id={labelId} secondary={value?.question?.restraint} />
+</div>
 
+           </div>
+                <div class="grid grid-cols-1 place-items-center">
+                <ListItemText
+id={labelId} primary={value?.question?.question} />
+                </div>
+          
             </div>
           </ListItem>
           </div>
@@ -570,7 +568,7 @@ console.log(left)
     <div className="grid   border-b-2 place-items-center w-full border-r-2 ">
     <h1 className='m-2' >Question Bank </h1>
     <div class="grid grid-cols-3 w-full gap-2 pl-2 pr-2 ">
-    <Box sx={{ minWidth: 120 }}>
+      <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
         <Select
@@ -614,7 +612,7 @@ console.log(left)
         </Select>
       </FormControl>
     </Box>
-    <TextField  value={filterdKeyword} onChange={e=> setFilteredKeyword(e.target.value)} id="outlined-basic" label="Key Work" variant="outlined" />
+    <TextField  value={filterdKeyword} onChange={e=> setFilteredKeyword(e.target.value)} id="outlined-basic" label="Keyword" variant="outlined" />
 
 
     </div>
