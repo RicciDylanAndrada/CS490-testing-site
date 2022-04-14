@@ -249,9 +249,9 @@ change(newa)
 
           onChange={e=>setRestraint(e.target.value)}
         >
-           <MenuItem value={"Recursive"}>Recursive</MenuItem>
-          <MenuItem value={"While"}>While</MenuItem>
-          <MenuItem value={"For"}>For</MenuItem>
+           <MenuItem value={"recursive"}>Recursive</MenuItem>
+          <MenuItem value={"while"}>While</MenuItem>
+          <MenuItem value={"ror"}>For</MenuItem>
         </Select>
       </FormControl>
     </Box>
@@ -275,7 +275,6 @@ change(newa)
                   <input
                   className="border-2"
                   required
-                  type='number'
                     onChange={(e) => handleMatrixChange(rowIndex, columnIndex, e)}
                   />
                 </td>
@@ -298,7 +297,7 @@ change(newa)
                                     
                                         </form>
                         </div>
-        <div className="grid grid-rows-6  h-full border-b-2 place-items-center w-full border-r-2 ">
+        <div className="grid grid-rows-6 overflow-auto h-full border-b-2 place-items-center w-full border-r-2 ">
         <h1 className='m-2 row-span-1' >Question Bank </h1>
 
     <div class="grid grid-cols-3 w-full gap-2 pl-2 pr-2  row-span-1">
@@ -370,6 +369,8 @@ change(newa)
     let both =
   filterdKeyword&& filterdCategory && filterdDifficulty? x?.question.question.includes(filterdKeyword) && x?.question.difficulty == filterdDifficulty && x?.question.category == filterdCategory
     : true;
+
+
 return difficulty  && filterWord && both
 })
 .map((value)=>{

@@ -25,10 +25,10 @@ function StudentSubTable({w,sum}) {
             let show_sum =0;
             let sum=0;
             let show_test=0
-            value.question.grade.test_cases.map((v)=>{
+            value?.question.grade.test_cases.map((v)=>{
               show_test+= Number(v.show_points)
             })
-            show_sum=Number(Number(value.question.grade.show_name_correct) + Number(value.question.grade.show_restraint)) + show_test
+            show_sum=Number(Number(value?.question.grade.show_name_correct) + Number(value?.question.grade.show_restraint)) + show_test
 
 
 
@@ -36,11 +36,11 @@ function StudentSubTable({w,sum}) {
 
 
             let test=0;
-            value.question.grade.test_cases.map((x)=>{
+            value?.question.grade.test_cases.map((x)=>{
               test+= Number(x.points)
             })
             
-            sum=Number(Number(value.question.grade.restraint) + Number(value.question.grade.name_correct)) + test
+            sum=Number(Number(value?.question.grade.restraint) + Number(value?.question.grade.name_correct)) + test
             
 
 
@@ -65,28 +65,28 @@ function StudentSubTable({w,sum}) {
 
 <TableRow>
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">Correct Function Name</TableCell>
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{value.question.function_name}()</TableCell>
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{value?.question.function_name}()</TableCell>
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"></TableCell>
 
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{typeof value.question.grade.show_name_correct== 'boolean' ?value.question.grade.show_name_correct.toString() : value.question.grade.show_name_correct}</TableCell>
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {value.question.grade.name_correct}
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{typeof value?.question.grade.show_name_correct== 'boolean' ?value?.question.grade.show_name_correct.toString() : value?.question.grade.show_name_correct}</TableCell>
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {value?.question.grade.name_correct}
 </TableCell>
 
 
 </TableRow>
 <TableRow>
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> Restraint</TableCell>
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{value.question.restraint}</TableCell>
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{value?.question.restraint}</TableCell>
 <TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"></TableCell>
 
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{typeof value.question.grade.show_restraint== 'boolean' ?value.question.grade.show_restraint.toString() : value.question.grade.show_restraint}</TableCell>
-<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {value.question.grade.restraint}
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center">{typeof value?.question.grade.show_restraint== 'boolean' ?value?.question.grade.show_restraint.toString() : value?.question.grade.show_restraint}</TableCell>
+<TableCell sx={{ fontWeight: 'light' }} colSpan={20} align="center"> {value?.question.grade.restraint}
 </TableCell>
 
 
 </TableRow>
 
-          {value.question.grade.test_cases.map((val,idex)=>{
+          {value?.question.grade.test_cases.map((val,idex)=>{
 
 return(
   <TableRow >
@@ -94,7 +94,7 @@ return(
 
 
   <TableCell sx={{ fontWeight: 'light' }} colSpan={20}  align="center">
-{value.question.function_name}(     {val.case.map((x,i)=>{
+{value?.question.function_name}(     {val.case.map((x,i)=>{
               if(i===0){
               return " "+x +', '
             }
@@ -119,9 +119,9 @@ return(
          <TableCell sx={{ fontWeight: 'bold' }} colSpan={60} align="center">Total</TableCell>
 
 
-<TableCell sx={{ fontWeight: 'bold' }} colSpan={20} align="center">{show_sum}/{value.points}</TableCell>
+<TableCell sx={{ fontWeight: 'bold' }} colSpan={20} align="center">{show_sum}/{value?.points}</TableCell>
 <TableCell sx={{ fontWeight: 'bold' }} colSpan={20} align="center"> 
-{sum}/{value.points}
+{sum}/{value?.points}
 
 </TableCell>
           </TableRow>
@@ -136,7 +136,7 @@ return(
             <TableRow>
             <TableCell sx={{ fontWeight: 'light' }} colSpan={100} align="center">
 
-{value.question.grade.comment}
+{value?.question.grade.comment}
  </TableCell>
             </TableRow>
         

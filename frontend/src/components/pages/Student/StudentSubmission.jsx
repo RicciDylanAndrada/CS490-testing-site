@@ -103,7 +103,7 @@ function StudentSubmission() {
     return(
       x?.submission?.map((y)=>{
         return(
-          <StudentSubmissionCard test_name={y.tes_t.test_name} test_id = {y.test_id} getButtonId1={getButtonId1}/>
+          <StudentSubmissionCard test_name={y?.tes_t.test_name} test_id = {y.test_id} getButtonId1={getButtonId1}/>
         )
       })
     )

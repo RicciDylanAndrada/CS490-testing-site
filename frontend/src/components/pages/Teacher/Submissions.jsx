@@ -82,7 +82,7 @@ const callAutoGrade=(x)=>{
   const studenttest1 = (fetchSubmission?.submissions?.filter((x)=>{
     return(
       x?.submission?.some((y)=>{
-        return(y.test_id==testid && y.tes_t.user_id ==studentid)
+        return(y?.test_id==testid && y.tes_t.user_id ==studentid)
       })
     )
   }))
