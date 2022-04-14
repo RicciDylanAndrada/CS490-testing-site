@@ -21,7 +21,6 @@ import sqlite3 as sql
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 
-cors = CORS()
 
 
 app = Flask(__name__)
@@ -34,6 +33,7 @@ app.config['DEBUG'] = True
 app.config.from_object(Configuration)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db = SQLAlchemy(app)
+cors = CORS(app)
 
 
 def grade_question(subq):
@@ -284,7 +284,7 @@ def sub():
     response ={"good":"good" }
     return response
 @app.route("/autograde",methods=['POST'])
-def autograde():
+def grade():
 
     submission = request.json.get('submission')
     print(submission)

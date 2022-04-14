@@ -1,7 +1,7 @@
 import React from 'react'
 import TeacherCard from '../shared/TeacherCard'
 import axios from 'axios'
-import { useState,useEffect,useContext } from 'react'
+import { useState,useEffect,useContext,forwardRef } from 'react'
 import LoginContext from '../../content/LoginContext'
 
 import Grid from '@mui/material/Grid';
@@ -17,6 +17,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 
 function Teacher() {
@@ -25,9 +27,23 @@ function Teacher() {
   const[filterdKeyword,setFilteredKeyword]=useState("")
   const[filterdDifficulty,setFilteredDifficulty]=useState("")
 
-  
+  const [open, setOpen] = useState(false);
 
+  const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
   
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
 
   const handleSectionChange = (event) => {
@@ -311,14 +327,15 @@ const customList = (items) => (
   <div className="overflow-auto max-h-80     w-full   flex flex-col space-y-4    ">
   
     
-      {items.map((value) => {
+      {items.map((value,index) => {
         const labelId = `transfer-list-item-${value.question_id}-label`;
 
         return (
-          <div  key={value.question_id} className='border-2 rounded-lg'>
+          <div  key={value.question_id} className='border-2 rounded-lg grid  grid-cols-10 '>
 
          
-          <ListItem
+       <div class="col-span-8">
+       <ListItem
             key={value.question_id}
             role="listitem"
             className="border-2"
@@ -340,21 +357,41 @@ const customList = (items) => (
             </ListItemIcon>
 
             
-      <div className=' grid grid-rows-3 rounded-xl h-24 ' > 
-            
+      <div className=' grid grid-rows-2 w-full rounded-xl h-24 ' > 
+      <div class="grid grid-cols-3 h-full  place-items-center">
+         <div class="flex flex-col place-items-center  ">
+         <h1 className="text-sm font-normal " >Category</h1>
+         <ListItemText id={labelId} secondary={value?.question?.category} />
+         </div>
+         <div class="flex flex-col place-items-center  ">
+         <h1 className="text-sm font-normal " >Difficulty</h1>
+         <ListItemText id={labelId} secondary={value?.question?.difficulty} />
 
-            <ListItemText 
+         </div>
+         <div class="flex flex-col place-items-center   ">
+         <h1 className="font-normal text-sm " >Restraint</h1>
 
-             id={labelId} secondary={value?.question?.category} />
-            <ListItemText
- id={labelId} primary={value?.question?.question} />
-            <ListItemText id={labelId} secondary={value?.question?.difficulty} />
+<ListItemText id={labelId} secondary={value?.question?.restraint} />
+</div>
 
+           </div>
+                <div class="grid grid-cols-1 place-items-center">
+                <ListItemText
+id={labelId} primary={value?.question?.question} />
+                </div>
+          
             </div>
           </ListItem>
+       </div>
+       <div class="grid place-items-center col-span-2 border-l-2 p-2">
+       <input  type='number'  required placeholder='points' name={value.question_id}  onChange={(e)=>handleInputChange(e,index)} className= "p-1 bg-gray-200  w-full rounded-md" ></input>
+
+       </div>
+
           </div>
         );
       })}
+
       <ListItem />
       
   </div>
@@ -409,7 +446,7 @@ const handleSubmitFinal=(e)=>{
   e.preventDefault()
   const result = Object.entries(studentSub.answers).map(([id, answer]) => ({id:id,answer}));
   console.log(result)
-  let finalArray = newArray(result,testQuestions)
+  let finalArray = newArray(result,left)
   console.log(finalArray)
   
   setTest(prev=>({
@@ -418,6 +455,8 @@ const handleSubmitFinal=(e)=>{
       }))
 let finalTest=test
 setSubmit(true)
+setLeft([])
+
 }
 
 
@@ -534,7 +573,7 @@ console.log(left)
 
         <div className="grid grid-cols-2"></div>
         {fetchTest && right && ( 
-        <form className ='h-full' onSubmit={handleSubmit}>
+        <form className ='h-full' onSubmit={handleSubmitFinal}>
         <div className="grid grid-cols-2 gap-2 pl-2 pr-2 p-2">
         <TextField
           id="outlined-password-input"
@@ -691,7 +730,7 @@ console.log(left)
      </div>
 </div>      
  <div className="h-full w-full p-2 ">
-          <button type='"submit'  className="place-self-right   btn btn-active   " >Add Points </button>
+          <button type='"submit'  className="place-self-right   btn btn-active   "  onClick={handleClick} >Create Test </button>
         </div> 
   </div>
  
@@ -937,7 +976,11 @@ console.log(left)
 
 
 
-
+       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Test Created
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
